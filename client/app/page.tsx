@@ -219,7 +219,7 @@ export default function Home() {
 
           <div className="info-content">
             <h1 className="name" title="Richard hanrick">
-              Richard hanrick
+              Marc Kenneth Capitulo-Lomio
             </h1>
             <p className="title">Web developer</p>
           </div>

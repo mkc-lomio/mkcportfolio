@@ -56,6 +56,7 @@ const education = [
   {
     title: "Bachelor of Science: Information Technology",
     year: "Jose Rizal University",
+    address: "Philippines",
     text: "Completed a comprehensive IT program covering software development, database management, and systems analysis.",
   },
 ];
@@ -96,16 +97,19 @@ const certifications = [
 const experience = [
   {
     title: "Software Engineer — Kinetic Innovative Staffing",
+    address: "Australia",
     year: "2023 — Present",
     text: "Automated attendance tracking with WebJobs pulling 100,000+ daily data points. Built a sessionization algorithm increasing time-tracking accuracy by 90% for 4,000+ users.",
   },
   {
     title: "Software Engineer — BlastAsia, Inc.",
+    address: "Philippines",
     year: "2019 — 2023",
     text: "Delivered 17 applications across recruitment, healthcare, e-commerce, insurance, and asset management. Led code reviews, R&D initiatives, and deployed scalable apps with Azure App Service.",
   },
   {
     title: "Software Developer Intern — Mr. Geek Mobile Solution Inc.",
+    address: "Philippines",
     year: "2018",
     text: "Developed android mobile application using Android Studio (Java) and PHP 7 as backend service.",
   },
@@ -120,14 +124,16 @@ const skills = [
 ];
 
 const projects = [
-  { images: ["/kinetic-portal-img.png"], title: "Kinetic Portal", category: "enterprise", url: "https://portal.kineticstaff.com/" },
-  { images: ["/project-2.png"], title: "Xamun Dev Portal", category: "enterprise", url: "https://www.xamun.ai/" },
-  { images: ["/project-3.jpg"], title: "Rivington (Collections, AMIG, Centauri)", category: "enterprise", url: "#" },
-  { images: ["/project-4.png"], title: "Daikin E-Commerce & Virtual Showroom", category: "e-commerce", url: "#" },
-  { images: ["/project-5.png"], title: "iScan Diagnostic Center", category: "healthcare", url: "#" },
-  { images: ["/project-6.png"], title: "Marius Cyber-Insurance", category: "enterprise", url: "#" },
-  { images: ["/project-8.jpg"], title: "Catalyst Code Generator", category: "developer tools", url: "#" },
-  { images: ["/project-9.png"], title: "My Scorecard (MundiPharma)", category: "enterprise", url: "#" },
+  { images: ["/kinetic-portal-img.png",
+    "/kinetic-portal-img-2.png","/kinetic-portal-img-3.png","/kinetic-portal-img-4.png"
+  ], title: "Kinetic Portal", category: "enterprise", url: "https://portal.kineticstaff.com/", description: "This project focused on boosting HR and administrative efficiency. It introduced a unified platform that handled leave and overtime requests, internal job postings, and employee contracts. Key features included a resume format for daily applicants, a payroll schedule manager, and advanced activity reports. Built to streamline HR operations, the platform improved employee experience and workflow.\n\nKey Contribution:\n• Automated Late WebJobs to run every 30 minutes, improving attendance tracking and cutting absenteeism response time by 25%.\n• Built WebJobs to pull 100,000+ daily data points from APIs (Holiday, Screenshot Monitor, Time Doctor, Hubstaff), boosting data accuracy and reducing manual input.\n• Created a Booking Calendar with FullCalendar to automate orientation scheduling for 63,000+ candidates.\n• Developed a timesheet monitor for 4,000+ team members, improving accountability and reducing errors.\n• Supported 70+ internal users by quickly resolving app issues, ensuring smooth business operations.\n• Built a sessionization algorithm to reconstruct continuous sessions from raw Hubstaff logs — increasing time-tracking accuracy by 90% for over 4,000 users.\n• Redesigned and optimized complex SQL Server queries handling 9 million candidate records, implementing strategic indexing, query plan optimization, and stored procedure refactoring to enhance database performance and user experience.\n• Strengthened application security by implementing user role-based access control for API authorization, integrating JWT token validation for secure authentication, and utilizing parameterized queries with Dapper to eliminate SQL injection vulnerabilities.\n• Implemented AES-256 encryption to secure team members' salary data at rest, ensuring confidentiality and compliance with data protection standards.\n• Implemented materialized views as a database-level caching strategy to precompute and store query results, reducing response times and improving performance for read-intensive workloads." },
+  { images: ["/project-2.png"], title: "Xamun Dev Portal", category: "enterprise", url: "https://www.xamun.ai/", description: "" },
+  { images: ["/project-3.jpg"], title: "Rivington (Collections, AMIG, Centauri)", category: "enterprise", url: "#", description: "" },
+  { images: ["/project-4.png"], title: "Daikin E-Commerce & Virtual Showroom", category: "e-commerce", url: "#", description: "" },
+  { images: ["/project-5.png"], title: "iScan Diagnostic Center", category: "healthcare", url: "#", description: "" },
+  { images: ["/project-6.png"], title: "Marius Cyber-Insurance", category: "enterprise", url: "#", description: "" },
+  { images: ["/project-8.jpg"], title: "Catalyst Code Generator", category: "developer tools", url: "#", description: "" },
+  { images: ["/project-9.png"], title: "My Scorecard (MundiPharma)", category: "enterprise", url: "#", description: "" },
 ];
 
 const blogPosts = [
@@ -160,6 +166,7 @@ export default function Home() {
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [galleryTitle, setGalleryTitle] = useState("");
   const [galleryUrl, setGalleryUrl] = useState("");
+  const [galleryDescription, setGalleryDescription] = useState("");
 
   const handleNavClick = (page: string) => {
     setActivePage(page.toLowerCase());
@@ -199,6 +206,7 @@ export default function Home() {
     setGalleryIndex(startIndex);
     setGalleryTitle(project.title);
     setGalleryUrl(project.url);
+    setGalleryDescription(project.description);
     setGalleryOpen(true);
   };
 
@@ -307,6 +315,31 @@ export default function Home() {
               </a>
             </li>
           </ul>
+
+          <div className="separator"></div>
+
+          <div className="powered-by">
+            <p className="powered-by-label">Powered by</p>
+            <div className="powered-by-badges">
+              <a href="https://nextjs.org" target="_blank" rel="noopener noreferrer" className="powered-by-badge">
+                <svg viewBox="0 0 180 180" width="14" height="14" fill="currentColor">
+                  <mask id="nextMask" maskUnits="userSpaceOnUse" x="0" y="0" width="180" height="180">
+                    <circle cx="90" cy="90" r="90" fill="white"/>
+                    <path d="M149.508 157.52L69.142 54H54v71.97h12.114V69.384l73.885 95.461a90.304 90.304 0 009.509-7.325z" fill="black"/>
+                    <rect x="115" y="54" width="12" height="72" fill="black"/>
+                  </mask>
+                  <circle cx="90" cy="90" r="90" mask="url(#nextMask)"/>
+                </svg>
+                <span>Next.js</span>
+              </a>
+              <a href="https://expressjs.com" target="_blank" rel="noopener noreferrer" className="powered-by-badge">
+                <svg viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
+                  <path d="M32 24.795c-1.164.296-1.884.013-2.53-.957l-4.594-6.356-.664-.872-5.42 7.257c-.577.77-1.227 1.065-2.25.77l7.066-9.428-6.589-8.59c.984-.135 1.744-.037 2.358.825l4.74 6.447 4.778-6.413c.578-.77 1.228-1.067 2.25-.77l-2.633 3.51-3.615 4.746c-.263.346-.227.692.039 1.028l6.06 8.048zm-17.027-8.77L8.092 6.196c1.185-.214 1.872-.035 2.468.822l4.18 5.927 4.258-5.926c.577-.77 1.227-1.065 2.25-.77l-6.12 8.194-6.573 8.757c-1.007.26-1.775.074-2.381-.795l4.8-6.38zM.005 15.846l.78-3.593c1.458-4.376 7.58-6.27 11.226-3.483 2.15 1.643 2.84 4.03 2.658 6.788H1.456c-.187 5.312 3.46 8.09 7.834 6.057 1.35-.629 2.2-1.823 2.6-3.254.194-.693.55-.813 1.2-.627-.78 3.19-2.94 5.1-6.293 5.372-3.978.323-7.443-1.906-8.357-5.437-.162-.627-.27-1.272-.434-1.823zm1.467-.64h12.4c-.116-4.237-2.786-7.02-6.24-7.02-3.688 0-6.044 2.882-6.16 7.02z"/>
+                </svg>
+                <span>Express.js</span>
+              </a>
+            </div>
+          </div>
         </div>
       </aside>
 
@@ -482,6 +515,12 @@ export default function Home() {
                 <li className="timeline-item" key={item.title}>
                   <h4 className="h4 timeline-item-title">{item.title}</h4>
                   <span>{item.year}</span>
+                  {item.address && (
+                    <span className="timeline-address">
+                      <ion-icon name="location-outline"></ion-icon>
+                      {item.address}
+                    </span>
+                  )}
                   <p className="timeline-text">{item.text}</p>
                 </li>
               ))}
@@ -500,6 +539,12 @@ export default function Home() {
                 <li className="timeline-item" key={item.title}>
                   <h4 className="h4 timeline-item-title">{item.title}</h4>
                   <span>{item.year}</span>
+                  {item.address && (
+                    <span className="timeline-address">
+                      <ion-icon name="location-outline"></ion-icon>
+                      {item.address}
+                    </span>
+                  )}
                   <p className="timeline-text">{item.text}</p>
                 </li>
               ))}
@@ -682,6 +727,14 @@ export default function Home() {
                     </span>
                   )}
                 </div>
+
+                {galleryDescription && (
+                  <div className="gallery-description">
+                    {galleryDescription.split("\n").map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </div>
+                )}
 
                 {galleryImages.length > 1 && (
                   <div className="gallery-thumbnails">

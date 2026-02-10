@@ -7,160 +7,140 @@ import Image from "next/image";
 
 const services = [
   {
-    icon: "/icon-design.svg",
-    title: "Web design",
-    text: "The most modern and high-quality design made at a professional level.",
+    icon: "/icon-dev.svg",
+    title: "Backend Development",
+    text: "Building robust APIs and web services using C#/.NET, with expertise in CQRS, Clean Architecture, and SQL Server optimization.",
   },
   {
-    icon: "/icon-dev.svg",
-    title: "Web development",
-    text: "High-quality development of sites at the professional level.",
+    icon: "/icon-design.svg",
+    title: "Frontend Development",
+    text: "Developing dynamic, responsive web applications with Angular, React, and TypeScript for seamless user experiences.",
   },
   {
     icon: "/icon-app.svg",
-    title: "Mobile apps",
-    text: "Professional development of applications for iOS and Android.",
+    title: "API Integration",
+    text: "Integrating third-party APIs such as Hubstaff, Zoom, Paynamics, and SharePoint to extend application capabilities.",
   },
   {
     icon: "/icon-photo.svg",
-    title: "Photography",
-    text: "I make high-quality photos of any category at a professional level.",
+    title: "Process Automation",
+    text: "Automating workflows with Azure WebJobs, Functions, and CI/CD pipelines to improve efficiency and reduce manual effort.",
   },
 ];
 
 const testimonials = [
   {
     avatar: "/avatar-1.png",
-    name: "Daniel lewis",
-    text: "Richard was hired to create a corporate identity. We were very pleased with the work done. She has a lot of experience and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt consectetur adipiscing elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.",
-  },
-  {
-    avatar: "/avatar-2.png",
-    name: "Jessica miller",
-    text: "Richard was hired to create a corporate identity. We were very pleased with the work done. She has a lot of experience and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt consectetur adipiscing elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.",
-  },
-  {
-    avatar: "/avatar-3.png",
-    name: "Emily evans",
-    text: "Richard was hired to create a corporate identity. We were very pleased with the work done. She has a lot of experience and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt consectetur adipiscing elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.",
-  },
-  {
-    avatar: "/avatar-4.png",
-    name: "Henry william",
-    text: "Richard was hired to create a corporate identity. We were very pleased with the work done. She has a lot of experience and is very concerned about the needs of client. Lorem ipsum dolor sit amet, ullamcous cididt consectetur adipiscing elit, seds do et eiusmod tempor incididunt ut laborels dolore magnarels alia.",
+    name: "Your Name Here",
+    text: "Share your experience working with Marc Kenneth. Your testimonial will appear here.",
   },
 ];
 
 const clients = [
-  "/logo-1-color.png",
-  "/logo-2-color.png",
-  "/logo-3-color.png",
-  "/logo-4-color.png",
-  "/logo-5-color.png",
-  "/logo-6-color.png",
+  "/daikin-logo.png",
+  "/homeqube-logo.jpg",
+  "/iscan-logo.png",
+  "/advance-energy-logo.png",
+  "/mundipharma-logo.jpg",
+  "/kinetic-logo.png",
+  "/magsaysay-careers-logo.png",
+  "/chesslab-ae-logo.png",
+  "/marius-logo.jpg",
+  "/mr-geek-logo.png",
+  "/rivtechcorp_cover-logo.jpg",
+  "/steer-logo.png",
+  "/xamun-ai-logo.png",
 ];
 
 const education = [
   {
-    title: "University school of the arts",
-    year: "2007 — 2008",
-    text: "Nemo enims ipsam voluptatem, blanditiis praesentium voluptum delenit atque corrupti, quos dolores et quas molestias exceptur.",
+    title: "Bachelor of Science: Information Technology",
+    year: "Jose Rizal University",
+    text: "Completed a comprehensive IT program covering software development, database management, and systems analysis.",
+  },
+];
+
+const certifications = [
+  {
+    title: "Exam 483: Programming in C#",
+    issuer: "Microsoft",
+    text: "Demonstrated proficiency in C# programming including managing program flow, creating types, and debugging applications.",
+    url: "https://www.credly.com/badges/13902a49-5ee2-4694-96d6-f7b3d22bf884/public_url",
   },
   {
-    title: "New york academy of art",
-    year: "2006 — 2007",
-    text: "Ratione voluptatem sequi nesciunt, facere quisquams facere menda ossimus, omnis voluptas assumenda est omnis..",
+    title: "Azure Developer Associate",
+    issuer: "Microsoft",
+    text: "Certified in designing, building, testing, and maintaining cloud applications and services on Microsoft Azure.",
+    url: "https://www.credly.com/badges/de57f472-20aa-42ed-af1a-23f25f9b4dfb",
   },
   {
-    title: "High school of art and design",
-    year: "2002 — 2004",
-    text: "Duis aute irure dolor in reprehenderit in voluptate, quila voluptas mag odit aut fugit, sed consequuntur magni dolores eos.",
+    title: "Advanced C# Programming in .NET Core",
+    issuer: "EDUCBA",
+    text: "Advanced training in .NET Core development covering modern C# features, async programming, and enterprise patterns.",
+    url: "https://www.coursera.org/account/accomplishments/verify/8ELB2A7JAYB3",
+  },
+  {
+    title: "Product Management",
+    issuer: "IBM",
+    text: "Certification covering product lifecycle management, stakeholder communication, and strategic product planning.",
+    url: "https://www.coursera.org/account/accomplishments/verify/LOOSMZOI690C",
+  },
+  {
+    title: "EF SET: C1 Advanced",
+    issuer: "EF Standard English Test",
+    text: "Achieved C1 Advanced level proficiency in English, demonstrating fluent and effective communication skills.",
+    url: "https://cert.efset.org/en/pUaqtj",
   },
 ];
 
 const experience = [
   {
-    title: "Creative director",
-    year: "2015 — Present",
-    text: "Nemo enim ipsam voluptatem blanditiis praesentium voluptum delenit atque corrupti, quos dolores et qvuas molestias exceptur.",
+    title: "Software Engineer — Kinetic Innovative Staffing",
+    year: "2023 — Present",
+    text: "Automated attendance tracking with WebJobs pulling 100,000+ daily data points. Built a sessionization algorithm increasing time-tracking accuracy by 90% for 4,000+ users.",
   },
   {
-    title: "Art director",
-    year: "2013 — 2015",
-    text: "Nemo enims ipsam voluptatem, blanditiis praesentium voluptum delenit atque corrupti, quos dolores et quas molestias exceptur.",
+    title: "Software Engineer — BlastAsia, Inc.",
+    year: "2019 — 2023",
+    text: "Delivered 17 applications across recruitment, healthcare, e-commerce, insurance, and asset management. Led code reviews, R&D initiatives, and deployed scalable apps with Azure App Service.",
   },
   {
-    title: "Web designer",
-    year: "2010 — 2013",
-    text: "Nemo enims ipsam voluptatem, blanditiis praesentium voluptum delenit atque corrupti, quos dolores et quas molestias exceptur.",
+    title: "Software Developer Intern — Mr. Geek Mobile Solution Inc.",
+    year: "2018",
+    text: "Developed android mobile application using Android Studio (Java) and PHP 7 as backend service.",
   },
 ];
 
 const skills = [
-  { name: "Web design", value: 80 },
-  { name: "Graphic design", value: 70 },
-  { name: "Branding", value: 90 },
-  { name: "WordPress", value: 50 },
+  { name: "C# / .NET", value: 95 },
+  { name: "Angular / TypeScript", value: 90 },
+  { name: "SQL Server / T-SQL", value: 90 },
+  { name: "Azure Services", value: 85 },
+  { name: "REST API Development", value: 95 },
 ];
 
 const projects = [
-  { img: "/project-1.jpg", title: "Finance", category: "web development" },
-  { img: "/project-2.png", title: "Orizon", category: "web development" },
-  { img: "/project-3.jpg", title: "Fundo", category: "web design" },
-  { img: "/project-4.png", title: "Brawlhalla", category: "applications" },
-  { img: "/project-5.png", title: "DSM.", category: "web design" },
-  { img: "/project-6.png", title: "MetaSpark", category: "web design" },
-  { img: "/project-7.png", title: "Summary", category: "web development" },
-  { img: "/project-8.jpg", title: "Task Manager", category: "applications" },
-  { img: "/project-9.png", title: "Arrival", category: "web development" },
+  { images: ["/kinetic-portal-img.png"], title: "Kinetic Portal", category: "enterprise", url: "https://portal.kineticstaff.com/" },
+  { images: ["/project-2.png"], title: "Xamun Dev Portal", category: "enterprise", url: "https://www.xamun.ai/" },
+  { images: ["/project-3.jpg"], title: "Rivington (Collections, AMIG, Centauri)", category: "enterprise", url: "#" },
+  { images: ["/project-4.png"], title: "Daikin E-Commerce & Virtual Showroom", category: "e-commerce", url: "#" },
+  { images: ["/project-5.png"], title: "iScan Diagnostic Center", category: "healthcare", url: "#" },
+  { images: ["/project-6.png"], title: "Marius Cyber-Insurance", category: "enterprise", url: "#" },
+  { images: ["/project-8.jpg"], title: "Catalyst Code Generator", category: "developer tools", url: "#" },
+  { images: ["/project-9.png"], title: "My Scorecard (MundiPharma)", category: "enterprise", url: "#" },
 ];
 
 const blogPosts = [
   {
     img: "/blog-1.jpg",
-    title: "Design conferences in 2022",
-    category: "Design",
-    date: "Fab 23, 2022",
-    text: "Veritatis et quasi architecto beatae vitae dicta sunt, explicabo.",
-  },
-  {
-    img: "/blog-2.jpg",
-    title: "Best fonts every designer",
-    category: "Design",
-    date: "Fab 23, 2022",
-    text: "Sed ut perspiciatis, nam libero tempore, cum soluta nobis est eligendi.",
-  },
-  {
-    img: "/blog-3.jpg",
-    title: "Design digest #80",
-    category: "Design",
-    date: "Fab 23, 2022",
-    text: "Excepteur sint occaecat cupidatat no proident, quis nostrum exercitationem ullam corporis suscipit.",
-  },
-  {
-    img: "/blog-4.jpg",
-    title: "UI interactions of the week",
-    category: "Design",
-    date: "Fab 23, 2022",
-    text: "Enim ad minim veniam, consectetur adipiscing elit, quis nostrud exercitation ullamco laboris nisi.",
-  },
-  {
-    img: "/blog-5.jpg",
-    title: "The forgotten art of spacing",
-    category: "Design",
-    date: "Fab 23, 2022",
-    text: "Maxime placeat, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    img: "/blog-6.jpg",
-    title: "Design digest #79",
-    category: "Design",
-    date: "Fab 23, 2022",
-    text: "Optio cumque nihil impedit uo minus quod maxime placeat, velit esse cillum.",
+    title: "Coming Soon",
+    category: "Blog",
+    date: "2025",
+    text: "Stay tuned — blog posts about software development, tech insights, and lessons learned will be shared here soon.",
   },
 ];
 
-const filterCategories = ["All", "Web design", "Applications", "Web development"];
+const filterCategories = ["All", "Enterprise", "E-commerce", "Healthcare", "Developer tools"];
 const navPages = ["About", "Resume", "Portfolio", "Blog", "Contact"];
 
 // ============ COMPONENT ============
@@ -174,6 +154,12 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState(testimonials[0]);
   const [formValid, setFormValid] = useState(false);
+  const [imagePopup, setImagePopup] = useState<string | null>(null);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [galleryTitle, setGalleryTitle] = useState("");
+  const [galleryUrl, setGalleryUrl] = useState("");
 
   const handleNavClick = (page: string) => {
     setActivePage(page.toLowerCase());
@@ -208,20 +194,40 @@ export default function Home() {
     return activeFilter === "all" || activeFilter === category;
   };
 
+  const openGallery = (project: (typeof projects)[0], startIndex = 0) => {
+    setGalleryImages(project.images);
+    setGalleryIndex(startIndex);
+    setGalleryTitle(project.title);
+    setGalleryUrl(project.url);
+    setGalleryOpen(true);
+  };
+
+  const closeGallery = () => {
+    setGalleryOpen(false);
+  };
+
+  const galleryPrev = () => {
+    setGalleryIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  };
+
+  const galleryNext = () => {
+    setGalleryIndex((prev) => (prev + 1) % galleryImages.length);
+  };
+
   return (
     <main>
       {/* ===== SIDEBAR ===== */}
       <aside className={`sidebar ${sidebarActive ? "active" : ""}`}>
         <div className="sidebar-info">
           <figure className="avatar-box">
-            <img src="/my-avatar.png" alt="Richard hanrick" width={80} />
+            <img src="/my-avatar.png" alt="Marc Kenneth Lomio" width={80} />
           </figure>
 
           <div className="info-content">
-            <h1 className="name" title="Richard hanrick">
+            <h1 className="name" title="Marc Kenneth Lomio">
               Marc Kenneth Capitulo-Lomio
             </h1>
-            <p className="title">Software Developer</p>
+            <p className="title">Software Engineer</p>
           </div>
 
           <button
@@ -286,18 +292,18 @@ export default function Home() {
 
           <ul className="social-list">
             <li className="social-item">
-              <a href="#" className="social-link">
-                <ion-icon name="logo-facebook"></ion-icon>
+              <a href="https://www.linkedin.com/in/marc-kenneth-lomio" className="social-link" target="_blank" rel="noopener noreferrer">
+                <ion-icon name="logo-linkedin"></ion-icon>
               </a>
             </li>
             <li className="social-item">
-              <a href="#" className="social-link">
-                <ion-icon name="logo-twitter"></ion-icon>
+              <a href="https://github.com/marckenneth" className="social-link" target="_blank" rel="noopener noreferrer">
+                <ion-icon name="logo-github"></ion-icon>
               </a>
             </li>
             <li className="social-item">
-              <a href="#" className="social-link">
-                <ion-icon name="logo-instagram"></ion-icon>
+              <a href="mailto:marckenneth.lomio@gmail.com" className="social-link">
+                <ion-icon name="mail-outline"></ion-icon>
               </a>
             </li>
           </ul>
@@ -334,24 +340,23 @@ export default function Home() {
 
           <section className="about-text">
             <p>
-              I&apos;m Creative Director and UI/UX Designer from Sydney,
-              Australia, working in web development and print media. I enjoy
-              turning complex problems into simple, beautiful and intuitive
-              designs.
+              I&apos;m a Software Engineer with 6+ years of experience specializing
+              in the Microsoft tech stack. I&apos;ve delivered 19 projects across
+              development, upgrades, and support — spanning HR systems, insurance
+              platforms, healthcare, e-commerce, and more.
             </p>
             <p>
-              My job is to build your website so that it is functional and
-              user-friendly but at the same time attractive. Moreover, I add
-              personal touch to your product and make sure that is eye-catching
-              and easy to use. My aim is to bring across your message and
-              identity in the most creative way. I created web design for many
-              famous brand companies.
+              I&apos;m skilled in process automation, third-party API integration,
+              and efficient code to solve complex problems. My focus
+              is on boosting system performance, reliability, and scalability. I
+              enjoy turning business requirements into well-architected solutions
+              using C#/.NET, Angular, SQL Server, and Azure cloud services.
             </p>
           </section>
 
           {/* Service */}
           <section className="service">
-            <h3 className="h3 service-title">What i&apos;m doing</h3>
+            <h3 className="h3 service-title">What I&apos;m doing</h3>
             <ul className="service-list">
               {services.map((service) => (
                 <li className="service-item" key={service.title}>
@@ -430,13 +435,31 @@ export default function Home() {
             <ul className="clients-list has-scrollbar">
               {clients.map((logo, i) => (
                 <li className="clients-item" key={i}>
-                  <a href="#">
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setImagePopup(logo);
+                    }}
+                  >
                     <img src={logo} alt="client logo" />
                   </a>
                 </li>
               ))}
             </ul>
           </section>
+
+          {/* Image Popup */}
+          {imagePopup && (
+            <div className="image-popup-overlay" onClick={() => setImagePopup(null)}>
+              <div className="image-popup-content" onClick={(e) => e.stopPropagation()}>
+                <button className="image-popup-close" onClick={() => setImagePopup(null)}>
+                  <ion-icon name="close-outline"></ion-icon>
+                </button>
+                <img src={imagePopup} alt="Client logo" />
+              </div>
+            </div>
+          )}
         </article>
 
         {/* ===== RESUME ===== */}
@@ -478,6 +501,29 @@ export default function Home() {
                   <h4 className="h4 timeline-item-title">{item.title}</h4>
                   <span>{item.year}</span>
                   <p className="timeline-text">{item.text}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section className="timeline">
+            <div className="title-wrapper">
+              <div className="icon-box">
+                <ion-icon name="ribbon-outline"></ion-icon>
+              </div>
+              <h3 className="h3">Certifications</h3>
+            </div>
+            <ol className="timeline-list">
+              {certifications.map((cert) => (
+                <li className="timeline-item" key={cert.title}>
+                  <h4 className="h4 timeline-item-title">
+                    <a href={cert.url} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>
+                      {cert.title}
+                      <ion-icon name="open-outline" style={{ fontSize: "14px", marginLeft: "6px", verticalAlign: "middle" }}></ion-icon>
+                    </a>
+                  </h4>
+                  <span>{cert.issuer}</span>
+                  <p className="timeline-text">{cert.text}</p>
                 </li>
               ))}
             </ol>
@@ -561,13 +607,19 @@ export default function Home() {
                   }`}
                   key={project.title}
                 >
-                  <a href="#">
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openGallery(project);
+                    }}
+                  >
                     <figure className="project-img">
                       <div className="project-item-icon-box">
                         <ion-icon name="eye-outline"></ion-icon>
                       </div>
                       <img
-                        src={project.img}
+                        src={project.images[0]}
                         alt={project.title}
                         loading="lazy"
                       />
@@ -579,9 +631,77 @@ export default function Home() {
               ))}
             </ul>
           </section>
+
+          {/* Gallery Popup */}
+          {galleryOpen && (
+            <div className="gallery-overlay" onClick={closeGallery}>
+              <div className="gallery-popup" onClick={(e) => e.stopPropagation()}>
+                <button className="gallery-close-btn" onClick={closeGallery}>
+                  <ion-icon name="close-outline"></ion-icon>
+                </button>
+
+                <div className="gallery-body">
+                  {galleryImages.length > 1 && (
+                    <button className="gallery-nav gallery-nav-prev" onClick={galleryPrev}>
+                      <ion-icon name="chevron-back-outline"></ion-icon>
+                    </button>
+                  )}
+
+                  <div className="gallery-image-wrapper">
+                    <img
+                      src={galleryImages[galleryIndex]}
+                      alt={`${galleryTitle} - ${galleryIndex + 1}`}
+                    />
+                  </div>
+
+                  {galleryImages.length > 1 && (
+                    <button className="gallery-nav gallery-nav-next" onClick={galleryNext}>
+                      <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </button>
+                  )}
+                </div>
+
+                <div className="gallery-footer">
+                  <div className="gallery-footer-left">
+                    <h4 className="gallery-title">{galleryTitle}</h4>
+                    {galleryUrl && galleryUrl !== "#" && (
+                      <a
+                        href={galleryUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="gallery-url"
+                      >
+                        <ion-icon name="open-outline"></ion-icon>
+                        Visit Site
+                      </a>
+                    )}
+                  </div>
+                  {galleryImages.length > 1 && (
+                    <span className="gallery-counter">
+                      {galleryIndex + 1} / {galleryImages.length}
+                    </span>
+                  )}
+                </div>
+
+                {galleryImages.length > 1 && (
+                  <div className="gallery-thumbnails">
+                    {galleryImages.map((img, i) => (
+                      <button
+                        key={i}
+                        className={`gallery-thumb ${i === galleryIndex ? "active" : ""}`}
+                        onClick={() => setGalleryIndex(i)}
+                      >
+                        <img src={img} alt={`Thumbnail ${i + 1}`} />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </article>
 
-        {/* ===== BLOG ===== */}
+        {/* ===== TECH HIGHLIGHTS ===== */}
         <article
           className={`blog ${activePage === "blog" ? "active" : ""}`}
         >
@@ -628,7 +748,7 @@ export default function Home() {
           <section className="mapbox">
             <figure>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d199666.5651251294!2d-121.58334177520186!3d38.56165006739519!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x809ac672b28397f9%3A0x921f6aaa74197fdb!2sSacramento%2C%20CA%2C%20USA!5e0!3m2!1sen!2sbd!4v1647608789441!5m2!1sen!2sbd"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61693.39870858498!2d121.14697285!3d14.588399!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c00c5b2e1b6d%3A0x5e0b5e47c097950c!2sAntipolo%2C%20Rizal%2C%20Philippines!5e0!3m2!1sen!2sph!4v1700000000000!5m2!1sen!2sph"
                 width="400"
                 height="300"
                 loading="lazy"

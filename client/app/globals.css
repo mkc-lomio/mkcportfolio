@@ -2241,3 +2241,147 @@ textarea.form-input::-webkit-resizer { display: none; }
   height: 100%;
   object-fit: cover;
 }
+
+/* ===== HOBBIES & CHESS ===== */
+
+.hobbies { margin-bottom: 15px; }
+
+.hobbies-title { margin-bottom: 20px; }
+
+.hobby-card {
+  padding: 20px;
+}
+
+.hobby-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.hobby-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.hobby-subtitle {
+  color: hsl(0, 0%, 55%);
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+.chess-games-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chess-game-item {
+  background: hsl(240, 2%, 15%);
+  border: 1px solid hsl(0, 0%, 20%);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.2s;
+}
+
+.chess-game-item:hover {
+  border-color: hsl(0, 0%, 30%);
+}
+
+.chess-game-players {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.88rem;
+  color: hsl(0, 0%, 90%);
+  font-weight: 500;
+}
+
+.chess-vs {
+  color: hsl(0, 0%, 45%);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.chess-title-badge {
+  display: inline-block;
+  background: hsl(35, 80%, 45%);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 4px;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+}
+
+.chess-game-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: hsl(0, 0%, 55%);
+}
+
+.chess-result {
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chess-result-win {
+  background: hsla(140, 60%, 40%, 0.2);
+  color: hsl(140, 60%, 55%);
+}
+
+.chess-result-loss {
+  background: hsla(0, 60%, 40%, 0.2);
+  color: hsl(0, 60%, 60%);
+}
+
+.chess-result-draw {
+  background: hsla(0, 0%, 50%, 0.2);
+  color: hsl(0, 0%, 65%);
+}
+
+.chess-game-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chess-termination {
+  font-size: 0.78rem;
+  color: hsl(0, 0%, 50%);
+  font-style: italic;
+}
+
+.chess-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: hsl(45, 100%, 72%);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: hsla(45, 100%, 72%, 0.1);
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.chess-view-btn:hover {
+  background: hsla(45, 100%, 72%, 0.2);
+  color: hsl(45, 100%, 80%);
+}

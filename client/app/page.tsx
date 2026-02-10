@@ -140,6 +140,22 @@ const blogPosts = [
   },
 ];
 
+const chessGames = [
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2606,
+    black: "Akshayraj_Kore",
+    blackElo: 2729,
+    blackTitle: "GM",
+    result: "1-0",
+    opening: "English Opening",
+    date: "Nov 18, 2025",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/145643480342/analysis?move=0",
+  },
+];
+
 const filterCategories = ["All", "Enterprise", "E-commerce", "Healthcare", "Developer tools"];
 const navPages = ["About", "Resume", "Portfolio", "Blog", "Contact"];
 
@@ -465,6 +481,58 @@ export default function Home() {
               </div>
             </div>
           )}
+
+          {/* Hobbies */}
+          <section className="hobbies">
+            <h3 className="h3 hobbies-title">Hobbies & Interests</h3>
+
+            <div className="hobby-card content-card">
+              <div className="hobby-header">
+                <span className="hobby-icon">♟️</span>
+                <div>
+                  <h4 className="h4">Chess</h4>
+                  <p className="hobby-subtitle">Best Games Collection</p>
+                </div>
+              </div>
+
+              <ul className="chess-games-list">
+                {chessGames.map((game, i) => (
+                  <li className="chess-game-item" key={i}>
+                    <div className="chess-game-players">
+                      <span className="chess-white">
+                        ⬜ {game.white} ({game.whiteElo})
+                      </span>
+                      <span className="chess-vs">vs</span>
+                      <span className="chess-black">
+                        ⬛ {game.blackTitle && <span className="chess-title-badge">{game.blackTitle}</span>}
+                        {game.black} ({game.blackElo})
+                      </span>
+                    </div>
+                    <div className="chess-game-meta">
+                      <span className="chess-result chess-result-win">
+                        {game.result === "1-0" ? "Win" : game.result === "0-1" ? "Loss" : "Draw"}
+                      </span>
+                      <span>{game.opening}</span>
+                      <span>{game.timeControl}</span>
+                      <span>{game.date}</span>
+                    </div>
+                    <div className="chess-game-footer">
+                      <span className="chess-termination">{game.termination}</span>
+                      <a
+                        href={game.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="chess-view-btn"
+                      >
+                        <ion-icon name="open-outline"></ion-icon>
+                        View Game
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
         </article>
 
         {/* ===== RESUME ===== */}

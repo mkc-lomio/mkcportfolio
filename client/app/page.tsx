@@ -221,7 +221,7 @@ export default function Home() {
             <h1 className="name" title="Richard hanrick">
               Marc Kenneth Capitulo-Lomio
             </h1>
-            <p className="title">Web developer</p>
+            <p className="title">Software Developer</p>
           </div>
 
           <button
@@ -243,8 +243,8 @@ export default function Home() {
               </div>
               <div className="contact-info">
                 <p className="contact-title">Email</p>
-                <a href="mailto:richard@example.com" className="contact-link">
-                  richard@example.com
+                <a href="mailto:marckenneth.lomio@gmail.com" className="contact-link">
+                  marckenneth.lomio@gmail.com
                 </a>
               </div>
             </li>
@@ -255,8 +255,8 @@ export default function Home() {
               </div>
               <div className="contact-info">
                 <p className="contact-title">Phone</p>
-                <a href="tel:+12133522795" className="contact-link">
-                  +1 (213) 352-2795
+                <a href="tel:+639171667863" className="contact-link">
+                  +63 917-166-7863
                 </a>
               </div>
             </li>
@@ -267,7 +267,7 @@ export default function Home() {
               </div>
               <div className="contact-info">
                 <p className="contact-title">Birthday</p>
-                <time dateTime="1982-06-23">June 23, 1982</time>
+                <time dateTime="1997-12-11">Dec 11, 1997</time>
               </div>
             </li>
 
@@ -277,7 +277,7 @@ export default function Home() {
               </div>
               <div className="contact-info">
                 <p className="contact-title">Location</p>
-                <address>Sacramento, California, USA</address>
+                <address>Antipolo, Rizal, Philippines</address>
               </div>
             </li>
           </ul>

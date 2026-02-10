@@ -265,28 +265,6 @@ export default function Home() {
 
             <li className="contact-item">
               <div className="icon-box">
-                <ion-icon name="phone-portrait-outline"></ion-icon>
-              </div>
-              <div className="contact-info">
-                <p className="contact-title">Phone</p>
-                <a href="tel:+639171667863" className="contact-link">
-                  +63 917-166-7863
-                </a>
-              </div>
-            </li>
-
-            <li className="contact-item">
-              <div className="icon-box">
-                <ion-icon name="calendar-outline"></ion-icon>
-              </div>
-              <div className="contact-info">
-                <p className="contact-title">Birthday</p>
-                <time dateTime="1997-12-11">Dec 11, 1997</time>
-              </div>
-            </li>
-
-            <li className="contact-item">
-              <div className="icon-box">
                 <ion-icon name="location-outline"></ion-icon>
               </div>
               <div className="contact-info">
@@ -676,82 +654,6 @@ export default function Home() {
               ))}
             </ul>
           </section>
-
-          {/* Gallery Popup */}
-          {galleryOpen && (
-            <div className="gallery-overlay" onClick={closeGallery}>
-              <div className="gallery-popup" onClick={(e) => e.stopPropagation()}>
-                <button className="gallery-close-btn" onClick={closeGallery}>
-                  <ion-icon name="close-outline"></ion-icon>
-                </button>
-
-                <div className="gallery-body">
-                  {galleryImages.length > 1 && (
-                    <button className="gallery-nav gallery-nav-prev" onClick={galleryPrev}>
-                      <ion-icon name="chevron-back-outline"></ion-icon>
-                    </button>
-                  )}
-
-                  <div className="gallery-image-wrapper">
-                    <img
-                      src={galleryImages[galleryIndex]}
-                      alt={`${galleryTitle} - ${galleryIndex + 1}`}
-                    />
-                  </div>
-
-                  {galleryImages.length > 1 && (
-                    <button className="gallery-nav gallery-nav-next" onClick={galleryNext}>
-                      <ion-icon name="chevron-forward-outline"></ion-icon>
-                    </button>
-                  )}
-                </div>
-
-                <div className="gallery-footer">
-                  <div className="gallery-footer-left">
-                    <h4 className="gallery-title">{galleryTitle}</h4>
-                    {galleryUrl && galleryUrl !== "#" && (
-                      <a
-                        href={galleryUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="gallery-url"
-                      >
-                        <ion-icon name="open-outline"></ion-icon>
-                        Visit Site
-                      </a>
-                    )}
-                  </div>
-                  {galleryImages.length > 1 && (
-                    <span className="gallery-counter">
-                      {galleryIndex + 1} / {galleryImages.length}
-                    </span>
-                  )}
-                </div>
-
-                {galleryDescription && (
-                  <div className="gallery-description">
-                    {galleryDescription.split("\n").map((line, i) => (
-                      <p key={i}>{line}</p>
-                    ))}
-                  </div>
-                )}
-
-                {galleryImages.length > 1 && (
-                  <div className="gallery-thumbnails">
-                    {galleryImages.map((img, i) => (
-                      <button
-                        key={i}
-                        className={`gallery-thumb ${i === galleryIndex ? "active" : ""}`}
-                        onClick={() => setGalleryIndex(i)}
-                      >
-                        <img src={img} alt={`Thumbnail ${i + 1}`} />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </article>
 
         {/* ===== TECH HIGHLIGHTS ===== */}
@@ -853,6 +755,82 @@ export default function Home() {
           </section>
         </article>
       </div>
+
+      {/* Gallery Popup */}
+      {galleryOpen && (
+        <div className="gallery-overlay" onClick={closeGallery}>
+          <div className="gallery-popup" onClick={(e) => e.stopPropagation()}>
+            <button className="gallery-close-btn" onClick={closeGallery}>
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+
+            <div className="gallery-body">
+              {galleryImages.length > 1 && (
+                <button className="gallery-nav gallery-nav-prev" onClick={galleryPrev}>
+                  <ion-icon name="chevron-back-outline"></ion-icon>
+                </button>
+              )}
+
+              <div className="gallery-image-wrapper">
+                <img
+                  src={galleryImages[galleryIndex]}
+                  alt={`${galleryTitle} - ${galleryIndex + 1}`}
+                />
+              </div>
+
+              {galleryImages.length > 1 && (
+                <button className="gallery-nav gallery-nav-next" onClick={galleryNext}>
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </button>
+              )}
+            </div>
+
+            <div className="gallery-footer">
+              <div className="gallery-footer-left">
+                <h4 className="gallery-title">{galleryTitle}</h4>
+                {galleryUrl && galleryUrl !== "#" && (
+                  <a
+                    href={galleryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="gallery-url"
+                  >
+                    <ion-icon name="open-outline"></ion-icon>
+                    Visit Site
+                  </a>
+                )}
+              </div>
+              {galleryImages.length > 1 && (
+                <span className="gallery-counter">
+                  {galleryIndex + 1} / {galleryImages.length}
+                </span>
+              )}
+            </div>
+
+            {galleryDescription && (
+              <div className="gallery-description">
+                {galleryDescription.split("\n").map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+            )}
+
+            {galleryImages.length > 1 && (
+              <div className="gallery-thumbnails">
+                {galleryImages.map((img, i) => (
+                  <button
+                    key={i}
+                    className={`gallery-thumb ${i === galleryIndex ? "active" : ""}`}
+                    onClick={() => setGalleryIndex(i)}
+                  >
+                    <img src={img} alt={`Thumbnail ${i + 1}`} />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

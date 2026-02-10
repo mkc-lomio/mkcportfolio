@@ -97,20 +97,20 @@ const certifications = [
 const experience = [
   {
     title: "Software Engineer — Kinetic Innovative Staffing",
-    address: "Australia",
-    year: "2023 — Present",
+    address: "Brisbane City, Queensland, Australia",
+    year: "Sep 2023 — Present",
     text: "Automated attendance tracking with WebJobs pulling 100,000+ daily data points. Built a sessionization algorithm increasing time-tracking accuracy by 90% for 4,000+ users.",
   },
   {
     title: "Software Engineer — BlastAsia, Inc.",
-    address: "Philippines",
-    year: "2019 — 2023",
+    address: "Metro Manila, Philippines",
+    year: "May 2019 — Sep 2023",
     text: "Delivered 17 applications across recruitment, healthcare, e-commerce, insurance, and asset management. Led code reviews, R&D initiatives, and deployed scalable apps with Azure App Service.",
   },
   {
     title: "Software Developer Intern — Mr. Geek Mobile Solution Inc.",
-    address: "Philippines",
-    year: "2018",
+    address: "Metro Manila, Philippines",
+    year: "Oct 2018 — Jan 2019",
     text: "Developed android mobile application using Android Studio (Java) and PHP 7 as backend service.",
   },
 ];

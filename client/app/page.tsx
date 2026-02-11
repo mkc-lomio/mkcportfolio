@@ -122,6 +122,54 @@ const skills = [
   { name: "REST API Development", value: 95 },
 ];
 
+const skillGroups = [
+  {
+    category: "Languages",
+    icon: "code-slash-outline",
+    items: ["C#", "TypeScript", "JavaScript", "SQL", "T-SQL", "PowerShell", "Go", "PHP", "RxJS", "JSON", "XML"],
+  },
+  {
+    category: "Backend",
+    icon: "server-outline",
+    items: [".NET 5", ".NET Core 3.1", ".NET Core 2.1", "IdentityServer4", "NSwag", "REST API", "Webhook", "MediatR"],
+  },
+  {
+    category: "Frontend",
+    icon: "laptop-outline",
+    items: ["Angular", "React.js", "Redux", "Bootstrap", "Metronic", "HTML/CSS"],
+  },
+  {
+    category: "Database",
+    icon: "layers-outline",
+    items: ["SQL Server", "Azure SQL", "MySQL", "Cosmos DB", "SQLite", "Dapper", "EF Core"],
+  },
+  {
+    category: "Cloud & DevOps",
+    icon: "cloud-outline",
+    items: ["Azure WebJobs", "Azure Functions", "Azure Blob Storage", "Azure Pipelines", "GitHub Actions", "Docker", "Jenkins", "IIS"],
+  },
+  {
+    category: "Integrations",
+    icon: "git-network-outline",
+    items: ["Hubstaff", "Time Doctor", "Screenshot Monitor", "Paynamics", "Zoom", "SharePoint", "SendGrid", "Movider", "Google Auth", "Facebook Auth", "Telerivet"],
+  },
+  {
+    category: "Libraries & Tools",
+    icon: "construct-outline",
+    items: ["Leaflet.js", "Plotly.js", "DrawFlow", "FullCalendar", "Pako.js", "ClosedXML", "MemoryCache", "Polly", "Swagger", "Postman", "DevToys"],
+  },
+  {
+    category: "Architecture",
+    icon: "git-merge-outline",
+    items: ["CQRS", "Clean Architecture", "DDD", "MVC", "Repository Pattern", "Onion Architecture", "N-Tier", "SOLID", "Design Patterns"],
+  },
+  {
+    category: "Workflow",
+    icon: "people-outline",
+    items: ["Agile / Scrum", "Kanban", "Git", "GitHub", "BitBucket", "Azure DevOps", "xUnit"],
+  },
+];
+
 const projects = [
   { images: ["/kinetic-portal-img.png",
     "/kinetic-portal-img-2.png","/kinetic-portal-img-3.png","/kinetic-portal-img-4.png"
@@ -691,22 +739,42 @@ export default function Home() {
 
           <section className="skill">
             <h3 className="h3 skills-title">My skills</h3>
-            <ul className="skills-list content-card">
-              {skills.map((skill) => (
-                <li className="skills-item" key={skill.name}>
-                  <div className="title-wrapper">
-                    <h5 className="h5">{skill.name}</h5>
-                    <data value={skill.value}>{skill.value}%</data>
+
+            <div className="skills-grid">
+              {skillGroups.map((group) => (
+                <div className="skill-category-card content-card" key={group.category}>
+                  <div className="skill-category-header">
+                    <ion-icon name={group.icon}></ion-icon>
+                    <h5 className="h5">{group.category}</h5>
                   </div>
-                  <div className="skill-progress-bg">
-                    <div
-                      className="skill-progress-fill"
-                      style={{ width: `${skill.value}%` }}
-                    ></div>
+                  <div className="skill-tags">
+                    {group.items.map((item) => (
+                      <span className="skill-tag" key={item}>{item}</span>
+                    ))}
                   </div>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
+
+            <div className="skills-core-bar">
+              <h4 className="h5 skills-bar-heading">Core Proficiency</h4>
+              <ul className="skills-bar-list content-card">
+                {skills.map((skill) => (
+                  <li className="skills-item" key={skill.name}>
+                    <div className="title-wrapper">
+                      <h5 className="h5">{skill.name}</h5>
+                      <data value={skill.value}>{skill.value}%</data>
+                    </div>
+                    <div className="skill-progress-bg">
+                      <div
+                        className="skill-progress-fill"
+                        style={{ width: `${skill.value}%` }}
+                      ></div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </section>
         </article>
 

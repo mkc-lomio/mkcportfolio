@@ -923,8 +923,88 @@ main {
 
 .skills-title { margin-bottom: 20px; }
 
-.skills-list { padding: 20px; }
+/* Skills Grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
 
+.skill-category-card {
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--bg-gradient-jet);
+  border: 1px solid var(--jet);
+  transition: var(--transition-1);
+}
+
+.skill-category-card:hover {
+  border-color: var(--orange-yellow-crayola);
+  box-shadow: 0 0 0 1px hsla(45, 100%, 72%, 0.1);
+}
+
+.skill-category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.skill-category-header ion-icon {
+  font-size: 20px;
+  color: var(--orange-yellow-crayola);
+  flex-shrink: 0;
+}
+
+.skill-category-header .h5 {
+  color: var(--white-1);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-500);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-tag {
+  display: inline-block;
+  padding: 5px 14px;
+  font-size: var(--fs-8);
+  font-weight: var(--fw-400);
+  color: var(--light-gray);
+  background: hsla(0, 0%, 100%, 0.04);
+  border: 1px solid hsla(0, 0%, 100%, 0.08);
+  border-radius: 50px;
+  white-space: nowrap;
+  transition: var(--transition-1);
+}
+
+.skill-tag:hover {
+  color: var(--orange-yellow-crayola);
+  background: hsla(45, 100%, 72%, 0.08);
+  border-color: hsla(45, 100%, 72%, 0.25);
+}
+
+/* Core Proficiency bars */
+.skills-core-bar {
+  margin-top: 8px;
+}
+
+.skills-bar-heading {
+  color: var(--white-2);
+  font-weight: var(--fw-500);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: var(--fs-7);
+  margin-bottom: 16px;
+}
+
+.skills-bar-list { padding: 20px; }
 
 .skills-item:not(:last-child) { margin-bottom: 15px; }
 
@@ -1590,6 +1670,10 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .skills-item:not(:last-child) { margin-bottom: 25px; }
 
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
 
 
   /**
@@ -1969,6 +2053,10 @@ textarea.form-input::-webkit-resizer { display: none; }
 	 */
 
   .timeline-text { max-width: 700px; }
+
+  .skills-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
 }
 /* ===== IMAGE POPUP ===== */

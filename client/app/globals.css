@@ -776,24 +776,34 @@ main {
 
 .clients { margin-bottom: 15px; }
 
-.clients-list {
+.clients-marquee-wrapper {
+  overflow: hidden;
+  margin: 0 -15px;
+  padding: 25px 0;
+  cursor: grab;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.clients-marquee-wrapper:active {
+  cursor: grabbing;
+}
+
+.clients-marquee {
   display: flex;
-  justify-content: flex-start;
   align-items: flex-start;
   gap: 15px;
-  margin: 0 -15px;
-  padding: 25px;
-  padding-bottom: 25px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  overscroll-behavior-inline: contain;
-  scroll-snap-type: inline mandatory;
-  scroll-padding-inline: 25px;
+  width: max-content;
+  will-change: transform;
+  list-style: none;
+  padding: 0 15px;
+  margin: 0;
 }
 
 .clients-item {
-  min-width: 50%;
-  scroll-snap-align: start;
+  min-width: 150px;
+  flex-shrink: 0;
 }
 
 .clients-item a {
@@ -1316,7 +1326,7 @@ textarea.form-input::-webkit-resizer { display: none; }
    * client
    */
 
-  .clients-item { min-width: calc(33.33% - 10px); }
+  .clients-item { min-width: 150px; }
 
 
 
@@ -1550,14 +1560,17 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   /* clients */
 
-  .clients-list {
-    gap: 50px;
+  .clients-marquee-wrapper {
     margin: 0 -30px;
-    padding: 45px;
-    scroll-padding-inline: 45px;
+    padding: 45px 0;
   }
 
-  .clients-item { min-width: calc(33.33% - 35px); }
+  .clients-marquee {
+    gap: 30px;
+    padding: 0 30px;
+  }
+
+  .clients-item { min-width: 160px; }
 
 
 
@@ -1813,7 +1826,7 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   /* clients */
 
-  .clients-item { min-width: calc(25% - 38px); }
+  .clients-item { min-width: 170px; }
 
 
 

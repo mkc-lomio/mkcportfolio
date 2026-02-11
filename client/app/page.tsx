@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useEffect, useRef, useCallback, FormEvent } from "react";
 import Image from "next/image";
 
 // ============ DATA ============
@@ -186,6 +186,60 @@ export default function Home() {
   const [galleryTitle, setGalleryTitle] = useState("");
   const [galleryUrl, setGalleryUrl] = useState("");
   const [galleryDescription, setGalleryDescription] = useState("");
+  const [marqueePaused, setMarqueePaused] = useState(false);
+  const marqueeRef = useRef<HTMLUListElement>(null);
+  const scrollPosRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartScrollRef = useRef(0);
+
+  useEffect(() => {
+    const marquee = marqueeRef.current;
+    if (!marquee) return;
+
+    let animationId: number;
+    const speed = 0.5;
+
+    const step = () => {
+      if (!marqueePaused && !isDraggingRef.current) {
+        scrollPosRef.current += speed;
+        const halfWidth = marquee.scrollWidth / 2;
+        if (scrollPosRef.current >= halfWidth) {
+          scrollPosRef.current = 0;
+        }
+        if (scrollPosRef.current < 0) {
+          scrollPosRef.current = halfWidth;
+        }
+        marquee.style.transform = `translateX(-${scrollPosRef.current}px)`;
+      }
+      animationId = requestAnimationFrame(step);
+    };
+
+    animationId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationId);
+  }, [marqueePaused]);
+
+  const handleMarqueePointerDown = useCallback((e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    dragStartXRef.current = e.clientX;
+    dragStartScrollRef.current = scrollPosRef.current;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  }, []);
+
+  const handleMarqueePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!isDraggingRef.current || !marqueeRef.current) return;
+    const delta = dragStartXRef.current - e.clientX;
+    let newPos = dragStartScrollRef.current + delta;
+    const halfWidth = marqueeRef.current.scrollWidth / 2;
+    if (newPos >= halfWidth) newPos -= halfWidth;
+    if (newPos < 0) newPos += halfWidth;
+    scrollPosRef.current = newPos;
+    marqueeRef.current.style.transform = `translateX(-${newPos}px)`;
+  }, []);
+
+  const handleMarqueePointerUp = useCallback(() => {
+    isDraggingRef.current = false;
+  }, []);
 
   const handleNavClick = (page: string) => {
     setActivePage(page.toLowerCase());
@@ -462,21 +516,33 @@ export default function Home() {
           {/* Clients */}
           <section className="clients">
             <h3 className="h3 clients-title">Clients</h3>
-            <ul className="clients-list has-scrollbar">
-              {clients.map((logo, i) => (
-                <li className="clients-item" key={i}>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setImagePopup(logo);
-                    }}
-                  >
-                    <img src={logo} alt="client logo" />
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div
+              className="clients-marquee-wrapper"
+              onMouseEnter={() => setMarqueePaused(true)}
+              onMouseLeave={() => { setMarqueePaused(false); isDraggingRef.current = false; }}
+              onTouchStart={() => setMarqueePaused(true)}
+              onTouchEnd={() => { setTimeout(() => setMarqueePaused(false), 2000); }}
+              onPointerDown={handleMarqueePointerDown}
+              onPointerMove={handleMarqueePointerMove}
+              onPointerUp={handleMarqueePointerUp}
+              onPointerCancel={handleMarqueePointerUp}
+            >
+              <ul className="clients-marquee" ref={marqueeRef}>
+                {[...clients, ...clients].map((logo, i) => (
+                  <li className="clients-item" key={i}>
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setImagePopup(logo);
+                      }}
+                    >
+                      <img src={logo} alt="client logo" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </section>
 
           {/* Image Popup */}

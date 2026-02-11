@@ -442,17 +442,17 @@ export default function Home() {
 
           <section className="about-text">
             <p>
-              I&apos;m a Software Engineer with 6+ years of experience specializing
-              in the Microsoft tech stack. I&apos;ve delivered 19 projects across
-              development, upgrades, and support — spanning HR systems, insurance
-              platforms, healthcare, e-commerce, and more.
+              He is a Software Engineer and individual contributor with 6+
+              years of experience in the Microsoft tech stack. He has delivered
+              12 projects across HR, insurance, e-commerce, healthcare, and
+              more — whether it&apos;s developing applications from the ground
+              up, reverse engineering, version upgrades, research &amp;
+              development, or maintenance. He picks up new tools and
+              domains quickly, often ramping up on unfamiliar stacks to deliver
+              ahead of schedule.
             </p>
             <p>
-              I&apos;m skilled in process automation, third-party API integration,
-              and efficient code to solve complex problems. My focus
-              is on boosting system performance, reliability, and scalability. I
-              enjoy turning business requirements into well-architected solutions
-              using C#/.NET, Angular, SQL Server, and Azure cloud services.
+              Outside of work, he is a competitive chess player.
             </p>
           </section>
 

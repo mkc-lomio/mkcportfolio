@@ -80,26 +80,6 @@
     "pinLabel": "vs Prodigy Faustino Oro (3121 Elo)"
   },
   {
-    "white": "GM_dmitrij",
-    "whiteElo": 3000,
-    "whiteTitle": "GM",
-    "whiteCountry": "DE",
-    "whiteImg": "https://images.chesscomfiles.com/uploads/v1/user/27181148.59e377d4.50x50o.29f1c14d472a.jpeg",
-    "black": "DrMkcTheHandSome",
-    "blackElo": 2668,
-    "blackTitle": "",
-    "blackCountry": "PH",
-    "blackImg": "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    "result": "1-0",
-    "opening": "Scandinavian Defense",
-    "date": "Jan 22, 2025",
-    "timeControl": "3 min",
-    "termination": "GM_dmitrij won by resignation",
-    "link": "https://www.chess.com/analysis/game/live/131304631235/analysis",
-    "pinned": true,
-    "pinLabel": "vs Super GM Dmitrij Kollars (3000 Elo)"
-  },
-  {
     "white": "DrMkcTheHandSome",
     "whiteElo": 2529,
     "whiteTitle": "",

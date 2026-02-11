@@ -3,666 +3,98 @@
 import { useState, useEffect, useRef, useCallback, FormEvent } from "react";
 import Image from "next/image";
 
-// ============ DATA ============
+// ============ TYPES ============
 
-const services = [
-  {
-    icon: "/icon-dev.svg",
-    title: "Backend Development",
-    text: "Building robust APIs and web services using C#/.NET, with expertise in CQRS, Clean Architecture, and SQL Server optimization.",
-  },
-  {
-    icon: "/icon-design.svg",
-    title: "Frontend Development",
-    text: "Developing dynamic, responsive web applications with Angular, React, and TypeScript for seamless user experiences.",
-  },
-  {
-    icon: "/icon-app.svg",
-    title: "API Integration",
-    text: "Integrating third-party APIs such as Hubstaff, Zoom, Paynamics, and SharePoint to extend application capabilities.",
-  },
-  {
-    icon: "/icon-photo.svg",
-    title: "Process Automation",
-    text: "Automating workflows with Azure WebJobs, Functions, and CI/CD pipelines to improve efficiency and reduce manual effort.",
-  },
-];
+interface Service {
+  icon: string;
+  title: string;
+  text: string;
+}
 
-const testimonials = [
-  {
-    avatar: "/avatar-1.png",
-    name: "Your Name Here",
-    text: "Share your experience working with Marc Kenneth. Your testimonial will appear here.",
-  },
-];
+interface Testimonial {
+  avatar: string;
+  name: string;
+  text: string;
+}
 
-const clients = [
-  "/daikin-logo.png",
-  "/homeqube-logo.jpg",
-  "/iscan-logo.png",
-  "/advance-energy-logo.png",
-  "/mundipharma-logo.jpg",
-  "/kinetic-logo.png",
-  "/magsaysay-careers-logo.png",
-  "/chesslab-ae-logo.png",
-  "/marius-logo.jpg",
-  "/mr-geek-logo.png",
-  "/rivtechcorp_cover-logo.jpg",
-  "/xamun-ai-logo.png",
-];
+interface Education {
+  title: string;
+  year: string;
+  address: string;
+  text: string;
+}
 
-const education = [
-  {
-    title: "Bachelor of Science: Information Technology",
-    year: "Jose Rizal University",
-    address: "Philippines",
-    text: "Completed a comprehensive IT program covering software development, database management, and systems analysis.",
-  },
-];
+interface Certification {
+  title: string;
+  issuer: string;
+  text: string;
+  url: string;
+}
 
-const certifications = [
-  {
-    title: "Exam 483: Programming in C#",
-    issuer: "Microsoft",
-    text: "Demonstrated proficiency in C# programming including managing program flow, creating types, and debugging applications.",
-    url: "https://www.credly.com/badges/13902a49-5ee2-4694-96d6-f7b3d22bf884/public_url",
-  },
-  {
-    title: "Azure Developer Associate",
-    issuer: "Microsoft",
-    text: "Certified in designing, building, testing, and maintaining cloud applications and services on Microsoft Azure.",
-    url: "https://www.credly.com/badges/de57f472-20aa-42ed-af1a-23f25f9b4dfb",
-  },
-  {
-    title: "Advanced C# Programming in .NET Core",
-    issuer: "EDUCBA",
-    text: "Advanced training in .NET Core development covering modern C# features, async programming, and enterprise patterns.",
-    url: "https://www.coursera.org/account/accomplishments/verify/8ELB2A7JAYB3",
-  },
-  {
-    title: "Product Management",
-    issuer: "IBM",
-    text: "Certification covering product lifecycle management, stakeholder communication, and strategic product planning.",
-    url: "https://www.coursera.org/account/accomplishments/verify/LOOSMZOI690C",
-  },
-  {
-    title: "EF SET: C1 Advanced",
-    issuer: "EF Standard English Test",
-    text: "Achieved C1 Advanced level proficiency in English, demonstrating fluent and effective communication skills.",
-    url: "https://cert.efset.org/en/pUaqtj",
-  },
-];
+interface Experience {
+  title: string;
+  address: string;
+  year: string;
+  text: string;
+}
 
-const experience = [
-  {
-    title: "Software Engineer — Kinetic Innovative Staffing",
-    address: "Brisbane City, Queensland, Australia",
-    year: "Sep 2023 — Present",
-    text: "Automated attendance tracking with WebJobs pulling 100,000+ daily data points. Built a sessionization algorithm increasing time-tracking accuracy by 90% for 4,000+ users.",
-  },
-  {
-    title: "Software Engineer — BlastAsia, Inc.",
-    address: "Metro Manila, Philippines",
-    year: "May 2019 — Sep 2023",
-    text: "Delivered 17 applications across recruitment, healthcare, e-commerce, insurance, and asset management. Led code reviews, R&D initiatives, and deployed scalable apps with Azure App Service.",
-  },
-  {
-    title: "Software Developer Intern — Mr. Geek Mobile Solution Inc.",
-    address: "Metro Manila, Philippines",
-    year: "Oct 2018 — Jan 2019",
-    text: "Developed android mobile application using Android Studio (Java) and PHP 7 as backend service.",
-  },
-];
+interface CoreSkill {
+  name: string;
+  value: number;
+}
 
-const skills = [
-  { name: "C# / .NET", value: 95 },
-  { name: "Angular / TypeScript", value: 90 },
-  { name: "SQL Server / T-SQL", value: 90 },
-  { name: "Azure Services", value: 85 },
-  { name: "REST API Development", value: 95 },
-];
+interface SkillGroup {
+  category: string;
+  icon: string;
+  items: string[];
+}
 
-const skillGroups = [
-  {
-    category: "Languages",
-    icon: "code-slash-outline",
-    items: ["C#", "TypeScript", "JavaScript", "SQL", "T-SQL", "PowerShell", "Go", "PHP", "RxJS", "JSON", "XML"],
-  },
-  {
-    category: "Backend",
-    icon: "server-outline",
-    items: [".NET 5", ".NET Core 3.1", ".NET Core 2.1", "IdentityServer4", "NSwag", "REST API", "Webhook", "MediatR"],
-  },
-  {
-    category: "Frontend",
-    icon: "laptop-outline",
-    items: ["Angular", "React.js", "Redux", "Bootstrap", "Metronic", "HTML/CSS"],
-  },
-  {
-    category: "Database",
-    icon: "layers-outline",
-    items: ["SQL Server", "Azure SQL", "MySQL", "Cosmos DB", "SQLite", "Dapper", "EF Core"],
-  },
-  {
-    category: "Cloud & DevOps",
-    icon: "cloud-outline",
-    items: ["Azure WebJobs", "Azure Functions", "Azure Blob Storage", "Azure Pipelines", "GitHub Actions", "Docker", "Jenkins", "IIS"],
-  },
-  {
-    category: "Integrations",
-    icon: "git-network-outline",
-    items: ["Hubstaff", "Time Doctor", "Screenshot Monitor", "Paynamics", "Zoom", "SharePoint", "SendGrid", "Movider", "Google Auth", "Facebook Auth", "Telerivet"],
-  },
-  {
-    category: "Libraries & Tools",
-    icon: "construct-outline",
-    items: ["Leaflet.js", "Plotly.js", "DrawFlow", "FullCalendar", "Pako.js", "ClosedXML", "MemoryCache", "Polly", "Swagger", "Postman", "DevToys"],
-  },
-  {
-    category: "Architecture",
-    icon: "git-merge-outline",
-    items: ["CQRS", "Clean Architecture", "DDD", "MVC", "Repository Pattern", "Onion Architecture", "N-Tier", "SOLID", "Design Patterns"],
-  },
-  {
-    category: "Workflow",
-    icon: "people-outline",
-    items: ["Agile / Scrum", "Kanban", "Git", "GitHub", "BitBucket", "Azure DevOps", "xUnit"],
-  },
-];
+interface SkillsData {
+  coreSkills: CoreSkill[];
+  skillGroups: SkillGroup[];
+}
 
-const projects = [
-  { images: ["/kinetic-portal-img.png",
-    "/kinetic-portal-img-2.png","/kinetic-portal-img-3.png","/kinetic-portal-img-4.png"
-  ], title: "Kinetic Portal", category: "administrative", url: "https://portal.kineticstaff.com/", description: "This project focused on boosting HR and administrative efficiency. It introduced a unified platform that handled leave and overtime requests, internal job postings, and employee contracts. Key features included a resume format for daily applicants, a payroll schedule manager, and advanced activity reports. Built to streamline HR operations, the platform improved employee experience and workflow.\n\nKey Contribution:\n• Automated Late WebJobs to run every 30 minutes, improving attendance tracking and cutting absenteeism response time by 25%.\n• Built WebJobs to pull 100,000+ daily data points from APIs (Holiday, Screenshot Monitor, Time Doctor, Hubstaff), boosting data accuracy and reducing manual input.\n• Created a Booking Calendar with FullCalendar to automate orientation scheduling for 63,000+ candidates.\n• Developed a timesheet monitor for 4,000+ team members, improving accountability and reducing errors.\n• Supported 70+ internal users by quickly resolving app issues, ensuring smooth business operations.\n• Built a sessionization algorithm to reconstruct continuous sessions from raw Hubstaff logs — increasing time-tracking accuracy by 90% for over 4,000 users.\n• Redesigned and optimized complex SQL Server queries handling 9 million candidate records, implementing strategic indexing, query plan optimization, and stored procedure refactoring to enhance database performance and user experience.\n• Strengthened application security by implementing user role-based access control for API authorization, integrating JWT token validation for secure authentication, and utilizing parameterized queries with Dapper to eliminate SQL injection vulnerabilities.\n• Implemented AES-256 encryption to secure team members' salary data at rest, ensuring confidentiality and compliance with data protection standards.\n• Implemented materialized views as a database-level caching strategy to precompute and store query results, reducing response times and improving performance for read-intensive workloads." },
-  { images: ["/xamun-ai-img.png","/xamun-ai-img-2.png"], title: "Xamun Dev Portal", category: "ai solutions", url: "https://www.xamun.ai/", description: "A full-code platform for startups and digital projects—faster and simpler than Low-Code.\n\nKey Contribution:\n• Wrote PowerShell scripts for Azure Pipelines to automate CI/CD, cut deployment time, and reduce errors.\n• Integrated workflows using the DrawFlow library to streamline process design.\n• Built a reusable Angular schematics library to speed up development and ensure UI consistency.\n• Deployed scalable web apps with Azure and Docker, boosting release speed and system stability.\n• Set up secure external logins with IdentityServer4, connecting Facebook, Google, and AzureAD to simplify user access.\n• Built an Azure Services Class Library with Polly for resilient communication between services, incorporating retry logic and a circuit breaker pattern to enhance fault tolerance." },
-  { images: ["/rivington-1.jpg","/rivington-2.jpg","/rivington-3.jpg"], title: "Rivington (Collections Application, AMIG Application, Centauri Application)", category: "insurance", url: "#", description: "Rivington Partners is a managing general agency that focuses on writing specialty property & casualty insurance and placing risk with sponsoring insurance carriers.\n\nKey Contribution:\n• Built a Reports API using ClosedXML and LargeXLSX .NET to handle payments, premiums, cancellations, and endorsements.\n• Led development of a Claims feature to import external data into the RivTech Star App, improving data integration.\n• Developed and managed Azure Functions to automate daily and monthly financial transaction reports, enabling timely, accurate insights and supporting high-volume payment processing workflows.\n• Built and tested complex reporting logic for premium tracking—covering inforce, written, earned, and unearned—ensuring compliance and accuracy.\n• Led backend improvements focused on performance, research, and new development efforts.\n• Developed dynamic, state-based forms tailored for U.S. users to improve data input and UX.\n• Upgraded the backend from .NET Core 2.1 to .NET 5.0, modernizing the stack and boosting performance.\n• Migrated Azure Functions to .NET 5.0 Isolated Process to improve scalability and cloud performance." },
-  { images: ["/daikin-ecommerce-1.jpg"], title: "Daikin E-commerce", category: "e-commerce", url: "#", description: "Daikin Philippines runs an online store for air purifiers, enabling customers to browse and purchase products seamlessly.\n\nKey Contribution:\n• Implemented end-to-end payment integration with Paynamics for enabling secure transaction processing and handling card payment flows.\n• Built webhooks, APIs, and blob storage systems with SQL scripts and social login via Facebook and Google.\n• Designed and implemented Split Pay functionality with Paynamics, enabling automated payment segregation to multiple stakeholders (merchants, logistics, digital platforms) during a single customer transaction, with convenience fees configured per payment channel — e.g., Credit/Debit Cards (4% + ₱20), Online Bank Transfer/E-Wallets (2.5%), Over-the-Counter (₱25), and Installments (0.60% for credit cards, 2.50% for non-credit)." },
-  { images: ["/daikin-virtualshowroom-1.jpg","/daikin-virtualshowroom-2.jpg"], title: "Daikin Virtual Showroom", category: "e-commerce", url: "#", description: "Daikin's Virtual Showroom helps customers explore products without visiting a physical store, providing an immersive online browsing experience.\n\nKey Contribution:\n• Boosted API performance for the Virtual Showroom through focused optimization.\n• Developed CRUD APIs and service classes to manage data more efficiently.\n• Designed the ERD for the Virtual Showroom database to support structured data storage and fast retrieval." },
-  { images: ["/iscan-1.jpg","/iscan-2.jpg"], title: "iScan Diagnostic Center", category: "healthcare", url: "#", description: "iScan offers fast, reliable medical imaging services, powered by a skilled and patient-focused team.\n\nKey Contribution:\n• Built backend workflows for release and notification modules, improving control and speeding up communication.\n• Developed and maintained an Azure Function to automate alerts, boosting response time and cutting manual work.\n• Set up SMTP for email alerts and integrated Telerivet for SMS, ensuring reliable, multi-channel messaging." },
-  { images: ["/mundipharma-1.jpg","/mundipharma-2.jpg"], title: "My Scorecard (Mundipharma)", category: "healthcare", url: "#", description: "A web app that processes sales data and calculates employee incentives. Exports payout summaries and reports directly to Excel.\n\nKey Contribution:\n• Led web development using .NET Core, React.js, and Redux.\n• Deployed the app using Jenkins and IIS.\n• Overhauled report generation workflows to improve speed and clarity." },
-  { images: ["/magsaysay-1.jpg"], title: "Magsaysay Online Careers", category: "recruitment", url: "#", description: "A mobile and web-based HR platform for end-to-end recruitment. Built for ease of use and seamless hiring.\n\nKey Contribution:\n• Integrated Zoom API to streamline meetings and boost communication.\n• Debugged the codebase thoroughly to resolve issues fast and keep the app reliable." },
-  { images: ["/marius-1.jpg","/marius-2.jpg"], title: "Marius", category: "insurance", url: "#", description: "Marius is a cyber-insurance platform for clients, underwriters, and system admins. It manages policies from application to endorsement, renewal, cancellation, and claims.\n\nKey Contribution:\n• Built secure upload/download features using Azure Blob Storage to manage files at scale.\n• Developed modules for quote binding and bind requests, speeding up policy handling and boosting efficiency.\n• Developed modules for payments, endorsements, and cancellations to ensure accurate transactions and improve user satisfaction." },
-  { images: ["/tempest-1.jpg","/tempest-2.jpg"], title: "Tempest Asset Management", category: "administrative", url: "#", description: "This system lets school staff track repairs from start to finish—from part usage to student restoration time. Accessible from any browser, anytime, on any device.\n\nKey Contribution:\n• Built reusable components and services across API, backend, and frontend.\n• Improved and added features to the web app for the TIG user base." },
-  { images: ["/catalyst-1.jpg","/catalyst-2.jpg"], title: "Catalyst", category: "others", url: "#", description: "A code generator tool that helps build high-quality software faster.\n\nKey Contribution:\n• Built a full client app from scratch using Angular 9.\n• Set up and deployed the Angular schematic project as npm package.\n• Integrated Azure services including Queue, Function, Table, Cosmos DB, and Storage." },
-  { images: ["/homeqube-1.jpg"], title: "HomeQube", category: "ai solutions", url: "https://www.homeqube.com/", description: "Homeqube builds performance systems to tackle global housing shortages. It champions decentralization, open access, and breaking down barriers in knowledge, production, and supply.\n\nKey Contribution:\n• Researched and applied tools like Plotly.js, Leaflet.js, and Pako.js to meet stakeholder needs.\n• Built reusable components and services for both front-end and back-end development." },
-];
+interface Project {
+  images: string[];
+  title: string;
+  category: string;
+  url: string;
+  description: string;
+}
 
-const blogPosts = [
-  {
-    img: "/blog-1.jpg",
-    title: "Coming Soon",
-    category: "Blog",
-    date: "2025",
-    text: "Stay tuned — blog posts about software development, tech insights, and lessons learned will be shared here soon.",
-  },
-];
+interface BlogPost {
+  img: string;
+  title: string;
+  category: string;
+  date: string;
+  text: string;
+}
 
-const chessGames = [
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2656,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "Lestofante90",
-    blackElo: 2829,
-    blackTitle: "GM",
-    blackCountry: "IT",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/27728592.a32ae2c7.50x50o.d5700c0c4af8.jpeg",
-    result: "1-0",
-    opening: "Indian Game",
-    date: "Jan 22, 2025",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/131252971603/analysis",
-    pinned: true,
-    pinLabel: "Win vs Italian GM Danyyil Dvirnyy",
-  },
-      {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2672,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "TRadjabov",
-    blackElo: 3055,
-    blackTitle: "GM",
-    blackCountry: "AZ",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/18202610.a304129e.50x50o.09bc9c3e8aa7.jpeg",
-    result: "0-1",
-    opening: "East Indian / London System",
-    date: "Aug 2, 2024",
-    timeControl: "3 min",
-    termination: "TRadjabov won by resignation",
-    link: "https://www.chess.com/analysis/game/live/116358617561/analysis",
-    pinned: true,
-    pinLabel: "vs Super GM Teimour Radjabov (3055 Elo)",
-  },
-  {
-    white: "NigelShort",
-    whiteElo: 2873,
-    whiteTitle: "GM",
-    whiteCountry: "GB",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/12089276.726643af.50x50o.8057016c8698.jpg",
-    black: "DrMkcTheHandSome",
-    blackElo: 2552,
-    blackTitle: "",
-    blackCountry: "PH",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    result: "1-0",
-    opening: "Scandinavian Defense",
-    date: "Dec 18, 2024",
-    timeControl: "3 min",
-    termination: "NigelShort won by resignation",
-    link: "https://www.chess.com/analysis/game/live/128260136447/analysis",
-    pinned: true,
-    pinLabel: "vs Legendary Nigel Short",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2589,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "FaustinoOro",
-    blackElo: 3121,
-    blackTitle: "IM",
-    blackCountry: "AR",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/80994690.b4cf9a71.50x50o.d54f67f28ec0.jpg",
-    result: "0-1",
-    opening: "Van't Kruijs Opening",
-    date: "Aug 7, 2025",
-    timeControl: "3 min",
-    termination: "FaustinoOro won by checkmate",
-    link: "https://www.chess.com/analysis/game/live/141601772714/analysis",
-    pinned: true,
-    pinLabel: "vs Prodigy Faustino Oro (3121 Elo)",
-  },
-  {
-    white: "GM_dmitrij",
-    whiteElo: 3000,
-    whiteTitle: "GM",
-    whiteCountry: "DE",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/27181148.59e377d4.50x50o.29f1c14d472a.jpeg",
-    black: "DrMkcTheHandSome",
-    blackElo: 2668,
-    blackTitle: "",
-    blackCountry: "PH",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    result: "1-0",
-    opening: "Scandinavian Defense",
-    date: "Jan 22, 2025",
-    timeControl: "3 min",
-    termination: "GM_dmitrij won by resignation",
-    link: "https://www.chess.com/analysis/game/live/131304631235/analysis",
-    pinned: true,
-    pinLabel: "vs Super GM Dmitrij Kollars (3000 Elo)",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2529,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "ShrookWafa",
-    blackElo: 2528,
-    blackTitle: "WGM",
-    blackCountry: "EG",
-    blackImg: "",
-    result: "1-0",
-    opening: "English Opening",
-    date: "Dec 11, 2025",
-    timeControl: "3 min",
-    termination: "Won by checkmate",
-    link: "https://www.chess.com/analysis/game/live/146589984330/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2606,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "Akshayraj_Kore",
-    blackElo: 2729,
-    blackTitle: "GM",
-    blackCountry: "US",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/6179690.a3b2c80b.50x50o.9bded12a99f0.png",
-    result: "1-0",
-    opening: "English Opening",
-    date: "Nov 18, 2025",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/145643480342/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2677,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "Hongjin",
-    blackElo: 2754,
-    blackTitle: "IM",
-    blackCountry: "KR",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/52951788.c76c8bf7.50x50o.55cd6040abcb.png",
-    result: "1-0",
-    opening: "Sicilian Defense",
-    date: "Sep 2, 2025",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/142635706398/analysis?move=70",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2682,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "TheCount",
-    blackElo: 2660,
-    blackTitle: "GM",
-    blackCountry: "US",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/6204387.76703bbd.50x50o.2dc344ab4ed6.jpg",
-    result: "1-0",
-    opening: "Alapin Sicilian",
-    date: "Aug 26, 2025",
-    timeControl: "3 min",
-    termination: "Won on time",
-    link: "https://www.chess.com/analysis/game/live/142363070494/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2679,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "StrategySensei007",
-    blackElo: 2730,
-    blackTitle: "GM",
-    blackCountry: "BG",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/5979666.d5a77311.50x50o.8da5d6d4f9b0.jpg",
-    result: "1-0",
-    opening: "Modern Defense",
-    date: "Aug 26, 2025",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/142362212080/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2675,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "krsolomac",
-    blackElo: 2644,
-    blackTitle: "IM",
-    blackCountry: "BA",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/11931378.cdc5997e.50x50o.00542293b8db.jpeg",
-    result: "1-0",
-    opening: "Sicilian Defense",
-    date: "Aug 26, 2025",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/142359477492/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2666,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "SecretGM",
-    blackElo: 2710,
-    blackTitle: "GM",
-    blackCountry: "US",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/6265586.1a732832.50x50o.79e98762c407.jpeg",
-    result: "1-0",
-    opening: "Nimzo-Indian Defense",
-    date: "Aug 26, 2025",
-    timeControl: "3 min",
-    termination: "Won by checkmate",
-    link: "https://www.chess.com/analysis/game/live/142351821154/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2668,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "blueshark23",
-    blackElo: 2632,
-    blackTitle: "GM",
-    blackCountry: "HU",
-    blackImg: "",
-    result: "1-0",
-    opening: "Sicilian Defense",
-    date: "Aug 13, 2025",
-    timeControl: "3 min",
-    termination: "Won on time",
-    link: "https://www.chess.com/analysis/game/live/141840314364/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "VSanduleac",
-    whiteElo: 2672,
-    whiteTitle: "GM",
-    whiteCountry: "MD",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/43935916.d7ab5db2.50x50o.e846c30c1581.jpeg",
-    black: "DrMkcTheHandSome",
-    blackElo: 2650,
-    blackTitle: "",
-    blackCountry: "PH",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    result: "0-1",
-    opening: "Caro-Kann Defense",
-    date: "Aug 13, 2025",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/141829214754/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2576,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "gorato",
-    blackElo: 2562,
-    blackTitle: "GM",
-    blackCountry: "RS",
-    blackImg: "",
-    result: "1-0",
-    opening: "Sicilian Defense",
-    date: "Jul 31, 2025",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/141333519806/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "SchroedingersTiger",
-    whiteElo: 2695,
-    whiteTitle: "GM",
-    whiteCountry: "DE",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/20001882.15a29b43.50x50o.0464bc3b3b68.jpg",
-    black: "DrMkcTheHandSome",
-    blackElo: 2636,
-    blackTitle: "",
-    blackCountry: "PH",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    result: "0-1",
-    opening: "Scandinavian Defense",
-    date: "Feb 18, 2025",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/123012836344/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "Ron_Weasley_Chess",
-    whiteElo: 2686,
-    whiteTitle: "FM",
-    whiteCountry: "IL",
-    whiteImg: "",
-    black: "DrMkcTheHandSome",
-    blackElo: 2616,
-    blackTitle: "",
-    blackCountry: "PH",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    result: "0-1",
-    opening: "Réti Opening",
-    date: "Feb 18, 2025",
-    timeControl: "3 min",
-    termination: "Won by checkmate",
-    link: "https://www.chess.com/analysis/game/live/123012400208/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "gmjoey1",
-    whiteElo: 2708,
-    whiteTitle: "GM",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/2406471.35bf5585.50x50o.e9e94ee09965.jpg",
-    black: "DrMkcTheHandSome",
-    blackElo: 2664,
-    blackTitle: "",
-    blackCountry: "PH",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    result: "0-1",
-    opening: "Caro-Kann Defense",
-    date: "Feb 3, 2025",
-    timeControl: "3 min",
-    termination: "Won on time",
-    link: "https://www.chess.com/analysis/game/live/132319867025/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2561,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "Ginger_GM",
-    blackElo: 2605,
-    blackTitle: "GM",
-    blackCountry: "GB",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/13423970.d6fd8e2b.50x50o.35135199b0fa.jpg",
-    result: "1-0",
-    opening: "King's Indian Defense",
-    date: "Dec 5, 2024",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/127150814903/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2594,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "gmmitkov",
-    blackElo: 2621,
-    blackTitle: "GM",
-    blackCountry: "US",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/25494216.67aa8f86.50x50o.79c657162590.jpeg",
-    result: "1-0",
-    opening: "Ruy Lopez",
-    date: "Sep 2, 2024",
-    timeControl: "3 min",
-    termination: "Won on time",
-    link: "https://www.chess.com/analysis/game/live/118986566359/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "ChristopherYoo",
-    whiteElo: 3011,
-    whiteTitle: "GM",
-    whiteCountry: "TV",
-    whiteImg: "",
-    black: "DrMkcTheHandSome",
-    blackElo: 2656,
-    blackTitle: "",
-    blackCountry: "PH",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    result: "1-0",
-    opening: "King's Indian Attack",
-    date: "Jul 31, 2024",
-    timeControl: "3 min",
-    termination: "ChristopherYoo won by resignation",
-    link: "https://www.chess.com/analysis/game/live/116190049329/analysis?move=0",
-    pinned: true,
-    pinLabel: "vs GM Christopher Yoo (3011 Elo)",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2653,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "RichardBitoon",
-    blackElo: 2637,
-    blackTitle: "GM",
-    blackCountry: "PH",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/2024982.6d370c0b.50x50o.25c4ffd46e4d.jpg",
-    result: "1-0",
-    opening: "Sicilian Defense",
-    date: "Aug 1, 2024",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/116269814789/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-  {
-    white: "DrMkcTheHandSome",
-    whiteElo: 2676,
-    whiteTitle: "",
-    whiteCountry: "PH",
-    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
-    black: "Mastroskaki",
-    blackElo: 2763,
-    blackTitle: "GM",
-    blackCountry: "GR",
-    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/61789490.4308c692.50x50o.3674eac708ff.webp",
-    result: "1-0",
-    opening: "Caro-Kann Defense",
-    date: "Aug 1, 2024",
-    timeControl: "3 min",
-    termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/116256052285/analysis",
-    pinned: false,
-    pinLabel: "",
-  },
-];
+interface ChessGame {
+  white: string;
+  whiteElo: number;
+  whiteTitle: string;
+  whiteCountry: string;
+  whiteImg: string;
+  black: string;
+  blackElo: number;
+  blackTitle: string;
+  blackCountry: string;
+  blackImg: string;
+  result: string;
+  opening: string;
+  date: string;
+  timeControl: string;
+  termination: string;
+  link: string;
+  pinned: boolean;
+  pinLabel: string;
+}
+
+// ============ CONSTANTS ============
 
 const CHESS_PAGE_SIZE = 10;
-
-const filterCategories = ["All", "Administrative", "E-commerce", "Healthcare", "Recruitment", "Insurance", "AI Solutions","others"];
+const filterCategories = ["All", "Administrative", "E-commerce", "Healthcare", "Recruitment", "Insurance", "AI Solutions", "others"];
 const navPages = ["About", "Resume", "Portfolio", "Blog", "Contact"];
 
 // ============ COMPONENT ============
@@ -674,7 +106,7 @@ export default function Home() {
   const [selectOpen, setSelectOpen] = useState(false);
   const [selectValue, setSelectValue] = useState("Select category");
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalData, setModalData] = useState(testimonials[0]);
+  const [modalData, setModalData] = useState<Testimonial | null>(null);
   const [formValid, setFormValid] = useState(false);
   const [imagePopup, setImagePopup] = useState<string | null>(null);
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -685,12 +117,63 @@ export default function Home() {
   const [galleryDescription, setGalleryDescription] = useState("");
   const [marqueePaused, setMarqueePaused] = useState(false);
   const [chessPage, setChessPage] = useState(1);
+
+  // Data state
+  const [services, setServices] = useState<Service[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [clients, setClients] = useState<string[]>([]);
+  const [education, setEducation] = useState<Education[]>([]);
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const [experience, setExperience] = useState<Experience[]>([]);
+  const [skills, setSkills] = useState<CoreSkill[]>([]);
+  const [skillGroups, setSkillGroups] = useState<SkillGroup[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [chessGames, setChessGames] = useState<ChessGame[]>([]);
+
   const marqueeRef = useRef<HTMLUListElement>(null);
   const scrollPosRef = useRef(0);
   const isDraggingRef = useRef(false);
   const dragStartXRef = useRef(0);
   const dragStartScrollRef = useRef(0);
 
+  // Fetch all data from JSON files
+  useEffect(() => {
+    const fetchData = async () => {
+      const [
+        servicesRes, testimonialsRes, clientsRes, educationRes,
+        certificationsRes, experienceRes, skillsRes, projectsRes,
+        blogPostsRes, chessGamesRes,
+      ] = await Promise.all([
+        fetch("/data/services.json"),
+        fetch("/data/testimonials.json"),
+        fetch("/data/clients.json"),
+        fetch("/data/education.json"),
+        fetch("/data/certifications.json"),
+        fetch("/data/experience.json"),
+        fetch("/data/skills.json"),
+        fetch("/data/projects.json"),
+        fetch("/data/blog-posts.json"),
+        fetch("/data/chess-games.json"),
+      ]);
+
+      setServices(await servicesRes.json());
+      const testimonialsData = await testimonialsRes.json();
+      setTestimonials(testimonialsData);
+      setModalData(testimonialsData[0] || null);
+      setClients(await clientsRes.json());
+      setEducation(await educationRes.json());
+      setCertifications(await certificationsRes.json());
+      setExperience(await experienceRes.json());
+      const skillsData: SkillsData = await skillsRes.json();
+      setSkills(skillsData.coreSkills);
+      setSkillGroups(skillsData.skillGroups);
+      setProjects(await projectsRes.json());
+      setBlogPosts(await blogPostsRes.json());
+      setChessGames(await chessGamesRes.json());
+    };
+    fetchData();
+  }, []);
   useEffect(() => {
     const marquee = marqueeRef.current;
     if (!marquee) return;
@@ -754,7 +237,7 @@ export default function Home() {
     setActiveFilter(category.toLowerCase());
   };
 
-  const openModal = (testimonial: (typeof testimonials)[0]) => {
+  const openModal = (testimonial: Testimonial) => {
     setModalData(testimonial);
     setModalOpen(true);
   };
@@ -772,7 +255,7 @@ export default function Home() {
     return activeFilter === "all" || activeFilter === category;
   };
 
-  const openGallery = (project: (typeof projects)[0], startIndex = 0) => {
+  const openGallery = (project: Project, startIndex = 0) => {
     setGalleryImages(project.images);
     setGalleryIndex(startIndex);
     setGalleryTitle(project.title);
@@ -797,14 +280,14 @@ export default function Home() {
   const countryFlagUrl = (code: string) =>
     `https://flagcdn.com/20x15/${code.toLowerCase()}.png`;
 
-  const isMyWin = (game: (typeof chessGames)[0]) => {
+  const isMyWin = (game: ChessGame) => {
     const me = "DrMkcTheHandSome";
     if (game.result === "1-0" && game.white === me) return true;
     if (game.result === "0-1" && game.black === me) return true;
     return false;
   };
 
-  const isMyLoss = (game: (typeof chessGames)[0]) => {
+  const isMyLoss = (game: ChessGame) => {
     const me = "DrMkcTheHandSome";
     if (game.result === "1-0" && game.black === me) return true;
     if (game.result === "0-1" && game.white === me) return true;
@@ -1024,6 +507,7 @@ export default function Home() {
               className={`overlay ${modalOpen ? "active" : ""}`}
               onClick={closeModal}
             ></div>
+            {modalData && (
             <section className="testimonials-modal">
               <button className="modal-close-btn" onClick={closeModal}>
                 <ion-icon name="close-outline"></ion-icon>
@@ -1046,6 +530,7 @@ export default function Home() {
                 </div>
               </div>
             </section>
+            )}
           </div>
 
           {/* Clients */}

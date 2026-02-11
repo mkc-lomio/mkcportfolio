@@ -48,7 +48,6 @@ const clients = [
   "/marius-logo.jpg",
   "/mr-geek-logo.png",
   "/rivtechcorp_cover-logo.jpg",
-  "/steer-logo.png",
   "/xamun-ai-logo.png",
 ];
 

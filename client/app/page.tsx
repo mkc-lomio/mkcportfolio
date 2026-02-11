@@ -133,9 +133,6 @@ export default function Home() {
 
   const marqueeRef = useRef<HTMLUListElement>(null);
   const scrollPosRef = useRef(0);
-  const isDraggingRef = useRef(false);
-  const dragStartXRef = useRef(0);
-  const dragStartScrollRef = useRef(0);
 
   // Fetch all data from JSON files
   useEffect(() => {
@@ -182,7 +179,7 @@ export default function Home() {
     const speed = 0.5;
 
     const step = () => {
-      if (!marqueePaused && !isDraggingRef.current) {
+      if (!marqueePaused) {
         scrollPosRef.current += speed;
         const halfWidth = marquee.scrollWidth / 2;
         if (scrollPosRef.current >= halfWidth) {
@@ -199,28 +196,6 @@ export default function Home() {
     animationId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(animationId);
   }, [marqueePaused]);
-
-  const handleMarqueePointerDown = useCallback((e: React.PointerEvent) => {
-    isDraggingRef.current = true;
-    dragStartXRef.current = e.clientX;
-    dragStartScrollRef.current = scrollPosRef.current;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-  }, []);
-
-  const handleMarqueePointerMove = useCallback((e: React.PointerEvent) => {
-    if (!isDraggingRef.current || !marqueeRef.current) return;
-    const delta = dragStartXRef.current - e.clientX;
-    let newPos = dragStartScrollRef.current + delta;
-    const halfWidth = marqueeRef.current.scrollWidth / 2;
-    if (newPos >= halfWidth) newPos -= halfWidth;
-    if (newPos < 0) newPos += halfWidth;
-    scrollPosRef.current = newPos;
-    marqueeRef.current.style.transform = `translateX(-${newPos}px)`;
-  }, []);
-
-  const handleMarqueePointerUp = useCallback(() => {
-    isDraggingRef.current = false;
-  }, []);
 
   const handleNavClick = (page: string) => {
     setActivePage(page.toLowerCase());
@@ -374,7 +349,7 @@ export default function Home() {
               </a>
             </li>
             <li className="social-item">
-              <a href="https://github.com/mkc-lomio" className="social-link" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/marckenneth" className="social-link" target="_blank" rel="noopener noreferrer">
                 <ion-icon name="logo-github"></ion-icon>
               </a>
             </li>
@@ -386,6 +361,15 @@ export default function Home() {
           </ul>
 
           <div className="separator"></div>
+
+          <a
+            href="/MarcKennethLomio_CV.pdf"
+            download="MarcKennethLomio_CV.pdf"
+            className="download-cv-btn"
+          >
+            <ion-icon name="download-outline"></ion-icon>
+            Download CV
+          </a>
 
           <div className="powered-by">
             <p className="powered-by-label">Powered by</p>
@@ -539,43 +523,19 @@ export default function Home() {
             <div
               className="clients-marquee-wrapper"
               onMouseEnter={() => setMarqueePaused(true)}
-              onMouseLeave={() => { setMarqueePaused(false); isDraggingRef.current = false; }}
+              onMouseLeave={() => setMarqueePaused(false)}
               onTouchStart={() => setMarqueePaused(true)}
               onTouchEnd={() => { setTimeout(() => setMarqueePaused(false), 2000); }}
-              onPointerDown={handleMarqueePointerDown}
-              onPointerMove={handleMarqueePointerMove}
-              onPointerUp={handleMarqueePointerUp}
-              onPointerCancel={handleMarqueePointerUp}
             >
               <ul className="clients-marquee" ref={marqueeRef}>
                 {[...clients, ...clients].map((logo, i) => (
                   <li className="clients-item" key={i}>
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setImagePopup(logo);
-                      }}
-                    >
-                      <img src={logo} alt="client logo" />
-                    </a>
+                    <img src={logo} alt="client logo" draggable={false} />
                   </li>
                 ))}
               </ul>
             </div>
           </section>
-
-          {/* Image Popup */}
-          {imagePopup && (
-            <div className="image-popup-overlay" onClick={() => setImagePopup(null)}>
-              <div className="image-popup-content" onClick={(e) => e.stopPropagation()}>
-                <button className="image-popup-close" onClick={() => setImagePopup(null)}>
-                  <ion-icon name="close-outline"></ion-icon>
-                </button>
-                <img src={imagePopup} alt="Client logo" />
-              </div>
-            </div>
-          )}
 
           {/* Hobbies */}
           <section className="hobbies">

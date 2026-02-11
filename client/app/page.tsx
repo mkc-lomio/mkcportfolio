@@ -94,7 +94,7 @@ interface ChessGame {
 // ============ CONSTANTS ============
 
 const CHESS_PAGE_SIZE = 10;
-const filterCategories = ["All", "Administrative", "E-commerce", "Healthcare", "Recruitment", "Insurance", "AI Solutions", "others"];
+const filterCategories = ["All", "Administrative", "E-commerce", "Healthcare", "Recruitment", "Insurance", "AI Solutions", "Others"];
 const navPages = ["About", "Resume", "Portfolio", "Blog", "Contact"];
 
 // ============ COMPONENT ============

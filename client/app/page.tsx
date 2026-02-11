@@ -200,18 +200,467 @@ const blogPosts = [
 const chessGames = [
   {
     white: "DrMkcTheHandSome",
+    whiteElo: 2656,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "Lestofante90",
+    blackElo: 2829,
+    blackTitle: "GM",
+    blackCountry: "IT",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/27728592.a32ae2c7.50x50o.d5700c0c4af8.jpeg",
+    result: "1-0",
+    opening: "Indian Game",
+    date: "Jan 22, 2025",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/131252971603/analysis",
+    pinned: true,
+    pinLabel: "Win vs Italian GM Danyyil Dvirnyy",
+  },
+      {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2672,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "TRadjabov",
+    blackElo: 3055,
+    blackTitle: "GM",
+    blackCountry: "AZ",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/18202610.a304129e.50x50o.09bc9c3e8aa7.jpeg",
+    result: "0-1",
+    opening: "East Indian / London System",
+    date: "Aug 2, 2024",
+    timeControl: "3 min",
+    termination: "TRadjabov won by resignation",
+    link: "https://www.chess.com/analysis/game/live/116358617561/analysis",
+    pinned: true,
+    pinLabel: "vs Super GM Teimour Radjabov (3055 Elo)",
+  },
+  {
+    white: "NigelShort",
+    whiteElo: 2873,
+    whiteTitle: "GM",
+    whiteCountry: "GB",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/12089276.726643af.50x50o.8057016c8698.jpg",
+    black: "DrMkcTheHandSome",
+    blackElo: 2552,
+    blackTitle: "",
+    blackCountry: "PH",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    result: "1-0",
+    opening: "Scandinavian Defense",
+    date: "Dec 18, 2024",
+    timeControl: "3 min",
+    termination: "NigelShort won by resignation",
+    link: "https://www.chess.com/analysis/game/live/128260136447/analysis",
+    pinned: true,
+    pinLabel: "vs Legendary Nigel Short",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2589,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "FaustinoOro",
+    blackElo: 3121,
+    blackTitle: "IM",
+    blackCountry: "AR",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/80994690.b4cf9a71.50x50o.d54f67f28ec0.jpg",
+    result: "0-1",
+    opening: "Van't Kruijs Opening",
+    date: "Aug 7, 2025",
+    timeControl: "3 min",
+    termination: "FaustinoOro won by checkmate",
+    link: "https://www.chess.com/analysis/game/live/141601772714/analysis",
+    pinned: true,
+    pinLabel: "vs Prodigy Faustino Oro (3121 Elo)",
+  },
+  {
+    white: "GM_dmitrij",
+    whiteElo: 3000,
+    whiteTitle: "GM",
+    whiteCountry: "DE",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/27181148.59e377d4.50x50o.29f1c14d472a.jpeg",
+    black: "DrMkcTheHandSome",
+    blackElo: 2668,
+    blackTitle: "",
+    blackCountry: "PH",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    result: "1-0",
+    opening: "Scandinavian Defense",
+    date: "Jan 22, 2025",
+    timeControl: "3 min",
+    termination: "GM_dmitrij won by resignation",
+    link: "https://www.chess.com/analysis/game/live/131304631235/analysis",
+    pinned: true,
+    pinLabel: "vs Super GM Dmitrij Kollars (3000 Elo)",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2529,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "ShrookWafa",
+    blackElo: 2528,
+    blackTitle: "WGM",
+    blackCountry: "EG",
+    blackImg: "",
+    result: "1-0",
+    opening: "English Opening",
+    date: "Dec 11, 2025",
+    timeControl: "3 min",
+    termination: "Won by checkmate",
+    link: "https://www.chess.com/analysis/game/live/146589984330/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
     whiteElo: 2606,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
     black: "Akshayraj_Kore",
     blackElo: 2729,
     blackTitle: "GM",
+    blackCountry: "US",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/6179690.a3b2c80b.50x50o.9bded12a99f0.png",
     result: "1-0",
     opening: "English Opening",
     date: "Nov 18, 2025",
     timeControl: "3 min",
     termination: "Won by resignation",
-    link: "https://www.chess.com/analysis/game/live/145643480342/analysis?move=0",
+    link: "https://www.chess.com/analysis/game/live/145643480342/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2677,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "Hongjin",
+    blackElo: 2754,
+    blackTitle: "IM",
+    blackCountry: "KR",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/52951788.c76c8bf7.50x50o.55cd6040abcb.png",
+    result: "1-0",
+    opening: "Sicilian Defense",
+    date: "Sep 2, 2025",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/142635706398/analysis?move=70",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2682,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "TheCount",
+    blackElo: 2660,
+    blackTitle: "GM",
+    blackCountry: "US",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/6204387.76703bbd.50x50o.2dc344ab4ed6.jpg",
+    result: "1-0",
+    opening: "Alapin Sicilian",
+    date: "Aug 26, 2025",
+    timeControl: "3 min",
+    termination: "Won on time",
+    link: "https://www.chess.com/analysis/game/live/142363070494/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2679,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "StrategySensei007",
+    blackElo: 2730,
+    blackTitle: "GM",
+    blackCountry: "BG",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/5979666.d5a77311.50x50o.8da5d6d4f9b0.jpg",
+    result: "1-0",
+    opening: "Modern Defense",
+    date: "Aug 26, 2025",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/142362212080/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2675,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "krsolomac",
+    blackElo: 2644,
+    blackTitle: "IM",
+    blackCountry: "BA",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/11931378.cdc5997e.50x50o.00542293b8db.jpeg",
+    result: "1-0",
+    opening: "Sicilian Defense",
+    date: "Aug 26, 2025",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/142359477492/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2666,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "SecretGM",
+    blackElo: 2710,
+    blackTitle: "GM",
+    blackCountry: "US",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/6265586.1a732832.50x50o.79e98762c407.jpeg",
+    result: "1-0",
+    opening: "Nimzo-Indian Defense",
+    date: "Aug 26, 2025",
+    timeControl: "3 min",
+    termination: "Won by checkmate",
+    link: "https://www.chess.com/analysis/game/live/142351821154/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2668,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "blueshark23",
+    blackElo: 2632,
+    blackTitle: "GM",
+    blackCountry: "HU",
+    blackImg: "",
+    result: "1-0",
+    opening: "Sicilian Defense",
+    date: "Aug 13, 2025",
+    timeControl: "3 min",
+    termination: "Won on time",
+    link: "https://www.chess.com/analysis/game/live/141840314364/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "VSanduleac",
+    whiteElo: 2672,
+    whiteTitle: "GM",
+    whiteCountry: "MD",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/43935916.d7ab5db2.50x50o.e846c30c1581.jpeg",
+    black: "DrMkcTheHandSome",
+    blackElo: 2650,
+    blackTitle: "",
+    blackCountry: "PH",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    result: "0-1",
+    opening: "Caro-Kann Defense",
+    date: "Aug 13, 2025",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/141829214754/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2576,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "gorato",
+    blackElo: 2562,
+    blackTitle: "GM",
+    blackCountry: "RS",
+    blackImg: "",
+    result: "1-0",
+    opening: "Sicilian Defense",
+    date: "Jul 31, 2025",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/141333519806/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "SchroedingersTiger",
+    whiteElo: 2695,
+    whiteTitle: "GM",
+    whiteCountry: "DE",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/20001882.15a29b43.50x50o.0464bc3b3b68.jpg",
+    black: "DrMkcTheHandSome",
+    blackElo: 2636,
+    blackTitle: "",
+    blackCountry: "PH",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    result: "0-1",
+    opening: "Scandinavian Defense",
+    date: "Feb 18, 2025",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/123012836344/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "Ron_Weasley_Chess",
+    whiteElo: 2686,
+    whiteTitle: "FM",
+    whiteCountry: "IL",
+    whiteImg: "",
+    black: "DrMkcTheHandSome",
+    blackElo: 2616,
+    blackTitle: "",
+    blackCountry: "PH",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    result: "0-1",
+    opening: "Réti Opening",
+    date: "Feb 18, 2025",
+    timeControl: "3 min",
+    termination: "Won by checkmate",
+    link: "https://www.chess.com/analysis/game/live/123012400208/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "gmjoey1",
+    whiteElo: 2708,
+    whiteTitle: "GM",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/2406471.35bf5585.50x50o.e9e94ee09965.jpg",
+    black: "DrMkcTheHandSome",
+    blackElo: 2664,
+    blackTitle: "",
+    blackCountry: "PH",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    result: "0-1",
+    opening: "Caro-Kann Defense",
+    date: "Feb 3, 2025",
+    timeControl: "3 min",
+    termination: "Won on time",
+    link: "https://www.chess.com/analysis/game/live/132319867025/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2561,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "Ginger_GM",
+    blackElo: 2605,
+    blackTitle: "GM",
+    blackCountry: "GB",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/13423970.d6fd8e2b.50x50o.35135199b0fa.jpg",
+    result: "1-0",
+    opening: "King's Indian Defense",
+    date: "Dec 5, 2024",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/127150814903/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2594,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "gmmitkov",
+    blackElo: 2621,
+    blackTitle: "GM",
+    blackCountry: "US",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/25494216.67aa8f86.50x50o.79c657162590.jpeg",
+    result: "1-0",
+    opening: "Ruy Lopez",
+    date: "Sep 2, 2024",
+    timeControl: "3 min",
+    termination: "Won on time",
+    link: "https://www.chess.com/analysis/game/live/118986566359/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "ChristopherYoo",
+    whiteElo: 3011,
+    whiteTitle: "GM",
+    whiteCountry: "TV",
+    whiteImg: "",
+    black: "DrMkcTheHandSome",
+    blackElo: 2656,
+    blackTitle: "",
+    blackCountry: "PH",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    result: "1-0",
+    opening: "King's Indian Attack",
+    date: "Jul 31, 2024",
+    timeControl: "3 min",
+    termination: "ChristopherYoo won by resignation",
+    link: "https://www.chess.com/analysis/game/live/116190049329/analysis?move=0",
+    pinned: true,
+    pinLabel: "vs GM Christopher Yoo (3011 Elo)",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2653,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "RichardBitoon",
+    blackElo: 2637,
+    blackTitle: "GM",
+    blackCountry: "PH",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/2024982.6d370c0b.50x50o.25c4ffd46e4d.jpg",
+    result: "1-0",
+    opening: "Sicilian Defense",
+    date: "Aug 1, 2024",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/116269814789/analysis",
+    pinned: false,
+    pinLabel: "",
+  },
+  {
+    white: "DrMkcTheHandSome",
+    whiteElo: 2676,
+    whiteTitle: "",
+    whiteCountry: "PH",
+    whiteImg: "https://images.chesscomfiles.com/uploads/v1/user/30529124.f8db1ea0.50x50o.89fc2cc1a0fe.jpeg",
+    black: "Mastroskaki",
+    blackElo: 2763,
+    blackTitle: "GM",
+    blackCountry: "GR",
+    blackImg: "https://images.chesscomfiles.com/uploads/v1/user/61789490.4308c692.50x50o.3674eac708ff.webp",
+    result: "1-0",
+    opening: "Caro-Kann Defense",
+    date: "Aug 1, 2024",
+    timeControl: "3 min",
+    termination: "Won by resignation",
+    link: "https://www.chess.com/analysis/game/live/116256052285/analysis",
+    pinned: false,
+    pinLabel: "",
   },
 ];
+
+const CHESS_PAGE_SIZE = 10;
 
 const filterCategories = ["All", "Administrative", "E-commerce", "Healthcare", "Recruitment", "Insurance", "AI Solutions","others"];
 const navPages = ["About", "Resume", "Portfolio", "Blog", "Contact"];
@@ -235,6 +684,7 @@ export default function Home() {
   const [galleryUrl, setGalleryUrl] = useState("");
   const [galleryDescription, setGalleryDescription] = useState("");
   const [marqueePaused, setMarqueePaused] = useState(false);
+  const [chessPage, setChessPage] = useState(1);
   const marqueeRef = useRef<HTMLUListElement>(null);
   const scrollPosRef = useRef(0);
   const isDraggingRef = useRef(false);
@@ -342,6 +792,43 @@ export default function Home() {
   const galleryNext = () => {
     setGalleryIndex((prev) => (prev + 1) % galleryImages.length);
   };
+
+  // Chess helpers
+  const countryFlagUrl = (code: string) =>
+    `https://flagcdn.com/20x15/${code.toLowerCase()}.png`;
+
+  const isMyWin = (game: (typeof chessGames)[0]) => {
+    const me = "DrMkcTheHandSome";
+    if (game.result === "1-0" && game.white === me) return true;
+    if (game.result === "0-1" && game.black === me) return true;
+    return false;
+  };
+
+  const isMyLoss = (game: (typeof chessGames)[0]) => {
+    const me = "DrMkcTheHandSome";
+    if (game.result === "1-0" && game.black === me) return true;
+    if (game.result === "0-1" && game.white === me) return true;
+    return false;
+  };
+
+  const pinnedGames = chessGames.filter((g) => g.pinned);
+  const unpinnedGames = chessGames.filter((g) => !g.pinned).sort((a, b) => {
+    const me = "DrMkcTheHandSome";
+    const aWin = (a.result === "1-0" && a.white === me) || (a.result === "0-1" && a.black === me);
+    const bWin = (b.result === "1-0" && b.white === me) || (b.result === "0-1" && b.black === me);
+    // Wins first
+    if (aWin && !bWin) return -1;
+    if (!aWin && bWin) return 1;
+    // Within same group, sort by opponent rating desc
+    const aOppElo = a.white === me ? a.blackElo : a.whiteElo;
+    const bOppElo = b.white === me ? b.blackElo : b.whiteElo;
+    return bOppElo - aOppElo;
+  });
+  const chessTotalPages = Math.ceil(unpinnedGames.length / CHESS_PAGE_SIZE);
+  const paginatedGames = unpinnedGames.slice(
+    (chessPage - 1) * CHESS_PAGE_SIZE,
+    chessPage * CHESS_PAGE_SIZE
+  );
 
   return (
     <main>
@@ -614,46 +1101,139 @@ export default function Home() {
                 <span className="hobby-icon">♟️</span>
                 <div>
                   <h4 className="h4">Chess</h4>
-                  <p className="hobby-subtitle">Best Games Collection</p>
+                  <p className="hobby-subtitle">Memorable Games</p>
                 </div>
               </div>
 
-              <ul className="chess-games-list">
-                {chessGames.map((game, i) => (
-                  <li className="chess-game-item" key={i}>
-                    <div className="chess-game-players">
-                      <span className="chess-white">
-                        ⬜ {game.white} ({game.whiteElo})
-                      </span>
-                      <span className="chess-vs">vs</span>
-                      <span className="chess-black">
-                        ⬛ {game.blackTitle && <span className="chess-title-badge">{game.blackTitle}</span>}
-                        {game.black} ({game.blackElo})
-                      </span>
-                    </div>
-                    <div className="chess-game-meta">
-                      <span className="chess-result chess-result-win">
-                        {game.result === "1-0" ? "Win" : game.result === "0-1" ? "Loss" : "Draw"}
-                      </span>
-                      <span>{game.opening}</span>
-                      <span>{game.timeControl}</span>
-                      <span>{game.date}</span>
-                    </div>
-                    <div className="chess-game-footer">
-                      <span className="chess-termination">{game.termination}</span>
-                      <a
-                        href={game.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="chess-view-btn"
+              {/* Pinned Games */}
+              {pinnedGames.length > 0 && (
+                <div className="chess-pinned-section">
+                  <div className="chess-pinned-label">
+                    <ion-icon name="pin-outline"></ion-icon> Pinned
+                  </div>
+                  <ul className="chess-games-list">
+                    {pinnedGames.map((game, i) => (
+                      <li className={`chess-game-item chess-game-pinned ${isMyWin(game) ? "chess-border-win" : isMyLoss(game) ? "chess-border-loss" : ""}`} key={`pin-${i}`}>
+                        {game.pinLabel && <span className="chess-pin-badge">{game.pinLabel}</span>}
+                        <div className="chess-game-players">
+                          <div className="chess-player">
+                            <span className="chess-piece-icon chess-piece-white">♔</span>
+                            <img src={countryFlagUrl(game.whiteCountry)} alt={game.whiteCountry} className="chess-flag" />
+                            {game.whiteImg ? <img src={game.whiteImg} alt={game.white} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
+                            <span className="chess-player-name">
+                              {game.whiteTitle && <span className="chess-title-badge">{game.whiteTitle}</span>}
+                              {game.white}
+                            </span>
+                            <span className="chess-elo">({game.whiteElo})</span>
+                          </div>
+                          <span className="chess-vs">vs</span>
+                          <div className="chess-player">
+                            <span className="chess-piece-icon chess-piece-black">♚</span>
+                            <img src={countryFlagUrl(game.blackCountry)} alt={game.blackCountry} className="chess-flag" />
+                            {game.blackImg ? <img src={game.blackImg} alt={game.black} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
+                            <span className="chess-player-name">
+                              {game.blackTitle && <span className="chess-title-badge">{game.blackTitle}</span>}
+                              {game.black}
+                            </span>
+                            <span className="chess-elo">({game.blackElo})</span>
+                          </div>
+                        </div>
+                        <div className="chess-game-meta">
+                          <span className={`chess-result ${isMyWin(game) ? "chess-result-win" : isMyLoss(game) ? "chess-result-loss" : "chess-result-draw"}`}>
+                            {game.result} {isMyWin(game) ? "Win" : isMyLoss(game) ? "Loss" : "Draw"}
+                          </span>
+                          <span>{game.opening}</span>
+                          <span>{game.timeControl}</span>
+                          <span>{game.date}</span>
+                        </div>
+                        <div className="chess-game-footer">
+                          <span className="chess-termination">{game.termination}</span>
+                          <a href={game.link} target="_blank" rel="noopener noreferrer" className="chess-view-btn">
+                            <ion-icon name="open-outline"></ion-icon> View Game
+                          </a>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* All Games */}
+              <div className="chess-all-section">
+                <div className="chess-section-label">All Games</div>
+                <ul className="chess-games-list">
+                  {paginatedGames.map((game, i) => (
+                    <li className={`chess-game-item ${isMyWin(game) ? "chess-border-win" : isMyLoss(game) ? "chess-border-loss" : ""}`} key={`game-${i}`}>
+                      <div className="chess-game-players">
+                        <div className="chess-player">
+                          <span className="chess-piece-icon chess-piece-white">♔</span>
+                          <img src={countryFlagUrl(game.whiteCountry)} alt={game.whiteCountry} className="chess-flag" />
+                          {game.whiteImg ? <img src={game.whiteImg} alt={game.white} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
+                          <span className="chess-player-name">
+                            {game.whiteTitle && <span className="chess-title-badge">{game.whiteTitle}</span>}
+                            {game.white}
+                          </span>
+                          <span className="chess-elo">({game.whiteElo})</span>
+                        </div>
+                        <span className="chess-vs">vs</span>
+                        <div className="chess-player">
+                          <span className="chess-piece-icon chess-piece-black">♚</span>
+                          <img src={countryFlagUrl(game.blackCountry)} alt={game.blackCountry} className="chess-flag" />
+                          {game.blackImg ? <img src={game.blackImg} alt={game.black} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
+                          <span className="chess-player-name">
+                            {game.blackTitle && <span className="chess-title-badge">{game.blackTitle}</span>}
+                            {game.black}
+                          </span>
+                          <span className="chess-elo">({game.blackElo})</span>
+                        </div>
+                      </div>
+                      <div className="chess-game-meta">
+                        <span className={`chess-result ${isMyWin(game) ? "chess-result-win" : isMyLoss(game) ? "chess-result-loss" : "chess-result-draw"}`}>
+                          {game.result} {isMyWin(game) ? "Win" : isMyLoss(game) ? "Loss" : "Draw"}
+                        </span>
+                        <span>{game.opening}</span>
+                        <span>{game.timeControl}</span>
+                        <span>{game.date}</span>
+                      </div>
+                      <div className="chess-game-footer">
+                        <span className="chess-termination">{game.termination}</span>
+                        <a href={game.link} target="_blank" rel="noopener noreferrer" className="chess-view-btn">
+                          <ion-icon name="open-outline"></ion-icon> View Game
+                        </a>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Pagination */}
+                {chessTotalPages > 1 && (
+                  <div className="chess-pagination">
+                    <button
+                      className="chess-page-btn"
+                      disabled={chessPage <= 1}
+                      onClick={() => setChessPage((p) => p - 1)}
+                    >
+                      <ion-icon name="chevron-back-outline"></ion-icon>
+                    </button>
+                    {Array.from({ length: chessTotalPages }, (_, i) => (
+                      <button
+                        key={i}
+                        className={`chess-page-btn ${chessPage === i + 1 ? "active" : ""}`}
+                        onClick={() => setChessPage(i + 1)}
                       >
-                        <ion-icon name="open-outline"></ion-icon>
-                        View Game
-                      </a>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                        {i + 1}
+                      </button>
+                    ))}
+                    <button
+                      className="chess-page-btn"
+                      disabled={chessPage >= chessTotalPages}
+                      onClick={() => setChessPage((p) => p + 1)}
+                    >
+                      <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </section>
         </article>

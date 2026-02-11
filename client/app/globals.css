@@ -2371,6 +2371,42 @@ textarea.form-input::-webkit-resizer { display: none; }
   margin-top: 2px;
 }
 
+/* Chess Pinned / Section Labels */
+.chess-pinned-section {
+  margin-bottom: 20px;
+}
+
+.chess-pinned-label,
+.chess-section-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--orange-yellow-crayola);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.chess-section-label {
+  color: var(--light-gray);
+  margin-top: 4px;
+}
+
+.chess-pin-badge {
+  display: inline-block;
+  background: hsla(45, 100%, 72%, 0.12);
+  color: var(--orange-yellow-crayola);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 50px;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+}
+
+/* Game list */
 .chess-games-list {
   display: flex;
   flex-direction: column;
@@ -2385,13 +2421,27 @@ textarea.form-input::-webkit-resizer { display: none; }
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .chess-game-item:hover {
   border-color: hsl(0, 0%, 30%);
 }
 
+.chess-game-pinned {
+  background: hsl(240, 3%, 16%);
+  border-color: hsla(45, 100%, 72%, 0.2);
+}
+
+.chess-border-win {
+  border-left: 3px solid hsl(140, 60%, 45%);
+}
+
+.chess-border-loss {
+  border-left: 3px solid hsl(0, 60%, 50%);
+}
+
+/* Player row */
 .chess-game-players {
   display: flex;
   align-items: center;
@@ -2399,20 +2449,74 @@ textarea.form-input::-webkit-resizer { display: none; }
   flex-wrap: wrap;
   font-size: 0.88rem;
   color: hsl(0, 0%, 90%);
+}
+
+.chess-player {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chess-piece-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.chess-piece-white { color: hsl(0, 0%, 90%); }
+.chess-piece-black { color: hsl(0, 0%, 40%); }
+
+.chess-flag {
+  width: 20px;
+  height: 15px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.chess-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid hsl(0, 0%, 25%);
+  flex-shrink: 0;
+}
+
+.chess-avatar-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(0, 0%, 20%);
+  color: hsl(0, 0%, 50%);
+  font-size: 0.75rem;
+}
+
+.chess-player-name {
   font-weight: 500;
+  font-size: 0.85rem;
+  color: hsl(0, 0%, 90%);
+}
+
+.chess-elo {
+  font-size: 0.78rem;
+  color: hsl(0, 0%, 55%);
+  font-weight: 400;
 }
 
 .chess-vs {
   color: hsl(0, 0%, 45%);
   font-size: 0.75rem;
   font-weight: 400;
+  padding: 0 2px;
 }
 
 .chess-title-badge {
   display: inline-block;
   background: hsl(35, 80%, 45%);
   color: #fff;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 3px;
@@ -2421,6 +2525,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   letter-spacing: 0.5px;
 }
 
+/* Meta row */
 .chess-game-meta {
   display: flex;
   align-items: center;
@@ -2454,6 +2559,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   color: hsl(0, 0%, 65%);
 }
 
+/* Footer */
 .chess-game-footer {
   display: flex;
   align-items: center;
@@ -2485,4 +2591,54 @@ textarea.form-input::-webkit-resizer { display: none; }
 .chess-view-btn:hover {
   background: hsla(45, 100%, 72%, 0.2);
   color: hsl(45, 100%, 80%);
+}
+
+/* Pagination */
+.chess-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid hsl(0, 0%, 18%);
+}
+
+.chess-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: hsl(0, 0%, 60%);
+  background: hsl(240, 2%, 16%);
+  border: 1px solid hsl(0, 0%, 22%);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chess-page-btn:hover:not(:disabled) {
+  background: hsl(240, 2%, 20%);
+  color: hsl(0, 0%, 85%);
+  border-color: hsl(0, 0%, 30%);
+}
+
+.chess-page-btn.active {
+  background: hsla(45, 100%, 72%, 0.15);
+  color: var(--orange-yellow-crayola);
+  border-color: hsla(45, 100%, 72%, 0.3);
+  font-weight: 600;
+}
+
+.chess-page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.chess-all-section {
+  margin-top: 4px;
 }

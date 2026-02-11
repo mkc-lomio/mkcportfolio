@@ -374,7 +374,7 @@ export default function Home() {
               </a>
             </li>
             <li className="social-item">
-              <a href="https://github.com/marckenneth" className="social-link" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/mkc-lomio" className="social-link" target="_blank" rel="noopener noreferrer">
                 <ion-icon name="logo-github"></ion-icon>
               </a>
             </li>

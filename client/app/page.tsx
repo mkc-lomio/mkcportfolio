@@ -363,7 +363,7 @@ export default function Home() {
           <div className="separator"></div>
 
           <a
-            href="/MarcKennethLomio_CV.pdf"
+            href="files/MarcKennethLomio_CV.pdf"
             download="MarcKennethLomio_CV.pdf"
             className="download-cv-btn"
           >
@@ -384,12 +384,6 @@ export default function Home() {
                   <circle cx="90" cy="90" r="90" mask="url(#nextMask)"/>
                 </svg>
                 <span>Next.js</span>
-              </a>
-              <a href="https://expressjs.com" target="_blank" rel="noopener noreferrer" className="powered-by-badge">
-                <svg viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
-                  <path d="M32 24.795c-1.164.296-1.884.013-2.53-.957l-4.594-6.356-.664-.872-5.42 7.257c-.577.77-1.227 1.065-2.25.77l7.066-9.428-6.589-8.59c.984-.135 1.744-.037 2.358.825l4.74 6.447 4.778-6.413c.578-.77 1.228-1.067 2.25-.77l-2.633 3.51-3.615 4.746c-.263.346-.227.692.039 1.028l6.06 8.048zm-17.027-8.77L8.092 6.196c1.185-.214 1.872-.035 2.468.822l4.18 5.927 4.258-5.926c.577-.77 1.227-1.065 2.25-.77l-6.12 8.194-6.573 8.757c-1.007.26-1.775.074-2.381-.795l4.8-6.38zM.005 15.846l.78-3.593c1.458-4.376 7.58-6.27 11.226-3.483 2.15 1.643 2.84 4.03 2.658 6.788H1.456c-.187 5.312 3.46 8.09 7.834 6.057 1.35-.629 2.2-1.823 2.6-3.254.194-.693.55-.813 1.2-.627-.78 3.19-2.94 5.1-6.293 5.372-3.978.323-7.443-1.906-8.357-5.437-.162-.627-.27-1.272-.434-1.823zm1.467-.64h12.4c-.116-4.237-2.786-7.02-6.24-7.02-3.688 0-6.044 2.882-6.16 7.02z"/>
-                </svg>
-                <span>Express.js</span>
               </a>
             </div>
           </div>

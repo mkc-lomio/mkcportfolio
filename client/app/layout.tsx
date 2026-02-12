@@ -3,7 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MKC - Personal Portfolio",
+  title: "Marc Kenneth Lomio - Portfolio",
   description: "Personal portfolio website",
   icons: {
     icon: "/logo.ico",

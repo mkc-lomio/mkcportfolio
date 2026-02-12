@@ -1,10 +1,10 @@
 [
   {
     "images": [
-      "/kinetic-portal-img.png",
-      "/kinetic-portal-img-2.png",
-      "/kinetic-portal-img-3.png",
-      "/kinetic-portal-img-4.png"
+      "portfolio/kinetic-portal-img.png",
+      "portfolio/kinetic-portal-img-2.png",
+      "portfolio/kinetic-portal-img-3.png",
+      "portfolio/kinetic-portal-img-4.png"
     ],
     "title": "Kinetic Portal",
     "category": "administrative",
@@ -13,8 +13,8 @@
   },
   {
     "images": [
-      "/xamun-ai-img.png",
-      "/xamun-ai-img-2.png"
+      "portfolio/xamun-ai-img.png",
+      "portfolio/xamun-ai-img-2.png"
     ],
     "title": "Xamun Dev Portal",
     "category": "ai solutions",
@@ -23,9 +23,9 @@
   },
   {
     "images": [
-      "/rivington-1.jpg",
-      "/rivington-2.jpg",
-      "/rivington-3.jpg"
+      "portfolio/rivington-1.jpg",
+      "portfolio/rivington-2.jpg",
+      "portfolio/rivington-3.jpg"
     ],
     "title": "Rivington (Collections Application, AMIG Application, Centauri Application)",
     "category": "insurance",
@@ -34,7 +34,7 @@
   },
   {
     "images": [
-      "/daikin-ecommerce-1.jpg"
+      "portfolio/daikin-ecommerce-1.jpg"
     ],
     "title": "Daikin E-commerce",
     "category": "e-commerce",
@@ -43,8 +43,8 @@
   },
   {
     "images": [
-      "/daikin-virtualshowroom-1.jpg",
-      "/daikin-virtualshowroom-2.jpg"
+      "portfolio/daikin-virtualshowroom-1.jpg",
+      "portfolio/daikin-virtualshowroom-2.jpg"
     ],
     "title": "Daikin Virtual Showroom",
     "category": "e-commerce",
@@ -53,8 +53,8 @@
   },
   {
     "images": [
-      "/iscan-1.jpg",
-      "/iscan-2.jpg"
+      "portfolio/iscan-1.jpg",
+      "portfolio/iscan-2.jpg"
     ],
     "title": "iScan Diagnostic Center",
     "category": "healthcare",
@@ -63,8 +63,8 @@
   },
   {
     "images": [
-      "/mundipharma-1.jpg",
-      "/mundipharma-2.jpg"
+      "portfolio/mundipharma-1.jpg",
+      "portfolio/mundipharma-2.jpg"
     ],
     "title": "My Scorecard (Mundipharma)",
     "category": "healthcare",
@@ -73,7 +73,7 @@
   },
   {
     "images": [
-      "/magsaysay-1.jpg"
+      "portfolio/magsaysay-1.jpg"
     ],
     "title": "Magsaysay Online Careers",
     "category": "recruitment",
@@ -82,8 +82,8 @@
   },
   {
     "images": [
-      "/marius-1.jpg",
-      "/marius-2.jpg"
+      "portfolio/marius-1.jpg",
+      "portfolio/marius-2.jpg"
     ],
     "title": "Marius",
     "category": "insurance",
@@ -92,8 +92,8 @@
   },
   {
     "images": [
-      "/tempest-1.jpg",
-      "/tempest-2.jpg"
+      "portfolio/tempest-1.jpg",
+      "portfolio/tempest-2.jpg"
     ],
     "title": "Tempest Asset Management",
     "category": "administrative",
@@ -102,8 +102,8 @@
   },
   {
     "images": [
-      "/catalyst-1.jpg",
-      "/catalyst-2.jpg"
+      "portfolio/catalyst-1.jpg",
+      "portfolio/catalyst-2.jpg"
     ],
     "title": "Catalyst",
     "category": "others",
@@ -112,7 +112,7 @@
   },
   {
     "images": [
-      "/homeqube-1.jpg"
+      "portfolio/homeqube-1.jpg"
     ],
     "title": "HomeQube",
     "category": "ai solutions",

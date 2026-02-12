@@ -118,5 +118,13 @@
     "category": "ai solutions",
     "url": "https://www.homeqube.com/",
     "description": "Homeqube builds performance systems to tackle global housing shortages. It champions decentralization, open access, and breaking down barriers in knowledge, production, and supply.\n\nKey Contribution:\n• Researched and applied tools like Plotly.js, Leaflet.js, and Pako.js to meet stakeholder needs.\n• Built reusable components and services for both front-end and back-end development."
+  },{
+    "images": [
+      "portfolio/mkchess-1.jpg"
+    ],
+    "title": "Chess Book Analyzer",
+    "category": "others",
+    "url": "https://www.chessbookanalyzer.com/",
+    "description": "A web-based chess book analyzer built as a personal project for studying chess openings and games interactively. It lets users load chess books (PDF/DjVu/ePub), display them side-by-side with an interactive chessboard, and analyze positions with Stockfish engine evaluation — all running locally in the browser with no server required.\n\nKey Features:\n• Interactive chessboard with drag-and-drop piece movement, move navigation, and board annotations (arrows and highlights).\n• Integrated Stockfish engine analysis running via Web Workers for real-time position evaluation.\n• Built-in book reader supporting PDF, DjVu, and ePub formats with a resizable split-panel layout.\n• PGN export and full move history with NAG annotation support (!, ?, !!, ??, etc.).\n• Tree-based variation/branching system for exploring side lines without losing the main line.\n• IndexedDB persistence to save and restore study sessions across browser reloads.\n• PWA-ready with offline capability — fully runs in the browser with zero backend dependency.\n\nTech Stack: Vanilla JavaScript, chess.js (v1.x), chessboard.js, Stockfish WASM, PDF.js, DjVu.js, ePub.js, IndexedDB."
   }
 ]

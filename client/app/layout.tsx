@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "MKC - Personal Portfolio",
   description: "Personal portfolio website",
   icons: {
-    icon: "/logo.ico",
+    icon: "/pawn.ico",
   },
 };
 

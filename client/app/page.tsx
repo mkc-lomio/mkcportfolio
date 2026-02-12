@@ -3,6 +3,15 @@
 import { useState, useEffect, useRef, useCallback, FormEvent } from "react";
 import Image from "next/image";
 
+declare global {
+  interface Window {
+    grecaptcha: {
+      ready: (cb: () => void) => void;
+      execute: (siteKey: string, options: { action: string }) => Promise<string>;
+    };
+  }
+}
+
 // ============ TYPES ============
 
 interface Service {
@@ -112,6 +121,8 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState<Testimonial | null>(null);
   const [formValid, setFormValid] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendResult, setSendResult] = useState<"success" | "error" | null>(null);
   const [imagePopup, setImagePopup] = useState<string | null>(null);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
@@ -229,6 +240,84 @@ export default function Home() {
   const handleFormChange = (e: FormEvent<HTMLFormElement>) => {
     const form = e.currentTarget;
     setFormValid(form.checkValidity());
+  };
+
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Client-side rate limit: max 3 sends per 10 minutes
+    const now = Date.now();
+    const RATE_LIMIT_WINDOW = 10 * 60 * 1000;
+    const MAX_SENDS = 3;
+    const sendTimestamps: number[] = JSON.parse(sessionStorage.getItem("contact_sends") || "[]");
+    const recentSends = sendTimestamps.filter((t) => now - t < RATE_LIMIT_WINDOW);
+    if (recentSends.length >= MAX_SENDS) {
+      setSendResult("error");
+      return;
+    }
+
+    setSending(true);
+    setSendResult(null);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const data = {
+      fullname: (formData.get("fullname") as string).trim(),
+      email: (formData.get("email") as string).trim(),
+      message: (formData.get("message") as string).trim(),
+    };
+
+    // Basic honeypot / validation
+    if (!data.fullname || !data.email || !data.message) {
+      setSending(false);
+      return;
+    }
+
+    try {
+      // Get reCAPTCHA token
+      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "";
+      const token = await new Promise<string>((resolve, reject) => {
+        if (!window.grecaptcha) {
+          reject(new Error("reCAPTCHA not loaded"));
+          return;
+        }
+        window.grecaptcha.ready(() => {
+          window.grecaptcha.execute(siteKey, { action: "contact" }).then(resolve).catch(reject);
+        });
+      });
+
+      const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+          template_id: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+          user_id: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
+          template_params: {
+            from_name: data.fullname,
+            from_email: data.email,
+            message: data.message,
+            "g-recaptcha-response": token,
+          },
+        }),
+      });
+
+      if (res.ok) {
+        setSendResult("success");
+        form.reset();
+        setFormValid(false);
+        // Track send timestamp
+        recentSends.push(now);
+        sessionStorage.setItem("contact_sends", JSON.stringify(recentSends));
+      } else {
+        setSendResult("error");
+      }
+    } catch {
+      setSendResult("error");
+    } finally {
+      setSending(false);
+      setTimeout(() => setSendResult(null), 5000);
+    }
   };
 
   const isProjectVisible = (category: string) => {
@@ -939,6 +1028,7 @@ export default function Home() {
               action="#"
               className="form"
               onChange={handleFormChange}
+              onSubmit={handleFormSubmit}
             >
               <div className="input-wrapper">
                 <input
@@ -947,6 +1037,7 @@ export default function Home() {
                   className="form-input"
                   placeholder="Full name"
                   required
+                  disabled={sending}
                 />
                 <input
                   type="email"
@@ -954,6 +1045,7 @@ export default function Home() {
                   className="form-input"
                   placeholder="Email address"
                   required
+                  disabled={sending}
                 />
               </div>
 
@@ -962,16 +1054,24 @@ export default function Home() {
                 className="form-input"
                 placeholder="Your Message"
                 required
+                disabled={sending}
               ></textarea>
 
               <button
                 className="form-btn"
                 type="submit"
-                disabled={!formValid}
+                disabled={!formValid || sending}
               >
-                <ion-icon name="paper-plane"></ion-icon>
-                <span>Send Message</span>
+                <ion-icon name={sending ? "hourglass-outline" : "paper-plane"}></ion-icon>
+                <span>{sending ? "Sending..." : "Send Message"}</span>
               </button>
+
+              {sendResult === "success" && (
+                <p className="form-result form-result-success">Message sent successfully!</p>
+              )}
+              {sendResult === "error" && (
+                <p className="form-result form-result-error">Failed to send. Please try again or email me directly.</p>
+              )}
             </form>
           </section>
         </article>

@@ -1434,6 +1434,26 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 .form-btn:disabled:hover::before { background: var(--bg-gradient-jet); }
 
+.form-result {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: var(--fs-7);
+  font-weight: var(--fw-400);
+}
+
+.form-result-success {
+  color: hsl(142, 70%, 65%);
+  background: hsla(142, 70%, 65%, 0.1);
+  border: 1px solid hsla(142, 70%, 65%, 0.2);
+}
+
+.form-result-error {
+  color: hsl(0, 70%, 65%);
+  background: hsla(0, 70%, 65%, 0.1);
+  border: 1px solid hsla(0, 70%, 65%, 0.2);
+}
+
 
 
 

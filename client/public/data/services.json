@@ -2,21 +2,21 @@
   {
     "icon": "/icon-dev.svg",
     "title": "Backend Development",
-    "text": "Building robust APIs and web services using C#/.NET, with expertise in CQRS, Clean Architecture, and SQL Server optimization."
+    "text": "Building robust APIs and scalable web services using C#/.NET, leveraging CQRS, Clean Architecture, and SQL Server — with hands-on experience across HR systems, insurance platforms, healthcare, and e-commerce domains."
   },
   {
     "icon": "/icon-design.svg",
     "title": "Frontend Development",
-    "text": "Developing dynamic, responsive web applications with Angular, React, and TypeScript for seamless user experiences."
+    "text": "Crafting dynamic, responsive web applications with Angular and TypeScript, from employee portals with complex form workflows to interactive dashboards — also experienced with React and Next.js for modern web projects."
   },
   {
     "icon": "/icon-app.svg",
     "title": "API Integration",
-    "text": "Integrating third-party APIs such as Hubstaff, Zoom, Paynamics, and SharePoint to extend application capabilities."
+    "text": "Connecting systems through third-party API integrations including Hubstaff, Zoom, Paynamics, SharePoint, and more — with a focus on optimizing rate limits, batching strategies, and data consistency."
   },
   {
     "icon": "/icon-photo.svg",
     "title": "Process Automation",
-    "text": "Automating workflows with Azure WebJobs, Functions, and CI/CD pipelines to improve efficiency and reduce manual effort."
+    "text": "Streamlining repetitive tasks and workflows through Python scripts, PowerShell automation, batch (.bat) files, Azure WebJobs, Functions, and CI/CD pipelines to cut manual effort and boost efficiency."
   }
 ]

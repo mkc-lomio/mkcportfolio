@@ -2640,7 +2640,7 @@ textarea.form-input::-webkit-resizer { display: none; }
 }
 
 /* Pagination */
-.chess-pagination {
+.pagination {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2650,7 +2650,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   border-top: 1px solid hsl(0, 0%, 18%);
 }
 
-.chess-page-btn {
+.page-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2667,20 +2667,20 @@ textarea.form-input::-webkit-resizer { display: none; }
   transition: all 0.2s;
 }
 
-.chess-page-btn:hover:not(:disabled) {
+.page-btn:hover:not(:disabled) {
   background: hsl(240, 2%, 20%);
   color: hsl(0, 0%, 85%);
   border-color: hsl(0, 0%, 30%);
 }
 
-.chess-page-btn.active {
+.page-btn.active {
   background: hsla(45, 100%, 72%, 0.15);
   color: var(--orange-yellow-crayola);
   border-color: hsla(45, 100%, 72%, 0.3);
   font-weight: 600;
 }
 
-.chess-page-btn:disabled {
+.page-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }

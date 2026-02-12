@@ -274,21 +274,25 @@ export default function Home() {
     return false;
   };
 
-  const pinnedGames = chessGames.filter((g) => g.pinned);
-  const unpinnedGames = chessGames.filter((g) => !g.pinned).sort((a, b) => {
-    const me = "DrMkcTheHandSome";
-    const aWin = (a.result === "1-0" && a.white === me) || (a.result === "0-1" && a.black === me);
-    const bWin = (b.result === "1-0" && b.white === me) || (b.result === "0-1" && b.black === me);
-    // Wins first
-    if (aWin && !bWin) return -1;
-    if (!aWin && bWin) return 1;
-    // Within same group, sort by opponent rating desc
-    const aOppElo = a.white === me ? a.blackElo : a.whiteElo;
-    const bOppElo = b.white === me ? b.blackElo : b.whiteElo;
-    return bOppElo - aOppElo;
+  const sortedChessGames = [...chessGames].sort((a, b) => {
+    // Pinned first
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    // Within unpinned: wins first, then by opponent elo desc
+    if (!a.pinned && !b.pinned) {
+      const me = "DrMkcTheHandSome";
+      const aWin = (a.result === "1-0" && a.white === me) || (a.result === "0-1" && a.black === me);
+      const bWin = (b.result === "1-0" && b.white === me) || (b.result === "0-1" && b.black === me);
+      if (aWin && !bWin) return -1;
+      if (!aWin && bWin) return 1;
+      const aOppElo = a.white === me ? a.blackElo : a.whiteElo;
+      const bOppElo = b.white === me ? b.blackElo : b.whiteElo;
+      return bOppElo - aOppElo;
+    }
+    return 0;
   });
-  const chessTotalPages = Math.ceil(unpinnedGames.length / CHESS_PAGE_SIZE);
-  const paginatedGames = unpinnedGames.slice(
+  const chessTotalPages = Math.ceil(sortedChessGames.length / CHESS_PAGE_SIZE);
+  const paginatedChessGames = sortedChessGames.slice(
     (chessPage - 1) * CHESS_PAGE_SIZE,
     chessPage * CHESS_PAGE_SIZE
   );
@@ -784,9 +788,9 @@ export default function Home() {
             {blogPosts.length > BLOG_PAGE_SIZE && (() => {
               const totalPages = Math.ceil(blogPosts.length / BLOG_PAGE_SIZE);
               return (
-                <div className="chess-pagination">
+                <div className="pagination">
                   <button
-                    className="chess-page-btn"
+                    className="page-btn"
                     disabled={blogPage <= 1}
                     onClick={() => setBlogPage((p) => p - 1)}
                   >
@@ -795,14 +799,14 @@ export default function Home() {
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button
                       key={i}
-                      className={`chess-page-btn ${blogPage === i + 1 ? "active" : ""}`}
+                      className={`page-btn ${blogPage === i + 1 ? "active" : ""}`}
                       onClick={() => setBlogPage(i + 1)}
                     >
                       {i + 1}
                     </button>
                   ))}
                   <button
-                    className="chess-page-btn"
+                    className="page-btn"
                     disabled={blogPage >= totalPages}
                     onClick={() => setBlogPage((p) => p + 1)}
                   >
@@ -832,135 +836,79 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Pinned Games */}
-              {pinnedGames.length > 0 && (
-                <div className="chess-pinned-section">
-                  <div className="chess-pinned-label">
-                    <ion-icon name="pin-outline"></ion-icon> Pinned
-                  </div>
-                  <ul className="chess-games-list">
-                    {pinnedGames.map((game, i) => (
-                      <li className={`chess-game-item chess-game-pinned ${isMyWin(game) ? "chess-border-win" : isMyLoss(game) ? "chess-border-loss" : ""}`} key={`pin-${i}`}>
-                        {game.pinLabel && <span className="chess-pin-badge">{game.pinLabel}</span>}
-                        <div className="chess-game-players">
-                          <div className="chess-player">
-                            <span className="chess-piece-icon chess-piece-white">♔</span>
-                            <img src={countryFlagUrl(game.whiteCountry)} alt={game.whiteCountry} className="chess-flag" />
-                            {game.whiteImg ? <img src={game.whiteImg} alt={game.white} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
-                            <span className="chess-player-name">
-                              {game.whiteTitle && <span className="chess-title-badge">{game.whiteTitle}</span>}
-                              {game.white}
-                            </span>
-                            <span className="chess-elo">({game.whiteElo})</span>
-                          </div>
-                          <span className="chess-vs">vs</span>
-                          <div className="chess-player">
-                            <span className="chess-piece-icon chess-piece-black">♚</span>
-                            <img src={countryFlagUrl(game.blackCountry)} alt={game.blackCountry} className="chess-flag" />
-                            {game.blackImg ? <img src={game.blackImg} alt={game.black} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
-                            <span className="chess-player-name">
-                              {game.blackTitle && <span className="chess-title-badge">{game.blackTitle}</span>}
-                              {game.black}
-                            </span>
-                            <span className="chess-elo">({game.blackElo})</span>
-                          </div>
-                        </div>
-                        <div className="chess-game-meta">
-                          <span className={`chess-result ${isMyWin(game) ? "chess-result-win" : isMyLoss(game) ? "chess-result-loss" : "chess-result-draw"}`}>
-                            {game.result} {isMyWin(game) ? "Win" : isMyLoss(game) ? "Loss" : "Draw"}
-                          </span>
-                          <span>{game.opening}</span>
-                          <span>{game.timeControl}</span>
-                          <span>{game.date}</span>
-                        </div>
-                        <div className="chess-game-footer">
-                          <span className="chess-termination">{game.termination}</span>
-                          <a href={game.link} target="_blank" rel="noopener noreferrer" className="chess-view-btn">
-                            <ion-icon name="open-outline"></ion-icon> View Game
-                          </a>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+              <ul className="chess-games-list">
+                {paginatedChessGames.map((game, i) => (
+                  <li className={`chess-game-item ${game.pinned ? "chess-game-pinned" : ""} ${isMyWin(game) ? "chess-border-win" : isMyLoss(game) ? "chess-border-loss" : ""}`} key={`game-${i}`}>
+                    {game.pinned && <span className="chess-pin-badge">{game.pinLabel || "Pinned"}</span>}
+                    <div className="chess-game-players">
+                      <div className="chess-player">
+                        <span className="chess-piece-icon chess-piece-white">♔</span>
+                        <img src={countryFlagUrl(game.whiteCountry)} alt={game.whiteCountry} className="chess-flag" />
+                        {game.whiteImg ? <img src={game.whiteImg} alt={game.white} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
+                        <span className="chess-player-name">
+                          {game.whiteTitle && <span className="chess-title-badge">{game.whiteTitle}</span>}
+                          {game.white}
+                        </span>
+                        <span className="chess-elo">({game.whiteElo})</span>
+                      </div>
+                      <span className="chess-vs">vs</span>
+                      <div className="chess-player">
+                        <span className="chess-piece-icon chess-piece-black">♚</span>
+                        <img src={countryFlagUrl(game.blackCountry)} alt={game.blackCountry} className="chess-flag" />
+                        {game.blackImg ? <img src={game.blackImg} alt={game.black} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
+                        <span className="chess-player-name">
+                          {game.blackTitle && <span className="chess-title-badge">{game.blackTitle}</span>}
+                          {game.black}
+                        </span>
+                        <span className="chess-elo">({game.blackElo})</span>
+                      </div>
+                    </div>
+                    <div className="chess-game-meta">
+                      <span className={`chess-result ${isMyWin(game) ? "chess-result-win" : isMyLoss(game) ? "chess-result-loss" : "chess-result-draw"}`}>
+                        {game.result} {isMyWin(game) ? "Win" : isMyLoss(game) ? "Loss" : "Draw"}
+                      </span>
+                      <span>{game.opening}</span>
+                      <span>{game.timeControl}</span>
+                      <span>{game.date}</span>
+                    </div>
+                    <div className="chess-game-footer">
+                      <span className="chess-termination">{game.termination}</span>
+                      <a href={game.link} target="_blank" rel="noopener noreferrer" className="chess-view-btn">
+                        <ion-icon name="open-outline"></ion-icon> View Game
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Pagination */}
+              {chessTotalPages > 1 && (
+                <div className="pagination">
+                  <button
+                    className="page-btn"
+                    disabled={chessPage <= 1}
+                    onClick={() => setChessPage((p) => p - 1)}
+                  >
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                  </button>
+                  {Array.from({ length: chessTotalPages }, (_, i) => (
+                    <button
+                      key={i}
+                      className={`page-btn ${chessPage === i + 1 ? "active" : ""}`}
+                      onClick={() => setChessPage(i + 1)}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                  <button
+                    className="page-btn"
+                    disabled={chessPage >= chessTotalPages}
+                    onClick={() => setChessPage((p) => p + 1)}
+                  >
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                  </button>
                 </div>
               )}
-
-              {/* All Games */}
-              <div className="chess-all-section">
-                <div className="chess-section-label">All Games</div>
-                <ul className="chess-games-list">
-                  {paginatedGames.map((game, i) => (
-                    <li className={`chess-game-item ${isMyWin(game) ? "chess-border-win" : isMyLoss(game) ? "chess-border-loss" : ""}`} key={`game-${i}`}>
-                      <div className="chess-game-players">
-                        <div className="chess-player">
-                          <span className="chess-piece-icon chess-piece-white">♔</span>
-                          <img src={countryFlagUrl(game.whiteCountry)} alt={game.whiteCountry} className="chess-flag" />
-                          {game.whiteImg ? <img src={game.whiteImg} alt={game.white} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
-                          <span className="chess-player-name">
-                            {game.whiteTitle && <span className="chess-title-badge">{game.whiteTitle}</span>}
-                            {game.white}
-                          </span>
-                          <span className="chess-elo">({game.whiteElo})</span>
-                        </div>
-                        <span className="chess-vs">vs</span>
-                        <div className="chess-player">
-                          <span className="chess-piece-icon chess-piece-black">♚</span>
-                          <img src={countryFlagUrl(game.blackCountry)} alt={game.blackCountry} className="chess-flag" />
-                          {game.blackImg ? <img src={game.blackImg} alt={game.black} className="chess-avatar" /> : <span className="chess-avatar chess-avatar-placeholder">♟</span>}
-                          <span className="chess-player-name">
-                            {game.blackTitle && <span className="chess-title-badge">{game.blackTitle}</span>}
-                            {game.black}
-                          </span>
-                          <span className="chess-elo">({game.blackElo})</span>
-                        </div>
-                      </div>
-                      <div className="chess-game-meta">
-                        <span className={`chess-result ${isMyWin(game) ? "chess-result-win" : isMyLoss(game) ? "chess-result-loss" : "chess-result-draw"}`}>
-                          {game.result} {isMyWin(game) ? "Win" : isMyLoss(game) ? "Loss" : "Draw"}
-                        </span>
-                        <span>{game.opening}</span>
-                        <span>{game.timeControl}</span>
-                        <span>{game.date}</span>
-                      </div>
-                      <div className="chess-game-footer">
-                        <span className="chess-termination">{game.termination}</span>
-                        <a href={game.link} target="_blank" rel="noopener noreferrer" className="chess-view-btn">
-                          <ion-icon name="open-outline"></ion-icon> View Game
-                        </a>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Pagination */}
-                {chessTotalPages > 1 && (
-                  <div className="chess-pagination">
-                    <button
-                      className="chess-page-btn"
-                      disabled={chessPage <= 1}
-                      onClick={() => setChessPage((p) => p - 1)}
-                    >
-                      <ion-icon name="chevron-back-outline"></ion-icon>
-                    </button>
-                    {Array.from({ length: chessTotalPages }, (_, i) => (
-                      <button
-                        key={i}
-                        className={`chess-page-btn ${chessPage === i + 1 ? "active" : ""}`}
-                        onClick={() => setChessPage(i + 1)}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
-                    <button
-                      className="chess-page-btn"
-                      disabled={chessPage >= chessTotalPages}
-                      onClick={() => setChessPage((p) => p + 1)}
-                    >
-                      <ion-icon name="chevron-forward-outline"></ion-icon>
-                    </button>
-                  </div>
-                )}
-              </div>
             </div>
           </section>
         </article>

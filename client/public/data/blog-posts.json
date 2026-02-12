@@ -1,9 +1,82 @@
 [
   {
-    "img": "/blog-1.jpg",
-    "title": "Coming Soon",
-    "category": "Blog",
-    "date": "2025",
-    "text": "Stay tuned — blog posts about software development, tech insights, and lessons learned will be shared here soon."
+    "img": "blog/ohmyposh.png",
+    "title": "How to Personalize Your Windows Terminal Experience with Oh My Posh",
+    "category": "Productivity Tools",
+    "date": "Mar 6, 2023",
+    "text": "Customize your Windows Terminal with Oh My Posh theme for PowerShell, WSL/Ubuntu and more!",
+    "url": "https://medium.com/@myelmarc/how-to-personalize-your-windows-terminal-experience-with-oh-my-posh-theme-for-powershell-619cf6f86af7",
+    "claps": 61,
+    "pinned": true
+  },
+  {
+    "img": "blog/vm.png",
+    "title": "Getting started with Virtual Machines: A Guide to Understanding Virtualization Technology",
+    "category": "Cloud Computing",
+    "date": "Mar 3, 2023",
+    "text": "A virtual machine (VM) is a computer program that creates a virtual environment that allows users to run programs and access files as if they were running on a physical machine.",
+    "url": "https://medium.com/@myelmarc/getting-started-with-virtual-machines-a-guide-to-understanding-virtualization-technology-cc507cd0d7f0",
+    "claps": 0,
+    "pinned": false
+  },
+  {
+    "img": "blog/docker-logo.png",
+    "title": "Docker Basic: Dockerizing Angular App Locally",
+    "category": "DevOps",
+    "date": "Sep 5, 2022",
+    "text": "A key takeaway in this piece is at the end you'll know how to dockerize the angular application and publish it in the Docker Hub.",
+    "url": "https://medium.com/@myelmarc/docker-basic-dockerizing-angular-app-locally-39c138fb71ac",
+    "claps": 0,
+    "pinned": false
+  },
+  {
+    "img": "blog/spag.png",
+    "title": "Organize your spaghetti code using Separation of Concern Design Principle",
+    "category": "Design Principles",
+    "date": "Oct 15, 2021",
+    "text": "The separation of concern (SoC) is a software design principle that delivers the modularity of a program and encapsulates the necessary information.",
+    "url": "https://medium.com/@myelmarc/organize-your-spaghetti-code-using-separation-of-concern-design-principle-9ff0c27976d1",
+    "claps": 0,
+    "pinned": false
+  },
+  {
+    "img": "blog/ted.png",
+    "title": "Terse, Expressive, Does one thing: Your code should do TED talk using TED Principle",
+    "category": "Design Principles",
+    "date": "Oct 13, 2021",
+    "text": "The TED Rule's main concept is naming of code should be easy to understand by everyone. When writing code, consider that your audience isn't just a computer but also a human.",
+    "url": "https://medium.com/@myelmarc/terse-expressive-does-one-thing-your-code-should-do-ted-talk-using-ted-principle-4c734ab40871",
+    "claps": 0,
+    "pinned": false
+  },
+  {
+    "img": "blog/dry.png",
+    "title": "Don't Repeat Yourself Principle: Forge your code DRY as the Sahara Desert",
+    "category": "Design Principles",
+    "date": "Oct 12, 2021",
+    "text": "The DRY principle states that every piece of knowledge must have a single, unambiguous representation within a system.",
+    "url": "https://medium.com/@myelmarc/forge-your-code-dry-as-the-sahara-dessert-b912aa645a9f",
+    "claps": 0,
+    "pinned": false
+  },
+  {
+    "img": "blog/dev.png",
+    "title": "Scrutinize the Pragmatic Programmer's 3 Key Attributes",
+    "category": "Software Development",
+    "date": "Sep 7, 2021",
+    "text": "Do you wonder how to be a good programmer? Did you know every legend in programming has key attributes that make them stand out?",
+    "url": "https://medium.com/@myelmarc/scrutinize-the-pragmatic-programmers-3-key-attributes-e4c80de15287",
+    "claps": 0,
+    "pinned": true
+  },
+  {
+    "img": "blog/softlifemanual.png",
+    "title": "7 Lessons in the Software Developer's Life Manual by John Sonmez",
+    "category": "Software Development",
+    "date": "Sep 1, 2021",
+    "text": "As software developers, we should have good soft skills, not just technical skills. It will help us make progress in our career.",
+    "url": "https://medium.com/@myelmarc/7-lessons-in-the-software-development-life-manual-by-john-sonmez-541522476ca8",
+    "claps": 0,
+    "pinned": true
   }
 ]

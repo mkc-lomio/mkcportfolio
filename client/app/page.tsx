@@ -68,6 +68,9 @@ interface BlogPost {
   category: string;
   date: string;
   text: string;
+  url: string;
+  claps: number;
+  pinned: boolean;
 }
 
 interface ChessGame {
@@ -94,6 +97,7 @@ interface ChessGame {
 // ============ CONSTANTS ============
 
 const CHESS_PAGE_SIZE = 10;
+const BLOG_PAGE_SIZE = 6;
 const filterCategories = ["All", "Administrative", "E-commerce", "Healthcare", "Recruitment", "Insurance", "AI Solutions", "Others"];
 const navPages = ["About", "Resume", "Portfolio", "Blog", "Hobbies", "Contact"];
 
@@ -117,6 +121,7 @@ export default function Home() {
   const [galleryDescription, setGalleryDescription] = useState("");
   const [marqueePaused, setMarqueePaused] = useState(false);
   const [chessPage, setChessPage] = useState(1);
+  const [blogPage, setBlogPage] = useState(1);
 
   // Data state
   const [services, setServices] = useState<Service[]>([]);
@@ -736,7 +741,7 @@ export default function Home() {
           </section>
         </article>
 
-        {/* ===== TECH HIGHLIGHTS ===== */}
+        {/* ===== BLOG ===== */}
         <article
           className={`blog ${activePage === "blog" ? "active" : ""}`}
         >
@@ -746,29 +751,66 @@ export default function Home() {
 
           <section className="blog-posts">
             <ul className="blog-posts-list">
-              {blogPosts.map((post) => (
-                <li className="blog-post-item" key={post.title}>
-                  <a href="#">
-                    <figure className="blog-banner-box">
-                      <img
-                        src={post.img}
-                        alt={post.title}
-                        loading="lazy"
-                      />
-                    </figure>
-                    <div className="blog-content">
-                      <div className="blog-meta">
-                        <p className="blog-category">{post.category}</p>
-                        <span className="dot"></span>
-                        <time dateTime="2022-02-23">{post.date}</time>
+              {(() => {
+                const sorted = [...blogPosts].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+                const paginated = sorted.slice((blogPage - 1) * BLOG_PAGE_SIZE, blogPage * BLOG_PAGE_SIZE);
+                return paginated.map((post) => (
+                  <li className="blog-post-item" key={post.title}>
+                    <a href={post.url} target="_blank" rel="noopener noreferrer">
+                      <figure className="blog-banner-box">
+                        {post.pinned && <span className="blog-pin-badge"><ion-icon name="pin-outline"></ion-icon> Pinned</span>}
+                        <img
+                          src={post.img}
+                          alt={post.title}
+                          loading="lazy"
+                        />
+                      </figure>
+                      <div className="blog-content">
+                        <div className="blog-meta">
+                          <p className="blog-category">{post.category}</p>
+                          <span className="dot"></span>
+                          <time dateTime="2023-03-06">{post.date}</time>
+                        </div>
+                        <h3 className="h3 blog-item-title">{post.title}</h3>
+                        <p className="blog-text">{post.text}</p>
                       </div>
-                      <h3 className="h3 blog-item-title">{post.title}</h3>
-                      <p className="blog-text">{post.text}</p>
-                    </div>
-                  </a>
-                </li>
-              ))}
+                    </a>
+                  </li>
+                ));
+              })()}
             </ul>
+
+            {/* Blog Pagination */}
+            {blogPosts.length > BLOG_PAGE_SIZE && (() => {
+              const totalPages = Math.ceil(blogPosts.length / BLOG_PAGE_SIZE);
+              return (
+                <div className="chess-pagination">
+                  <button
+                    className="chess-page-btn"
+                    disabled={blogPage <= 1}
+                    onClick={() => setBlogPage((p) => p - 1)}
+                  >
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i}
+                      className={`chess-page-btn ${blogPage === i + 1 ? "active" : ""}`}
+                      onClick={() => setBlogPage(i + 1)}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                  <button
+                    className="chess-page-btn"
+                    disabled={blogPage >= totalPages}
+                    onClick={() => setBlogPage((p) => p + 1)}
+                  >
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                  </button>
+                </div>
+              );
+            })()}
           </section>
         </article>
 

@@ -1261,6 +1261,23 @@ main {
   height: 200px;
   border-radius: 12px;
   overflow: hidden;
+  position: relative;
+}
+
+.blog-pin-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--orange-yellow-crayola);
+  color: var(--smoky-black);
+  font-size: 11px;
+  font-weight: var(--fw-500);
+  padding: 3px 10px;
+  border-radius: 6px;
 }
 
 .blog-banner-box img {

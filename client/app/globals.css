@@ -335,6 +335,14 @@ main {
 .avatar-box {
   background: var(--bg-gradient-onyx);
   border-radius: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar-box img {
+  width: 80px;
+  height: auto;
+  display: block;
 }
 
 .info-content .name {
@@ -2366,9 +2374,9 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 /* ===== HOBBIES & CHESS ===== */
 
-.hobbies { margin-bottom: 15px; }
+.hobbies-content { margin-bottom: 15px; }
 
-.hobbies-title { margin-bottom: 20px; }
+.hobbies-content .hobbies-title { margin-bottom: 20px; }
 
 .hobby-card {
   padding: 20px;

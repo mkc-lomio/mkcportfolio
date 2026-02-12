@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Marc Kenneth Lomio - Portfolio",
   description: "Personal portfolio website",
   icons: {
-    icon: "/logo.ico",
+    icon: "/pawn.ico",
   },
 };
 

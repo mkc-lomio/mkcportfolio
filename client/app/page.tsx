@@ -24,6 +24,7 @@ interface Testimonial {
   avatar: string;
   name: string;
   subtitle?: string;
+  relation?: string;
   date?: string;
   text: string;
 }
@@ -572,6 +573,7 @@ export default function Home() {
                         {t.subtitle && <span className="testimonials-subtitle">{t.subtitle}</span>}
                         {t.date && <span className="testimonials-date">{t.date}</span>}
                       </div>
+                      {t.relation && <span className="testimonials-relation">{t.relation}</span>}
                       <img src="/icon-quote.svg" alt="quote icon" className="testimonials-quote-icon" />
                     </div>
                     <blockquote className="testimonials-quote">

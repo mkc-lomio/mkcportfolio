@@ -712,6 +712,18 @@ main {
   align-self: flex-start;
 }
 
+.testimonials-relation {
+  font-size: 11px;
+  font-weight: var(--fw-500);
+  color: var(--white-2);
+  background: hsla(45, 100%, 72%, 0.15);
+  border: 1px solid hsla(45, 100%, 72%, 0.3);
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
 .testimonials-quote {
   color: var(--light-gray);
   font-size: var(--fs-6);

@@ -126,5 +126,15 @@
     "category": "others",
     "url": "https://www.chessbookanalyzer.com/",
     "description": "A web-based chess book analyzer built as a personal project for studying chess openings and games interactively. It lets users load chess books (PDF/DjVu/ePub), display them side-by-side with an interactive chessboard, and analyze positions with Stockfish engine evaluation — all running locally in the browser with no server required.\n\nKey Features:\n• Interactive chessboard with drag-and-drop piece movement, move navigation, and board annotations (arrows and highlights).\n• Integrated Stockfish engine analysis running via Web Workers for real-time position evaluation.\n• Built-in book reader supporting PDF, DjVu, and ePub formats with a resizable split-panel layout.\n• PGN export and full move history with NAG annotation support (!, ?, !!, ??, etc.).\n• Tree-based variation/branching system for exploring side lines without losing the main line.\n• IndexedDB persistence to save and restore study sessions across browser reloads.\n• PWA-ready with offline capability — fully runs in the browser with zero backend dependency.\n\nTech Stack: Vanilla JavaScript, chess.js (v1.x), chessboard.js, Stockfish WASM, PDF.js, DjVu.js, ePub.js, IndexedDB."
+  },
+    {
+    "images": [
+      "portfolio/chesslabae-1.png",
+      "portfolio/chesslabae-2.png"
+    ],
+    "title": "ChessLab AE",
+    "category": "others",
+    "url": "https://chesslab.ae/",
+    "description": "A Dubai-based chess academy website built for ChessLab AE, a training platform led by International Masters, FIDE Certified Instructors, and Sports Psychologists. The site serves as the digital front for their coaching programs, tournament events, and community engagement — helping players of all levels from beginners to competitive tournament players.\n\nKey Features:\n• Landing page with a video background hero section showcasing the academy's brand and call-to-action for booking assessments.\n• Structured training roadmap displaying three learning tiers — First Movers (beginner), Star Class (intermediate), and Elite Class (advanced) — each with Google Calendar booking integration.\n• Team profiles section highlighting coaches and staff with their titles, certifications, and personal quotes.\n• Events section featuring recent and upcoming FIDE-rated tournaments with event details and registration links.\n• Client testimonials carousel with reviews from parents and chess players.\n• FAQ accordion section addressing common questions about programs, age requirements, coaching qualifications, and class formats.\n• Multi-branch contact section with Google Maps integration, WhatsApp link, social media links, and operating hours.\n• Fully responsive design optimized for desktop and mobile devices.\n\nTech Stack: WordPress, Softaculous (deployment)."
   }
 ]

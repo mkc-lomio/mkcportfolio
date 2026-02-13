@@ -38,7 +38,7 @@ function LazyImage({ src, alt, className, ...props }: React.ImgHTMLAttributes<HT
 
 // ============ TYPING ANIMATION ============
 
-const typingRoles = ["Software Engineer", "Full-Stack Developer", ".NET Developer", "Frontend Developer", "AI Engineer", "API Developer", "Azure Developer"];
+const typingRoles = ["Software Engineer", "Full-Stack Developer", ".NET Specialist", "Angular Developer", "Chess Enthusiast"];
 
 function TypingAnimation() {
   const [roleIndex, setRoleIndex] = useState(0);
@@ -982,7 +982,10 @@ export default function Home() {
           {/* Testimonials */}
           <section className="testimonials">
             <div className="testimonials-header">
-              <h3 className="h3 testimonials-title">Testimonials</h3>
+              <div>
+                <h3 className="h3 testimonials-title">The Feedback Loop</h3>
+                <p className="testimonials-tagline">Proof of impact from the trusted network</p>
+              </div>
               {testimonials.length > 1 && (
                 <span className="testimonials-count">{testimonials.length} recommendations</span>
               )}
@@ -1023,10 +1026,11 @@ export default function Home() {
                         </figure>
                         <div className="testimonials-card-info">
                           <h4 className="h4 testimonials-item-title">{t.name}</h4>
-                          {t.subtitle && <span className="testimonials-subtitle">{t.subtitle}</span>}
+                          <span className="testimonials-subtitle">
+                            {[t.relation, t.subtitle].filter(Boolean).join(" • ")}
+                          </span>
                           {t.date && <span className="testimonials-date">{t.date}</span>}
                         </div>
-                        {t.relation && <span className="testimonials-relation">{t.relation}</span>}
                         <img src="/icon-quote.svg" alt="quote icon" className="testimonials-quote-icon" />
                       </div>
                       <blockquote className="testimonials-quote">

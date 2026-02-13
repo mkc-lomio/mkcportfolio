@@ -1,6 +1,41 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, FormEvent } from "react";
+
+// ============ ANIMATED COUNTER ============
+
+function AnimatedCounter({ end, suffix = "", duration = 1600 }: { end: number; suffix?: string; duration?: number }) {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          const start = performance.now();
+          const step = (now: number) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.floor(eased * end));
+            if (progress < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [end, duration, hasAnimated]);
+
+  return <span ref={ref} className="counter-value">{count}{suffix}</span>;
+}
 import Image from "next/image";
 
 declare global {
@@ -533,6 +568,31 @@ export default function Home() {
             <p>
               Outside of work, he is a competitive chess player.
             </p>
+          </section>
+
+          {/* Stats */}
+          <section className="about-stats">
+            <div className="stats-row">
+              <div className="stat-item">
+                <AnimatedCounter end={6} suffix="+" />
+                <span className="stat-label">Years Experience</span>
+              </div>
+              <div className="stat-separator" />
+              <div className="stat-item">
+                <AnimatedCounter end={clients.length || 12} suffix="" />
+                <span className="stat-label">Clients</span>
+              </div>
+              <div className="stat-separator" />
+              <div className="stat-item">
+                <AnimatedCounter end={projects.length || 14} suffix="" />
+                <span className="stat-label">Projects</span>
+              </div>
+              <div className="stat-separator" />
+              <div className="stat-item">
+                <AnimatedCounter end={skillGroups.reduce((sum, g) => sum + g.items.length, 0) || 78} suffix="+" />
+                <span className="stat-label">Technologies</span>
+              </div>
+            </div>
           </section>
 
           {/* Service */}

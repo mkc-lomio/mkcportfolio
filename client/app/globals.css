@@ -570,6 +570,72 @@ main {
 
 .about-text p { margin-bottom: 15px; }
 
+
+/**
+ * #about-stats
+ */
+
+.about-stats {
+  margin-bottom: 30px;
+}
+
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 20px 10px;
+  background: var(--border-gradient-onyx);
+  border-radius: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.stats-row::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: var(--bg-gradient-jet);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  min-width: 0;
+}
+
+.counter-value {
+  font-size: 1.6rem;
+  font-weight: var(--fw-600);
+  background: var(--text-gradient-yellow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--light-gray-70);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: var(--fw-400);
+  white-space: nowrap;
+}
+
+.stat-separator {
+  width: 1px;
+  height: 36px;
+  background: var(--jet);
+  flex-shrink: 0;
+}
+
 .download-cv-btn {
   display: flex;
   align-items: center;
@@ -1581,6 +1647,23 @@ textarea.form-input::-webkit-resizer { display: none; }
     padding: 12px;
   }
 
+  .stats-row {
+    padding: 16px 6px;
+  }
+
+  .counter-value {
+    font-size: 1.3rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-separator {
+    height: 28px;
+  }
+
   .chess-game-item {
     padding: 12px;
   }
@@ -1845,6 +1928,25 @@ textarea.form-input::-webkit-resizer { display: none; }
   .about .article-title { margin-bottom: 20px; }
 
   .about-text { margin-bottom: 40px; }
+
+  /* stats */
+
+  .stats-row {
+    padding: 24px 16px;
+  }
+
+  .counter-value {
+    font-size: 2rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+  }
+
+  .stat-separator {
+    height: 44px;
+  }
 
   /* service */
 

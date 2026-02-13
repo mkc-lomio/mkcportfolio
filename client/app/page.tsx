@@ -36,6 +36,104 @@ function LazyImage({ src, alt, className, ...props }: React.ImgHTMLAttributes<HT
   );
 }
 
+// ============ TYPING ANIMATION ============
+
+const typingRoles = ["Software Engineer", "Full-Stack Developer", ".NET Specialist", "Angular Developer", "Chess Enthusiast"];
+
+function TypingAnimation() {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+  const [pause, setPause] = useState(false);
+
+  useEffect(() => {
+    const current = typingRoles[roleIndex];
+
+    if (pause) {
+      const t = setTimeout(() => { setPause(false); setDeleting(true); }, 2000);
+      return () => clearTimeout(t);
+    }
+
+    if (deleting) {
+      if (charIndex === 0) {
+        setDeleting(false);
+        setRoleIndex((prev) => (prev + 1) % typingRoles.length);
+        return;
+      }
+      const t = setTimeout(() => setCharIndex((c) => c - 1), 30);
+      return () => clearTimeout(t);
+    }
+
+    if (charIndex < current.length) {
+      const t = setTimeout(() => setCharIndex((c) => c + 1), 80);
+      return () => clearTimeout(t);
+    }
+
+    setPause(true);
+  }, [charIndex, deleting, pause, roleIndex]);
+
+  return (
+    <span className="typing-text">
+      {typingRoles[roleIndex].slice(0, charIndex)}
+      <span className="typing-cursor">|</span>
+    </span>
+  );
+}
+
+// ============ CONFETTI ============
+
+function fireConfetti() {
+  const canvas = document.createElement("canvas");
+  canvas.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999";
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext("2d")!;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles: { x: number; y: number; vx: number; vy: number; size: number; color: string; rotation: number; rv: number; life: number }[] = [];
+  const colors = ["#FFD700", "#FFA500", "#FF6347", "#7CFC00", "#00BFFF", "#FF69B4", "#9370DB"];
+
+  for (let i = 0; i < 120; i++) {
+    particles.push({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+      y: canvas.height * 0.6,
+      vx: (Math.random() - 0.5) * 12,
+      vy: -Math.random() * 14 - 4,
+      size: Math.random() * 6 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      rv: (Math.random() - 0.5) * 10,
+      life: 1,
+    });
+  }
+
+  let frame = 0;
+  const animate = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    for (const p of particles) {
+      p.x += p.vx;
+      p.vy += 0.25;
+      p.y += p.vy;
+      p.rotation += p.rv;
+      p.life -= 0.008;
+      if (p.life <= 0) continue;
+      alive = true;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      ctx.restore();
+    }
+    frame++;
+    if (alive && frame < 300) requestAnimationFrame(animate);
+    else document.body.removeChild(canvas);
+  };
+  requestAnimationFrame(animate);
+}
+
 // ============ SKILL RADAR CHART ============
 
 function SkillRadarChart({ skills }: { skills: { name: string; value: number }[] }) {
@@ -278,6 +376,8 @@ export default function Home() {
   const [marqueePaused, setMarqueePaused] = useState(false);
   const [chessPage, setChessPage] = useState(1);
   const [blogPage, setBlogPage] = useState(1);
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [testimonialPaused, setTestimonialPaused] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(true);
@@ -367,6 +467,15 @@ export default function Home() {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  // Testimonial auto-scroll
+  useEffect(() => {
+    if (testimonials.length <= 1 || testimonialPaused) return;
+    const interval = setInterval(() => {
+      setTestimonialIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [testimonials.length, testimonialPaused]);
+
   // Scroll listener for scroll-to-top button and mobile nav hide/show
   useEffect(() => {
     const handleScroll = () => {
@@ -384,6 +493,7 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+
   const handleNavClick = (page: string) => {
     const next = page.toLowerCase();
     if (next === activePage) return;
@@ -395,6 +505,32 @@ export default function Home() {
       setTimeout(() => setTransitioning(false), 50);
     }, 200);
   };
+
+  // Keyboard navigation (arrow keys to switch tabs)
+  useEffect(() => {
+    const pages = navPages.map((p) => p.toLowerCase());
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        const idx = pages.indexOf(activePage);
+        if (idx === -1) return;
+        const nextIdx = e.key === "ArrowRight"
+          ? (idx + 1) % pages.length
+          : (idx - 1 + pages.length) % pages.length;
+        const next = pages[nextIdx];
+        if (next === activePage) return;
+        setTransitioning(true);
+        setTimeout(() => {
+          setPrevPage(activePage);
+          setActivePage(next);
+          window.scrollTo(0, 0);
+          setTimeout(() => setTransitioning(false), 50);
+        }, 200);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [activePage]);
 
   const handleFilter = (category: string) => {
     setActiveFilter(category.toLowerCase());
@@ -484,6 +620,7 @@ export default function Home() {
         setSendResult("success");
         form.reset();
         setFormValid(false);
+        fireConfetti();
         // Track send timestamp
         recentSends.push(now);
         sessionStorage.setItem("contact_sends", JSON.stringify(recentSends));
@@ -577,7 +714,7 @@ export default function Home() {
             <h1 className="name" title="Marc Kenneth Lomio">
               Marc Kenneth Lomio
             </h1>
-            <p className="title">Software Engineer</p>
+            <p className="title"><TypingAnimation /></p>
             <span className="availability-badge">
               <span className="availability-dot" />
               Open to opportunities
@@ -768,30 +905,80 @@ export default function Home() {
 
           {/* Testimonials */}
           <section className="testimonials">
-            <h3 className="h3 testimonials-title">Testimonials</h3>
-            <ul className="testimonials-list">
-              {testimonials.map((t) => (
-                <li className="testimonials-item" key={t.name}>
-                  <div className="content-card testimonials-card">
-                    <div className="testimonials-card-header">
-                      <figure className="testimonials-avatar-box">
-                        <img src={t.avatar} alt={t.name} width={60} />
-                      </figure>
-                      <div className="testimonials-card-info">
-                        <h4 className="h4 testimonials-item-title">{t.name}</h4>
-                        {t.subtitle && <span className="testimonials-subtitle">{t.subtitle}</span>}
-                        {t.date && <span className="testimonials-date">{t.date}</span>}
+            <div className="testimonials-header">
+              <h3 className="h3 testimonials-title">Testimonials</h3>
+              {testimonials.length > 1 && (
+                <span className="testimonials-count">{testimonials.length} recommendations</span>
+              )}
+            </div>
+
+            <div
+              className="testimonials-carousel"
+              onMouseEnter={() => setTestimonialPaused(true)}
+              onMouseLeave={() => setTestimonialPaused(false)}
+              onTouchStart={() => setTestimonialPaused(true)}
+              onTouchEnd={() => { setTimeout(() => setTestimonialPaused(false), 3000); }}
+            >
+              <div className="testimonials-track">
+                {testimonials.map((t, i) => (
+                  <div
+                    className={`testimonials-slide ${i === testimonialIndex ? "active" : ""}`}
+                    key={t.name}
+                  >
+                    <div className="content-card testimonials-card">
+                      <div className="testimonials-card-header">
+                        <figure className="testimonials-avatar-box">
+                          <img src={t.avatar} alt={t.name} width={60} />
+                        </figure>
+                        <div className="testimonials-card-info">
+                          <h4 className="h4 testimonials-item-title">{t.name}</h4>
+                          {t.subtitle && <span className="testimonials-subtitle">{t.subtitle}</span>}
+                          {t.date && <span className="testimonials-date">{t.date}</span>}
+                        </div>
+                        {t.relation && <span className="testimonials-relation">{t.relation}</span>}
+                        <img src="/icon-quote.svg" alt="quote icon" className="testimonials-quote-icon" />
                       </div>
-                      {t.relation && <span className="testimonials-relation">{t.relation}</span>}
-                      <img src="/icon-quote.svg" alt="quote icon" className="testimonials-quote-icon" />
+                      <blockquote className="testimonials-quote">
+                        <p>&ldquo;{t.text}&rdquo;</p>
+                      </blockquote>
                     </div>
-                    <blockquote className="testimonials-quote">
-                      <p>&ldquo;{t.text}&rdquo;</p>
-                    </blockquote>
                   </div>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+
+              {testimonials.length > 1 && (
+                <>
+                  <div className="testimonials-nav">
+                    <button
+                      className="testimonials-nav-btn"
+                      onClick={() => setTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
+                      aria-label="Previous testimonial"
+                    >
+                      <ion-icon name="chevron-back-outline"></ion-icon>
+                    </button>
+                    <button
+                      className="testimonials-nav-btn"
+                      onClick={() => setTestimonialIndex((prev) => (prev + 1) % testimonials.length)}
+                      aria-label="Next testimonial"
+                    >
+                      <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </button>
+                  </div>
+
+                  <div className="testimonials-dots">
+                    {testimonials.map((_, i) => (
+                      <button
+                        key={i}
+                        className={`testimonials-dot ${i === testimonialIndex ? "active" : ""}`}
+                        onClick={() => setTestimonialIndex(i)}
+                        aria-label={`Go to testimonial ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
             <div className="testimonials-cta">
               <p>Worked with me? I&apos;d love to hear your feedback! Send your testimonial to{" "}
                 <a href="mailto:marckenneth.lomio@gmail.com?subject=Testimonial for Marc Kenneth">
@@ -1059,6 +1246,8 @@ export default function Home() {
                           <p className="blog-category">{post.category}</p>
                           <span className="dot"></span>
                           <time dateTime="2023-03-06">{post.date}</time>
+                          <span className="dot"></span>
+                          <span className="blog-read-time">{Math.max(1, Math.ceil(post.text.split(/\s+/).length / 200))} min read</span>
                         </div>
                         <h3 className="h3 blog-item-title">{post.title}</h3>
                         <p className="blog-text">{post.text}</p>

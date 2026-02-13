@@ -1612,9 +1612,10 @@ main {
 
 .blog-meta {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
-  gap: 7px;
+  gap: 6px 7px;
   margin-bottom: 10px;
 }
 
@@ -1629,6 +1630,26 @@ main {
   width: 4px;
   height: 4px;
   border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.blog-read-time {
+  color: var(--light-gray-70);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-300);
+}
+
+.blog-read-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  color: var(--light-gray-70);
+  margin-bottom: 10px;
+}
+
+.blog-read-badge ion-icon {
+  font-size: 12px;
 }
 
 .blog-item-title {
@@ -1801,12 +1822,6 @@ textarea.form-input::-webkit-resizer { display: none; }
 .info-content .title {
   min-width: 140px;
   min-height: 22px;
-}
-
-.blog-read-time {
-  color: var(--light-gray-70);
-  font-size: var(--fs-6);
-  font-weight: var(--fw-300);
 }
 
 
@@ -2121,6 +2136,54 @@ article.active.page-exit {
 @keyframes errorFadeIn {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+
+/*-----------------------------------*\
+  #FOOTER
+\*-----------------------------------*/
+
+.site-footer {
+  margin-top: 30px;
+  padding: 24px 16px;
+  border-top: 1px solid var(--jet);
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-copy {
+  font-size: 0.75rem;
+  color: var(--light-gray-70);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 16px;
+}
+
+.footer-links button,
+.footer-links a {
+  background: none;
+  border: none;
+  color: var(--light-gray);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.footer-links button:hover,
+.footer-links a:hover {
+  color: var(--orange-yellow-crayola);
 }
 
 

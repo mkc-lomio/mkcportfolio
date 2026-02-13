@@ -319,8 +319,9 @@ interface BlogPost {
   date: string;
   text: string;
   url: string;
-  claps: number;
-  pinned: boolean;
+  claps?: number;
+  pinned?: boolean;
+  readTime?: number;
 }
 
 interface ChessGame {
@@ -1294,10 +1295,12 @@ export default function Home() {
                         <div className="blog-meta">
                           <p className="blog-category">{post.category}</p>
                           <span className="dot"></span>
-                          <time dateTime="2023-03-06">{post.date}</time>
-                          <span className="dot"></span>
-                          <span className="blog-read-time">{Math.max(1, Math.ceil(post.text.split(/\s+/).length / 200))} min read</span>
+                          <time dateTime={post.date}>{post.date}</time>
                         </div>
+                        <span className="blog-read-badge">
+                          <ion-icon name="time-outline"></ion-icon>
+                          {post.readTime || Math.max(1, Math.ceil(post.text.split(/\s+/).length / 200))} min read
+                        </span>
                         <h3 className="h3 blog-item-title">{post.title}</h3>
                         <p className="blog-text">{post.text}</p>
                       </div>

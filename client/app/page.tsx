@@ -38,7 +38,7 @@ function LazyImage({ src, alt, className, ...props }: React.ImgHTMLAttributes<HT
 
 // ============ TYPING ANIMATION ============
 
-const typingRoles = ["Software Engineer", "Full-Stack Developer", ".NET Specialist", "Angular Developer", "Chess Enthusiast"];
+const typingRoles = ["Software Engineer", "Full-Stack Developer", ".NET Developer", "Frontend Developer", "AI Engineer", "API Developer", "Azure Developer"];
 
 function TypingAnimation() {
   const [roleIndex, setRoleIndex] = useState(0);

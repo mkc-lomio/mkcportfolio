@@ -366,6 +366,8 @@ export default function Home() {
   const [formValid, setFormValid] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendResult, setSendResult] = useState<"success" | "error" | null>(null);
+  const [formErrors, setFormErrors] = useState<{ fullname?: string; email?: string; message?: string }>({});
+  const [formTouched, setFormTouched] = useState<{ fullname?: boolean; email?: boolean; message?: boolean }>({});
   const [imagePopup, setImagePopup] = useState<string | null>(null);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
@@ -551,13 +553,60 @@ export default function Home() {
     setModalOpen(false);
   };
 
+  const validateField = (name: string, value: string) => {
+    if (name === "fullname") {
+      if (!value.trim()) return "Full name is required";
+      if (value.trim().length < 2) return "Name must be at least 2 characters";
+    }
+    if (name === "email") {
+      if (!value.trim()) return "Email is required";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Please enter a valid email";
+    }
+    if (name === "message") {
+      if (!value.trim()) return "Message is required";
+      if (value.trim().length < 10) return "Message must be at least 10 characters";
+    }
+    return "";
+  };
+
+  const handleFieldBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormTouched((prev) => ({ ...prev, [name]: true }));
+    const error = validateField(name, value);
+    setFormErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
   const handleFormChange = (e: FormEvent<HTMLFormElement>) => {
     const form = e.currentTarget;
-    setFormValid(form.checkValidity());
+    const data = new FormData(form);
+    const errors: typeof formErrors = {};
+    let valid = true;
+    for (const [name, value] of data.entries()) {
+      const err = validateField(name, value as string);
+      if (err) valid = false;
+      if (formTouched[name as keyof typeof formTouched]) {
+        errors[name as keyof typeof formErrors] = err;
+      }
+    }
+    setFormErrors(errors);
+    setFormValid(valid);
   };
 
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    // Validate all fields
+    const errors: typeof formErrors = {};
+    let valid = true;
+    for (const [name, value] of formData.entries()) {
+      const err = validateField(name, value as string);
+      if (err) { valid = false; errors[name as keyof typeof formErrors] = err; }
+    }
+    setFormTouched({ fullname: true, email: true, message: true });
+    setFormErrors(errors);
+    if (!valid) return;
 
     // Client-side rate limit: max 3 sends per 10 minutes
     const now = Date.now();
@@ -573,8 +622,6 @@ export default function Home() {
     setSending(true);
     setSendResult(null);
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
     const data = {
       fullname: (formData.get("fullname") as string).trim(),
       email: (formData.get("email") as string).trim(),
@@ -620,6 +667,8 @@ export default function Home() {
         setSendResult("success");
         form.reset();
         setFormValid(false);
+        setFormErrors({});
+        setFormTouched({});
         fireConfetti();
         // Track send timestamp
         recentSends.push(now);
@@ -1416,31 +1465,49 @@ export default function Home() {
               onSubmit={handleFormSubmit}
             >
               <div className="input-wrapper">
-                <input
-                  type="text"
-                  name="fullname"
-                  className="form-input"
-                  placeholder="Full name"
-                  required
-                  disabled={sending}
-                />
-                <input
-                  type="email"
-                  name="email"
-                  className="form-input"
-                  placeholder="Email address"
-                  required
-                  disabled={sending}
-                />
+                <div className="form-field">
+                  <input
+                    type="text"
+                    name="fullname"
+                    className={`form-input ${formErrors.fullname && formTouched.fullname ? "form-input-error" : ""}`}
+                    placeholder="Full name"
+                    required
+                    disabled={sending}
+                    onBlur={handleFieldBlur}
+                  />
+                  {formErrors.fullname && formTouched.fullname && (
+                    <span className="form-error">{formErrors.fullname}</span>
+                  )}
+                </div>
+                <div className="form-field">
+                  <input
+                    type="email"
+                    name="email"
+                    className={`form-input ${formErrors.email && formTouched.email ? "form-input-error" : ""}`}
+                    placeholder="Email address"
+                    required
+                    disabled={sending}
+                    onBlur={handleFieldBlur}
+                  />
+                  {formErrors.email && formTouched.email && (
+                    <span className="form-error">{formErrors.email}</span>
+                  )}
+                </div>
               </div>
 
-              <textarea
-                name="message"
-                className="form-input"
-                placeholder="Your Message"
-                required
-                disabled={sending}
-              ></textarea>
+              <div className="form-field">
+                <textarea
+                  name="message"
+                  className={`form-input ${formErrors.message && formTouched.message ? "form-input-error" : ""}`}
+                  placeholder="Your Message"
+                  required
+                  disabled={sending}
+                  onBlur={handleFieldBlur}
+                ></textarea>
+                {formErrors.message && formTouched.message && (
+                  <span className="form-error">{formErrors.message}</span>
+                )}
+              </div>
 
               <button
                 className="form-btn"

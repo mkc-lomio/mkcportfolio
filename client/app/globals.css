@@ -599,6 +599,30 @@ main {
   padding: 20px 7px;
   transition: color var(--transition-1);
   white-space: nowrap;
+  position: relative;
+}
+
+.navbar-link::after {
+  content: "";
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--orange-yellow-crayola);
+  border-radius: 1px;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.navbar-link:hover::after,
+.navbar-link:focus::after {
+  width: 60%;
+  left: 20%;
+}
+
+.navbar-link.active::after {
+  width: 100%;
+  left: 0;
 }
 
 .navbar-link:hover,
@@ -2070,6 +2094,33 @@ article.active.page-exit {
   fill: var(--light-gray);
   font-size: 9px;
   font-weight: 500;
+}
+
+
+/*-----------------------------------*\
+  #FORM VALIDATION
+\*-----------------------------------*/
+
+.form-field {
+  position: relative;
+}
+
+.form-input-error {
+  border-color: hsl(0, 60%, 50%) !important;
+}
+
+.form-error {
+  display: block;
+  font-size: 0.72rem;
+  color: hsl(0, 70%, 60%);
+  margin-top: 4px;
+  padding-left: 2px;
+  animation: errorFadeIn 0.25s ease;
+}
+
+@keyframes errorFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 

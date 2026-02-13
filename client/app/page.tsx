@@ -583,9 +583,14 @@ export default function Home() {
                 </li>
               ))}
             </ul>
+            <div className="testimonials-cta">
+              <p>Worked with me? I&apos;d love to hear your feedback! Send your testimonial to{" "}
+                <a href="mailto:marckenneth.lomio@gmail.com?subject=Testimonial for Marc Kenneth">
+                  marckenneth.lomio@gmail.com
+                </a>
+              </p>
+            </div>
           </section>
-
-          {/* Clients */}
           <section className="clients">
             <h3 className="h3 clients-title">Clients</h3>
             <div

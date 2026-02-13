@@ -745,6 +745,28 @@ main {
   min-width: unset;
 }
 
+.testimonials-cta {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: var(--bg-gradient-jet);
+  border: 1px solid var(--jet);
+  border-radius: 14px;
+  text-align: center;
+  font-size: var(--fs-7);
+  color: var(--light-gray);
+  line-height: 1.6;
+}
+
+.testimonials-cta a {
+  color: var(--vegas-gold);
+  text-decoration: none;
+  font-weight: var(--fw-500);
+}
+
+.testimonials-cta a:hover {
+  text-decoration: underline;
+}
+
 
 /**
  * #testimonials-modal

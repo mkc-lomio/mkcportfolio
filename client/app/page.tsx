@@ -2,6 +2,110 @@
 
 import { useState, useEffect, useRef, useCallback, FormEvent } from "react";
 
+// ============ LAZY IMAGE ============
+
+function LazyImage({ src, alt, className, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) {
+  const [loaded, setLoaded] = useState(false);
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); observer.disconnect(); } },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className={`lazy-image-wrapper ${loaded ? "loaded" : ""}`}>
+      {!loaded && <div className="skeleton-shimmer" />}
+      {inView && (
+        <img
+          src={src}
+          alt={alt}
+          className={className}
+          onLoad={() => setLoaded(true)}
+          {...props}
+        />
+      )}
+    </div>
+  );
+}
+
+// ============ SKILL RADAR CHART ============
+
+function SkillRadarChart({ skills }: { skills: { name: string; value: number }[] }) {
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting && !hasAnimated) { setHasAnimated(true); observer.disconnect(); } },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasAnimated]);
+
+  if (!skills.length) return null;
+
+  const cx = 150, cy = 150, maxR = 110;
+  const n = skills.length;
+  const angleStep = (2 * Math.PI) / n;
+
+  const getPoint = (index: number, value: number) => {
+    const angle = angleStep * index - Math.PI / 2;
+    const r = (value / 100) * maxR;
+    return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+  };
+
+  const gridLevels = [20, 40, 60, 80, 100];
+
+  const dataPoints = skills.map((s, i) => getPoint(i, s.value));
+  const dataPath = dataPoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ") + " Z";
+
+  return (
+    <svg ref={ref} viewBox="0 0 300 300" className="radar-chart">
+      {/* Grid */}
+      {gridLevels.map((level) => {
+        const pts = Array.from({ length: n }, (_, i) => getPoint(i, level));
+        const path = pts.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ") + " Z";
+        return <path key={level} d={path} className="radar-grid" />;
+      })}
+      {/* Axes */}
+      {skills.map((_, i) => {
+        const p = getPoint(i, 100);
+        return <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} className="radar-axis" />;
+      })}
+      {/* Data polygon */}
+      <g className={`radar-data-group ${hasAnimated ? "radar-animated" : ""}`} style={{ transformOrigin: `${cx}px ${cy}px` }}>
+        <path d={dataPath} className="radar-data" />
+        <path d={dataPath} className="radar-data-stroke" />
+        {/* Dots */}
+        {skills.map((s, i) => {
+          const dp = getPoint(i, s.value);
+          return <circle key={s.name} cx={dp.x} cy={dp.y} r={4} className="radar-dot" />;
+        })}
+      </g>
+      {/* Labels (always visible) */}
+      {skills.map((s, i) => {
+        const lp = getPoint(i, 120);
+        return (
+          <text key={s.name} x={lp.x} y={lp.y} className="radar-label" textAnchor="middle" dominantBaseline="central">
+            {s.name.split(" / ")[0]}
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
+
 // ============ ANIMATED COUNTER ============
 
 function AnimatedCounter({ end, suffix = "", duration = 1600 }: { end: number; suffix?: string; duration?: number }) {
@@ -107,6 +211,7 @@ interface Project {
   category: string;
   url: string;
   description: string;
+  techStack?: string[];
 }
 
 interface BlogPost {
@@ -152,6 +257,8 @@ const navPages = ["About", "Resume", "Portfolio", "Blog", "Hobbies", "Contact"];
 
 export default function Home() {
   const [activePage, setActivePage] = useState("about");
+  const [prevPage, setPrevPage] = useState("about");
+  const [transitioning, setTransitioning] = useState(false);
   const [sidebarActive, setSidebarActive] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
   const [selectOpen, setSelectOpen] = useState(false);
@@ -171,6 +278,10 @@ export default function Home() {
   const [marqueePaused, setMarqueePaused] = useState(false);
   const [chessPage, setChessPage] = useState(1);
   const [blogPage, setBlogPage] = useState(1);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(true);
+  const lastScrollY = useRef(0);
 
   // Data state
   const [services, setServices] = useState<Service[]>([]);
@@ -251,9 +362,38 @@ export default function Home() {
     return () => cancelAnimationFrame(animationId);
   }, [marqueePaused]);
 
+  // Theme toggle
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  // Scroll listener for scroll-to-top button and mobile nav hide/show
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setShowScrollTop(y > 400);
+      // Hide mobile nav on scroll down, show on scroll up
+      if (y > lastScrollY.current && y > 100) {
+        setShowMobileNav(false);
+      } else {
+        setShowMobileNav(true);
+      }
+      lastScrollY.current = y;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleNavClick = (page: string) => {
-    setActivePage(page.toLowerCase());
-    window.scrollTo(0, 0);
+    const next = page.toLowerCase();
+    if (next === activePage) return;
+    setTransitioning(true);
+    setTimeout(() => {
+      setPrevPage(activePage);
+      setActivePage(next);
+      window.scrollTo(0, 0);
+      setTimeout(() => setTransitioning(false), 50);
+    }, 200);
   };
 
   const handleFilter = (category: string) => {
@@ -425,7 +565,7 @@ export default function Home() {
   );
 
   return (
-    <main>
+    <main className={theme}>
       {/* ===== SIDEBAR ===== */}
       <aside className={`sidebar ${sidebarActive ? "active" : ""}`}>
         <div className="sidebar-info">
@@ -438,6 +578,10 @@ export default function Home() {
               Marc Kenneth Lomio
             </h1>
             <p className="title">Software Engineer</p>
+            <span className="availability-badge">
+              <span className="availability-dot" />
+              Open to opportunities
+            </span>
           </div>
 
           <button
@@ -507,6 +651,11 @@ export default function Home() {
             Download CV
           </a>
 
+          <button className="theme-toggle-btn" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+            <ion-icon name={theme === "dark" ? "sunny-outline" : "moon-outline"}></ion-icon>
+            <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+          </button>
+
           <div className="powered-by">
             <p className="powered-by-label">Powered by</p>
             <div className="powered-by-badges">
@@ -529,7 +678,7 @@ export default function Home() {
       {/* ===== MAIN CONTENT ===== */}
       <div className="main-content">
         {/* NAVBAR */}
-        <nav className="navbar">
+        <nav className={`navbar ${showMobileNav ? "" : "navbar-hidden"}`}>
           <ul className="navbar-list">
             {navPages.map((page) => (
               <li className="navbar-item" key={page}>
@@ -548,7 +697,7 @@ export default function Home() {
 
         {/* ===== ABOUT ===== */}
         <article
-          className={`about ${activePage === "about" ? "active" : ""}`}
+          className={`about ${activePage === "about" ? "active" : ""} ${transitioning ? "page-exit" : "page-enter"}`}
         >
           <header>
             <h2 className="h2 article-title">About me</h2>
@@ -674,7 +823,7 @@ export default function Home() {
 
         {/* ===== RESUME ===== */}
         <article
-          className={`resume ${activePage === "resume" ? "active" : ""}`}
+          className={`resume ${activePage === "resume" ? "active" : ""} ${transitioning ? "page-exit" : "page-enter"}`}
         >
           <header>
             <h2 className="h2 article-title">Resume</h2>
@@ -794,7 +943,7 @@ export default function Home() {
 
         {/* ===== PORTFOLIO ===== */}
         <article
-          className={`portfolio ${activePage === "portfolio" ? "active" : ""}`}
+          className={`portfolio ${activePage === "portfolio" ? "active" : ""} ${transitioning ? "page-exit" : "page-enter"}`}
         >
           <header>
             <h2 className="h2 article-title">Portfolio</h2>
@@ -860,14 +1009,20 @@ export default function Home() {
                       <div className="project-item-icon-box">
                         <ion-icon name="eye-outline"></ion-icon>
                       </div>
-                      <img
+                      <LazyImage
                         src={project.images[0]}
                         alt={project.title}
-                        loading="lazy"
                       />
                     </figure>
                     <h3 className="project-title">{project.title}</h3>
                     <p className="project-category">{project.category}</p>
+                    {project.techStack && project.techStack.length > 0 && (
+                      <div className="project-tech-tags">
+                        {project.techStack.slice(0, 5).map((tech) => (
+                          <span className="project-tech-tag" key={tech}>{tech}</span>
+                        ))}
+                      </div>
+                    )}
                   </a>
                 </li>
               ))}
@@ -877,7 +1032,7 @@ export default function Home() {
 
         {/* ===== BLOG ===== */}
         <article
-          className={`blog ${activePage === "blog" ? "active" : ""}`}
+          className={`blog ${activePage === "blog" ? "active" : ""} ${transitioning ? "page-exit" : "page-enter"}`}
         >
           <header>
             <h2 className="h2 article-title">Blog</h2>
@@ -950,7 +1105,7 @@ export default function Home() {
 
         {/* ===== HOBBIES ===== */}
         <article
-          className={`hobbies ${activePage === "hobbies" ? "active" : ""}`}
+          className={`hobbies ${activePage === "hobbies" ? "active" : ""} ${transitioning ? "page-exit" : "page-enter"}`}
         >
           <header>
             <h2 className="h2 article-title">Hobbies</h2>
@@ -1045,7 +1200,7 @@ export default function Home() {
 
         {/* ===== CONTACT ===== */}
         <article
-          className={`contact ${activePage === "contact" ? "active" : ""}`}
+          className={`contact ${activePage === "contact" ? "active" : ""} ${transitioning ? "page-exit" : "page-enter"}`}
         >
           <header>
             <h2 className="h2 article-title">Contact</h2>
@@ -1117,6 +1272,15 @@ export default function Home() {
           </section>
         </article>
       </div>
+
+      {/* Scroll to Top */}
+      <button
+        className={`scroll-top-btn ${showScrollTop ? "visible" : ""}`}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Scroll to top"
+      >
+        <ion-icon name="chevron-up-outline"></ion-icon>
+      </button>
 
       {/* Gallery Popup */}
       {galleryOpen && (

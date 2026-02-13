@@ -485,8 +485,9 @@ main {
 .contact-info :is(.contact-link, time, address) {
   color: var(--white-2);
   font-size: var(--fs-7);
-  word-break: break-all;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  white-space: normal;
 }
 
 .contact-info address { font-style: normal; }
@@ -1681,6 +1682,39 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 /*-----------------------------------*\
   #AVAILABILITY BADGE
+\*-----------------------------------*/
+
+.typing-text {
+  display: inline;
+}
+
+.typing-cursor {
+  display: inline-block;
+  color: var(--orange-yellow-crayola);
+  font-weight: var(--fw-300);
+  animation: blink-cursor 0.7s step-end infinite;
+  margin-left: 1px;
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.info-content .title {
+  min-width: 140px;
+  min-height: 22px;
+}
+
+.blog-read-time {
+  color: var(--light-gray-70);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-300);
+}
+
+
+/*-----------------------------------*\
+  #AVAILABILITY BADGE  
 \*-----------------------------------*/
 
 .availability-badge {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 
-const siteUrl = "marckennethlomio.com";
+const siteUrl = "https://marckennethlomio.com";
 
 export const metadata: Metadata = {
   title: "Marc Kenneth Lomio | Software Engineer Portfolio",

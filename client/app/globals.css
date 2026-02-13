@@ -675,18 +675,62 @@ main {
   box-shadow: var(--shadow-1);
 }
 
-.testimonials-item-title { margin-bottom: 7px; }
+.testimonials-item-title { margin-bottom: 2px; }
 
-.testimonials-text {
+.testimonials-date {
+  display: block;
+  font-size: var(--fs-8);
+  color: var(--light-gray);
+}
+
+.testimonials-subtitle {
+  display: block;
+  font-size: var(--fs-8);
+  color: var(--vegas-gold);
+  margin-bottom: 2px;
+}
+
+.testimonials-card {
+  padding: 24px;
+  cursor: default;
+}
+
+.testimonials-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.testimonials-card-info {
+  flex: 1;
+}
+
+.testimonials-quote-icon {
+  width: 36px;
+  opacity: 0.6;
+  align-self: flex-start;
+}
+
+.testimonials-quote {
   color: var(--light-gray);
   font-size: var(--fs-6);
   font-weight: var(--fw-300);
   line-height: 1.6;
-  display: -webkit-box;
-  line-clamp: 4;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-style: italic;
+  border-left: 3px solid var(--vegas-gold);
+  padding-left: 16px;
+  margin: 0;
+}
+
+.testimonials-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.testimonials-item {
+  min-width: unset;
 }
 
 

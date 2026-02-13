@@ -23,6 +23,8 @@ interface Service {
 interface Testimonial {
   avatar: string;
   name: string;
+  subtitle?: string;
+  date?: string;
   text: string;
 }
 
@@ -557,57 +559,29 @@ export default function Home() {
           {/* Testimonials */}
           <section className="testimonials">
             <h3 className="h3 testimonials-title">Testimonials</h3>
-            <ul className="testimonials-list has-scrollbar">
+            <ul className="testimonials-list">
               {testimonials.map((t) => (
                 <li className="testimonials-item" key={t.name}>
-                  <div
-                    className="content-card"
-                    onClick={() => openModal(t)}
-                  >
-                    <figure className="testimonials-avatar-box">
-                      <img src={t.avatar} alt={t.name} width={60} />
-                    </figure>
-                    <h4 className="h4 testimonials-item-title">{t.name}</h4>
-                    <div className="testimonials-text">
-                      <p>{t.text}</p>
+                  <div className="content-card testimonials-card">
+                    <div className="testimonials-card-header">
+                      <figure className="testimonials-avatar-box">
+                        <img src={t.avatar} alt={t.name} width={60} />
+                      </figure>
+                      <div className="testimonials-card-info">
+                        <h4 className="h4 testimonials-item-title">{t.name}</h4>
+                        {t.subtitle && <span className="testimonials-subtitle">{t.subtitle}</span>}
+                        {t.date && <span className="testimonials-date">{t.date}</span>}
+                      </div>
+                      <img src="/icon-quote.svg" alt="quote icon" className="testimonials-quote-icon" />
                     </div>
+                    <blockquote className="testimonials-quote">
+                      <p>&ldquo;{t.text}&rdquo;</p>
+                    </blockquote>
                   </div>
                 </li>
               ))}
             </ul>
           </section>
-
-          {/* Testimonials Modal */}
-          <div className={`modal-container ${modalOpen ? "active" : ""}`}>
-            <div
-              className={`overlay ${modalOpen ? "active" : ""}`}
-              onClick={closeModal}
-            ></div>
-            {modalData && (
-            <section className="testimonials-modal">
-              <button className="modal-close-btn" onClick={closeModal}>
-                <ion-icon name="close-outline"></ion-icon>
-              </button>
-              <div className="modal-img-wrapper">
-                <figure className="modal-avatar-box">
-                  <img
-                    src={modalData.avatar}
-                    alt={modalData.name}
-                    width={80}
-                  />
-                </figure>
-                <img src="/icon-quote.svg" alt="quote icon" />
-              </div>
-              <div className="modal-content">
-                <h4 className="h3 modal-title">{modalData.name}</h4>
-                <time dateTime="2021-06-14">14 June, 2021</time>
-                <div>
-                  <p>{modalData.text}</p>
-                </div>
-              </div>
-            </section>
-            )}
-          </div>
 
           {/* Clients */}
           <section className="clients">

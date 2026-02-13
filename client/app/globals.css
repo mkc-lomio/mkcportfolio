@@ -371,6 +371,16 @@ main {
   max-height: 140px;
   overflow: hidden;
   transition: var(--transition-2);
+  animation: sidebar-glow 6s ease-in-out infinite;
+}
+
+@keyframes sidebar-glow {
+  0%, 100% {
+    box-shadow: var(--shadow-1), 0 0 8px hsla(45, 100%, 72%, 0.08), inset 0 0 0 1px hsla(45, 100%, 72%, 0.06);
+  }
+  50% {
+    box-shadow: var(--shadow-1), 0 0 18px hsla(45, 100%, 72%, 0.15), inset 0 0 0 1px hsla(45, 100%, 72%, 0.15);
+  }
 }
 
 .sidebar.active { max-height: 580px; }

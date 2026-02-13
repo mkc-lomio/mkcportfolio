@@ -791,7 +791,7 @@ export default function Home() {
               Marc Kenneth Lomio
             </h1>
             <p className="title"><TypingAnimation /></p>
-            <span className="availability-badge">
+            <span className="availability-badge" title="Based in Philippines, UTC+8">
               <span className="availability-dot" />
               Open to opportunities
             </span>

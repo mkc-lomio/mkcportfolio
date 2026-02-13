@@ -470,6 +470,32 @@ export default function Home() {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  // Favicon pulse on tab return
+  useEffect(() => {
+    const originalTitle = document.title;
+    let interval: ReturnType<typeof setInterval>;
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        let toggle = false;
+        interval = setInterval(() => {
+          document.title = toggle ? "👋 Come back!" : originalTitle;
+          toggle = !toggle;
+        }, 1500);
+      } else {
+        clearInterval(interval);
+        document.title = originalTitle;
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      clearInterval(interval);
+      document.title = originalTitle;
+    };
+  }, []);
+
   // Testimonial auto-scroll
   useEffect(() => {
     if (testimonials.length <= 1 || testimonialPaused) return;
@@ -966,8 +992,23 @@ export default function Home() {
               className="testimonials-carousel"
               onMouseEnter={() => setTestimonialPaused(true)}
               onMouseLeave={() => setTestimonialPaused(false)}
-              onTouchStart={() => setTestimonialPaused(true)}
-              onTouchEnd={() => { setTimeout(() => setTestimonialPaused(false), 3000); }}
+              onTouchStart={(e) => {
+                setTestimonialPaused(true);
+                (e.currentTarget as HTMLElement).dataset.touchX = String(e.touches[0].clientX);
+              }}
+              onTouchEnd={(e) => {
+                const startX = Number((e.currentTarget as HTMLElement).dataset.touchX || 0);
+                const endX = e.changedTouches[0].clientX;
+                const diff = startX - endX;
+                if (Math.abs(diff) > 50) {
+                  if (diff > 0) {
+                    setTestimonialIndex((prev) => (prev + 1) % testimonials.length);
+                  } else {
+                    setTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+                  }
+                }
+                setTimeout(() => setTestimonialPaused(false), 3000);
+              }}
             >
               <div className="testimonials-track">
                 {testimonials.map((t, i) => (

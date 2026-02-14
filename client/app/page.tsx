@@ -1021,9 +1021,9 @@ export default function Home() {
                   >
                     <div className="content-card testimonials-card">
                       <div className="testimonials-card-header">
-                        <figure className="testimonials-avatar-box">
-                          <img src={t.avatar} alt={t.name} width={60} />
-                        </figure>
+                        <div className="testimonials-initials-box">
+                          {t.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}
+                        </div>
                         <div className="testimonials-card-info">
                           <h4 className="h4 testimonials-item-title">{t.name}</h4>
                           <span className="testimonials-subtitle">

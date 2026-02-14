@@ -876,6 +876,22 @@ main {
   object-position: top center;
 }
 
+.testimonials-initials-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, hsl(45, 100%, 72%) 0%, hsl(35, 100%, 68%) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: hsl(35, 80%, 25%);
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-1);
+}
+
 .testimonials-card {
   padding: 20px;
   cursor: default;
@@ -2546,6 +2562,12 @@ article.active.page-exit {
     width: 52px;
     height: 52px;
     border-radius: 50%;
+  }
+
+  .testimonials-initials-box {
+    width: 52px;
+    height: 52px;
+    font-size: 17px;
   }
 
   .testimonials-nav {

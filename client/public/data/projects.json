@@ -221,6 +221,25 @@
   },
   {
     "images": [
+      "portfolio/kcmj-2.png",
+      "portfolio/kcmj-3.png",
+      "portfolio/kcmj-1.png"
+    ],
+    "title": "KCMJ Sari-Sari Store POS",
+    "category": "e-commerce",
+    "url": "#",
+    "description": "A full-featured Point of Sale (POS) system built for a family-owned sari-sari store. Designed for daily retail operations with real-time inventory tracking, sales monitoring, and credit management — optimized for tablet and mobile use by non-technical users.\n\nKey Features:\n• Dashboard overview with today's sales, cash on hand, profit, petty cash, and outstanding credit (utang) summary.\n• Real-time inventory management with best sellers ranking, stock velocity tracking, days-left estimates, and low stock alerts.\n• QR code scanning and manual product search for fast checkout.\n• Credit/Utang system with per-customer balance tracking, payment recording, and overdue alerts (30+ days).\n• Cash register management with starting balance, cash-out, petty cash, and full audit trail history.\n• Sales trend charts (7-day and 3-month) and best sellers analytics by revenue and quantity.\n• Purchase expense tracking for monitoring spending on goods for resale.\n• Dual-mode support: Admin dashboard with full controls and a simplified Sales Terminal for cashiers.\n• Built with Angular 19, Supabase (PostgreSQL + Auth + RLS), and SCSS with a mobile-first responsive design.",
+    "techStack": [
+      "Angular 19",
+      "TypeScript",
+      "Supabase",
+      "PostgreSQL",
+      "SCSS",
+      "Chart.js"
+    ]
+  },
+  {
+    "images": [
       "portfolio/chesslabae-1.png",
       "portfolio/chesslabae-2.png"
     ],
@@ -233,4 +252,4 @@
       "Softaculous"
     ]
   }
-] 
+]

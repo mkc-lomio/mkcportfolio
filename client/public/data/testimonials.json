@@ -1,6 +1,5 @@
 [
   {
-    "avatar": "/memoji/avatar-2.png",
     "name": "Kelly Ann David-Salcedo",
     "subtitle": "ChessLab AE",
     "date": "Feb 2026",
@@ -8,11 +7,17 @@
     "text": "They were outsourced from Dubai. Working with them has been smooth despite the time difference. They respond quickly, communicate clearly, and handle everything without needing much direction. Please check chesslab.ae to his work with us hehe"
   },
   {
-    "avatar":"/memoji/avatar-3.png",
     "name":"Cindy Mae Nilooban",
     "subtitle":"Kinetic Innovative Staffing",
     "date":"Feb 2026",
     "relation":"Technical Recruiter",
     "text":"Marc is a valued member of the IT support team at Kinetic, and I would confidently say he is one of the best members of the team. He is extremely reliable and always ready to help. Whenever you reach out to him, getting support is never complicated. He responds quickly and often calls right away to address any concerns, so you are never left waiting. Marc is truly just one call away, which makes a huge difference, especially when working under tight deadlines. He consistently ensures that issues are resolved as quickly as possible and provides timely support you can depend on. Thank you, Marc! ❤"
+  },
+  {
+    "name":"Mark Rayden Mirafuente",
+    "subtitle":"Kinetic Innovative Staffing",
+    "date":"Feb 2026",
+    "relation":"Senior Web Developer",
+    "text":"Marc was my lead when I was a junior developer, and we both had an opportunity of working together for the past three years. By carefully guiding me through difficult tasks and teaching me how to approach challenges with confidence and structure, he significantly contributed to my growth. It was very motivating to see his rapid progression and deserved promotion to senior level. I've witnessed him effectively manage challenging projects with professionalism, skill, and leadership during our time together. In addition to his technical expertise, Marc inspires others around him and guides them toward becoming better developers."
   }
 ]

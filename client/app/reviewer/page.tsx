@@ -1,5 +1,7 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const ReviewerContent = dynamic(() => import("./ReviewerContent"), {
@@ -12,5 +14,12 @@ const ReviewerContent = dynamic(() => import("./ReviewerContent"), {
 });
 
 export default function ReviewerPage() {
+  const searchParams = useSearchParams();
+  const code = searchParams.get("code");
+
+  if (code !== "mkc") {
+    notFound();
+  }
+
   return <ReviewerContent />;
 }

@@ -1,0 +1,307 @@
+[
+  {
+    "id": "owasp-web-security",
+    "title": "OWASP Web Security",
+    "icon": "\ud83d\udee1\ufe0f",
+    "topics": [
+      {
+        "id": "owasp-overview",
+        "title": "OWASP Web Security Overview",
+        "tags": [
+          "OWASP",
+          "top 10",
+          "security by design"
+        ],
+        "notes": "OWASP web security best practices focus on mitigating the top 10 risks \u2014 such as injection, broken access control, and cryptographic failures \u2014 by adopting a **\"security by design\"** approach.\n\n**Key actions include:**\n- Strict input validation\n- Enforcing multi-factor authentication (MFA)\n- Using parameterized queries\n- Keeping components updated\n- Implementing robust logging and monitoring to prevent data breaches"
+      },
+      {
+        "id": "injection-prevention",
+        "title": "Injection Prevention",
+        "tags": [
+          "injection",
+          "SQL",
+          "parameterized queries"
+        ],
+        "notes": "Use **parameterized queries** (prepared statements) to prevent SQL, NoSQL, and OS command injection.\n\n**Why it matters:** Injection attacks occur when untrusted data is sent to an interpreter as part of a command or query. The attacker's hostile data can trick the interpreter into executing unintended commands or accessing data without authorization.\n\n**In .NET:**\n```csharp\n// \u274c Vulnerable \u2014 string concatenation\nvar query = \"SELECT * FROM Users WHERE Name = '\" + userInput + \"'\";\n\n// \u2705 Safe \u2014 parameterized with Dapper\nvar user = await connection.QueryAsync<User>(\n    \"SELECT * FROM Users WHERE Name = @Name\",\n    new { Name = userInput });\n\n// \u2705 Safe \u2014 EF Core (parameterized by default)\nvar user = await context.Users\n    .Where(u => u.Name == userInput)\n    .FirstOrDefaultAsync();\n```\n\n**Additional measures:**\n- Use stored procedures with parameterized inputs\n- Apply least privilege to database accounts\n- Validate and sanitize all inputs before processing\n- Use ORMs (EF Core, Dapper) which parameterize by default"
+      },
+      {
+        "id": "broken-access-control",
+        "title": "Broken Access Control",
+        "tags": [
+          "access control",
+          "RBAC",
+          "authorization"
+        ],
+        "notes": "Implement **Role-Based Access Control (RBAC)**, enforce the **principle of least privilege**, and validate authorization tokens for every request.\n\n**Common vulnerabilities:**\n- Users accessing other users' data by modifying IDs in URLs (IDOR)\n- Missing authorization checks on API endpoints\n- Privilege escalation \u2014 regular user performing admin actions\n- CORS misconfiguration allowing unauthorized origins\n\n**In ASP.NET Core:**\n```csharp\n// Role-based authorization\n[Authorize(Roles = \"Admin\")]\npublic IActionResult DeleteUser(int id) { ... }\n\n// Policy-based authorization\n[Authorize(Policy = \"CanEditReports\")]\npublic IActionResult EditReport(int id) { ... }\n\n// Resource-based \u2014 verify ownership\nif (report.OwnerId != currentUserId)\n    return Forbid();\n```\n\n**Best practices:**\n- Deny by default \u2014 require explicit grants\n- Validate permissions server-side on every request (don't trust client-side checks)\n- Log access control failures and alert on repeated attempts\n- Disable directory listing and ensure metadata files are not accessible"
+      },
+      {
+        "id": "cryptographic-failures",
+        "title": "Cryptographic Failures",
+        "tags": [
+          "encryption",
+          "TLS",
+          "hashing",
+          "passwords"
+        ],
+        "notes": "Encrypt all sensitive data **in transit** (using TLS) and **at rest**. Properly hash passwords (e.g., using Argon2 or bcrypt) and manage keys securely.\n\n**Data in transit:**\n- Enforce HTTPS/TLS everywhere \u2014 redirect HTTP \u2192 HTTPS\n- Use HSTS (HTTP Strict Transport Security) headers\n- Use TLS 1.2+ (disable TLS 1.0/1.1)\n\n**Data at rest:**\n- Encrypt sensitive database columns (e.g., AES-256)\n- Use Azure Key Vault or similar for key management\n- Never store encryption keys alongside encrypted data\n\n**Password hashing:**\n- \u274c Never store passwords in plain text or reversible encryption\n- \u274c Don't use MD5 or SHA-1 for passwords\n- \u2705 Use **bcrypt**, **Argon2**, or **PBKDF2** with a unique salt per password\n\n**In .NET:**\n```csharp\n// Password hashing with BCrypt\nvar hash = BCrypt.Net.BCrypt.HashPassword(password);\nvar isValid = BCrypt.Net.BCrypt.Verify(password, hash);\n```\n\n**Key management:**\n- Rotate encryption keys periodically\n- Use envelope encryption (encrypt data key with a master key)\n- Never hardcode keys in source code \u2014 use environment variables or vault services"
+      },
+      {
+        "id": "input-validation",
+        "title": "Input Validation & Sanitization",
+        "tags": [
+          "validation",
+          "sanitization",
+          "XSS"
+        ],
+        "notes": "**Never trust user input.** Validate all data against a strict allowlist of expected types, lengths, and formats.\n\n**Validation strategies:**\n- **Allowlist** (preferred) \u2014 define what IS allowed. Reject everything else.\n- **Blocklist** (weaker) \u2014 define what is NOT allowed. Easy to bypass with encoding tricks.\n\n**What to validate:**\n- Data type (string, number, date)\n- Length (min/max)\n- Format (regex for email, phone, etc.)\n- Range (numeric min/max)\n- Required vs optional\n\n**In ASP.NET Core:**\n```csharp\npublic class CreateUserRequest\n{\n    [Required]\n    [StringLength(100, MinimumLength = 2)]\n    public string Name { get; set; }\n\n    [Required]\n    [EmailAddress]\n    public string Email { get; set; }\n\n    [Range(18, 120)]\n    public int Age { get; set; }\n}\n```\n\n**XSS Prevention:**\n- Encode output \u2014 HTML-encode all user-generated content before rendering\n- Use Content Security Policy (CSP) headers\n- Angular and React auto-escape by default \u2014 don't bypass with `innerHTML` or `dangerouslySetInnerHTML`\n\n**Server-side validation is mandatory** \u2014 client-side validation is for UX only and can be bypassed."
+      },
+      {
+        "id": "secure-session-management",
+        "title": "Secure Session Management",
+        "tags": [
+          "sessions",
+          "cookies",
+          "authentication"
+        ],
+        "notes": "Use long, random session IDs, set the `HttpOnly` and `Secure` flags on cookies, and ensure sessions time out.\n\n**Cookie flags:**\n- **HttpOnly** \u2014 prevents JavaScript from accessing the cookie (mitigates XSS)\n- **Secure** \u2014 cookie only sent over HTTPS\n- **SameSite=Strict/Lax** \u2014 prevents CSRF by restricting cross-site cookie sending\n\n**In ASP.NET Core:**\n```csharp\nbuilder.Services.ConfigureApplicationCookie(options =>\n{\n    options.Cookie.HttpOnly = true;\n    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;\n    options.Cookie.SameSite = SameSiteMode.Strict;\n    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);\n    options.SlidingExpiration = true;\n});\n```\n\n**Best practices:**\n- Generate cryptographically random session IDs (never sequential or guessable)\n- Regenerate session ID after login (prevents session fixation)\n- Implement idle timeout AND absolute timeout\n- Invalidate sessions on logout (server-side)\n- Store tokens in httpOnly cookies \u2014 NOT in localStorage (vulnerable to XSS)"
+      },
+      {
+        "id": "security-configuration",
+        "title": "Security Configuration",
+        "tags": [
+          "configuration",
+          "hardening",
+          "headers"
+        ],
+        "notes": "Disable unnecessary features, remove default accounts, and ensure error messages do not leak sensitive information.\n\n**Hardening checklist:**\n- Remove or disable unused endpoints, features, and frameworks\n- Remove default/sample accounts and passwords\n- Disable detailed error messages in production \u2014 return generic messages to clients, log details server-side\n- Remove server version headers (`Server`, `X-Powered-By`)\n\n**Security headers:**\n```\nX-Content-Type-Options: nosniff\nX-Frame-Options: DENY\nContent-Security-Policy: default-src 'self'\nStrict-Transport-Security: max-age=31536000; includeSubDomains\nReferrer-Policy: strict-origin-when-cross-origin\nPermissions-Policy: camera=(), microphone=(), geolocation=()\n```\n\n**In ASP.NET Core:**\n```csharp\n// Don't expose stack traces in production\nif (!app.Environment.IsDevelopment())\n{\n    app.UseExceptionHandler(\"/error\");\n    app.UseHsts();\n}\n\n// Remove server header\nbuilder.WebHost.ConfigureKestrel(options =>\n    options.AddServerHeader = false);\n```\n\n**Keep dependencies updated** \u2014 regularly audit and patch NuGet packages, npm packages, and OS-level dependencies. Use tools like `dotnet list package --vulnerable` and `npm audit`."
+      },
+      {
+        "id": "logging-monitoring",
+        "title": "Logging and Monitoring",
+        "tags": [
+          "logging",
+          "monitoring",
+          "audit"
+        ],
+        "notes": "Implement **centralized logging** to track all authentication failures, input validation errors, and high-value transactions.\n\n**What to log:**\n- Authentication successes and failures\n- Authorization failures (access denied)\n- Input validation errors\n- Application errors and exceptions\n- High-value transactions (payments, data exports, admin actions)\n- Account changes (password reset, role changes)\n\n**What NOT to log:**\n- Passwords, tokens, or session IDs\n- Credit card numbers or PII (mask/redact sensitive fields)\n- Encryption keys or secrets\n\n**Best practices:**\n- Use structured logging (JSON format) for easy querying\n- Centralize logs (Azure Monitor, ELK Stack, Seq, Application Insights)\n- Set up alerts for suspicious patterns (brute force attempts, unusual access patterns)\n- Ensure logs are tamper-proof (append-only storage, separate access controls)\n- Retain logs for compliance requirements (30-90 days minimum)\n\n**In .NET:**\n```csharp\n// Structured logging with Serilog\nLog.Warning(\"Failed login attempt for {Email} from {IP}\",\n    email, HttpContext.Connection.RemoteIpAddress);\n\n// Application Insights\nbuilder.Services.AddApplicationInsightsTelemetry();\n```"
+      }
+    ]
+  },
+  {
+    "id": "sql",
+    "title": "SQL",
+    "icon": "\ud83d\uddc4\ufe0f",
+    "topics": [
+      {
+        "id": "tsql",
+        "title": "Transact-SQL (T-SQL)",
+        "tags": [
+          "T-SQL",
+          "SQL Server",
+          "fundamentals"
+        ],
+        "notes": "T-SQL is an **extension of SQL** specifically for Microsoft SQL Server. It adds procedural programming features on top of standard SQL.\n\n**What T-SQL adds:**\n- **Control Flow** \u2014 `IF`, `ELSE`, `WHILE`, `CASE`\n- **Variables** \u2014 `DECLARE @name NVARCHAR(50)`, `SET @name = 'Marc'`\n- **Error Handling** \u2014 `TRY...CATCH` blocks\n- **Stored Procedures & Functions** \u2014 reusable query logic\n- **Transactions** \u2014 `BEGIN TRAN`, `COMMIT`, `ROLLBACK`"
+      },
+      {
+        "id": "select-clauses",
+        "title": "6 Principal Clauses of SELECT",
+        "tags": [
+          "SELECT",
+          "syntax",
+          "fundamentals"
+        ],
+        "notes": "The standard order of a SQL `SELECT` statement:\n\n1. `SELECT` \u2014 which columns to return\n2. `FROM` \u2014 which table(s) to query\n3. `WHERE` \u2014 filter rows before grouping\n4. `GROUP BY` \u2014 group rows by column(s)\n5. `HAVING` \u2014 filter groups after aggregation\n6. `ORDER BY` \u2014 sort the final result"
+      },
+      {
+        "id": "acid-principle",
+        "title": "ACID Principle",
+        "tags": [
+          "ACID",
+          "transactions",
+          "integrity"
+        ],
+        "notes": "ACID ensures database transactions are reliable. **Real scenario:** transferring money between bank accounts.\n\n- **Atomicity** \u2014 The entire transfer happens completely or not at all. No partial state.\n- **Consistency** \u2014 The total balance stays correct. No money is lost or created.\n- **Isolation** \u2014 Your transaction is separate from others. No mix-ups from concurrent operations.\n- **Durability** \u2014 Once the transfer is committed, it's saved permanently \u2014 even if the server crashes right after."
+      },
+      {
+        "id": "data-types",
+        "title": "NVARCHAR vs VARCHAR",
+        "tags": [
+          "data types",
+          "unicode",
+          "storage"
+        ],
+        "notes": "**VARCHAR**\n- Stores **non-Unicode** characters (ASCII)\n- 1 byte per character\n- Use for English-only or single-language data\n\n**NVARCHAR**\n- Stores **Unicode** characters\n- 2 bytes per character\n- Supports multiple languages (Arabic, Chinese, Japanese, etc.)\n\n**Rule of thumb:** Use `NVARCHAR` if your app may store multi-language data. Use `VARCHAR` to save space when you're certain it's single-language only."
+      },
+      {
+        "id": "like-operator",
+        "title": "LIKE Operator & Wildcards",
+        "tags": [
+          "LIKE",
+          "wildcard",
+          "filtering"
+        ],
+        "notes": "The `LIKE` operator is used for pattern matching with the `%` wildcard.\n\n- `'Marc%'` \u2014 Starts with \"Marc\" (e.g., Marc, MarcKenneth)\n- `'%Marc'` \u2014 Ends with \"Marc\" (e.g., JohnMarc)\n- `'%Marc%'` \u2014 Contains \"Marc\" anywhere (e.g., JohnMarcSmith)\n\n**Performance note:** Only **prefix patterns** (`'Marc%'`) are SARGable and can use indexes. Patterns starting with `%` force a full scan."
+      },
+      {
+        "id": "having-vs-where",
+        "title": "WHERE vs HAVING",
+        "tags": [
+          "WHERE",
+          "HAVING",
+          "filtering"
+        ],
+        "notes": "Both filter data, but at **different stages** of query execution:\n\n- **WHERE** \u2014 Filters individual **rows before** grouping/aggregation\n- **HAVING** \u2014 Filters **groups after** aggregation (`GROUP BY`)\n\n**Example:**\n```sql\n-- WHERE: filter rows first\nSELECT Department, COUNT(*) AS Total\nFROM Employees\nWHERE IsActive = 1          -- before grouping\nGROUP BY Department\nHAVING COUNT(*) > 5;        -- after grouping\n```"
+      },
+      {
+        "id": "aggregation",
+        "title": "Aggregate Functions",
+        "tags": [
+          "aggregation",
+          "functions",
+          "GROUP BY"
+        ],
+        "notes": "Aggregate functions perform a calculation on a set of values and return a **single result**.\n\n- `SUM(column)` \u2014 Adds up all values\n- `COUNT(column)` \u2014 Counts the number of rows\n- `AVG(column)` \u2014 Calculates the average\n- `MIN(column)` \u2014 Finds the smallest value\n- `MAX(column)` \u2014 Finds the largest value\n\nTypically used with `GROUP BY` to get results per group. Without `GROUP BY`, they aggregate the entire result set."
+      },
+      {
+        "id": "group-by",
+        "title": "GROUP BY",
+        "tags": [
+          "GROUP BY",
+          "grouping",
+          "aggregation"
+        ],
+        "notes": "Groups rows that share the same value in specified columns into summary rows. Used with aggregate functions to produce **one result per group**.\n\n```sql\nSELECT Department, COUNT(*) AS EmployeeCount\nFROM Employees\nGROUP BY Department;\n```\n\n**Key rule:** Every column in `SELECT` must either be in `GROUP BY` or inside an aggregate function."
+      },
+      {
+        "id": "distinct",
+        "title": "DISTINCT",
+        "tags": [
+          "DISTINCT",
+          "duplicates",
+          "filtering"
+        ],
+        "notes": "`DISTINCT` eliminates **duplicate rows** from the result set.\n\n```sql\nSELECT DISTINCT Department FROM Employees;\n```\n\n**Note:** `DISTINCT` applies to the entire row, not just one column. It can be slower on large datasets \u2014 consider `GROUP BY` as an alternative when you also need aggregation."
+      },
+      {
+        "id": "outer-apply",
+        "title": "OUTER APPLY",
+        "tags": [
+          "APPLY",
+          "joins",
+          "subqueries"
+        ],
+        "notes": "`OUTER APPLY` lets you join each row from the left table to a **subquery or table-valued function** on the right.\n\n- Similar to `LEFT JOIN`, but the right side can reference columns from the left side\n- Returns all rows from the left table, with NULLs if the right side returns nothing\n- `CROSS APPLY` is the equivalent of `INNER JOIN` (only returns matches)\n\n**Use case:** When you need to join to a correlated subquery or a function that takes a parameter from each row."
+      },
+      {
+        "id": "clustered-index",
+        "title": "Clustered Index",
+        "tags": [
+          "indexing",
+          "clustered",
+          "performance"
+        ],
+        "notes": "A clustered index determines the **physical order** of data rows in the table.\n\n**Key facts:**\n- Only **one** clustered index per table (usually the primary key)\n- The table data IS the clustered index \u2014 leaf nodes contain the actual rows\n- Data is physically sorted on disk by the clustered index key\n- Ideal for columns used in range queries (`BETWEEN`, `>`, `<`) and `ORDER BY`"
+      },
+      {
+        "id": "non-clustered-index",
+        "title": "Non-Clustered Index",
+        "tags": [
+          "indexing",
+          "non-clustered",
+          "performance"
+        ],
+        "notes": "A non-clustered index is a **separate structure** that stores a copy of indexed columns with pointers back to the actual data rows.\n\n**Key facts:**\n- You can have **multiple** non-clustered indexes per table (up to 999)\n- Leaf nodes contain the index key + a pointer to the clustered index key (or RID)\n- Adds overhead on writes (INSERT/UPDATE/DELETE must maintain the index)\n\n**When to use:**\n- \u2705 Frequently searched columns (WHERE on non-primary key)\n- \u2705 Need fast lookups without changing table order\n- \u2705 Use `INCLUDE` columns for covering indexes to avoid key lookups"
+      },
+      {
+        "id": "sargable",
+        "title": "SARGable Queries",
+        "tags": [
+          "SARGable",
+          "performance",
+          "indexing"
+        ],
+        "notes": "**SARGable** (Search ARGument ABLE) conditions allow the database engine to use **index seeks** instead of slow full scans.\n\n**SARGable (good \u2014 uses index):**\n- Equality: `=`, `IN`\n- Range: `<`, `<=`, `>`, `>=`, `BETWEEN`\n- Prefix pattern: `LIKE 'prefix%'`\n- `IS NULL` on indexed columns\n\n**Non-SARGable (bad \u2014 forces full scan):**\n- Functions on columns: `WHERE YEAR(HireDate) = 2023`\n- Calculations on columns: `WHERE Salary + Bonus > 100000`\n- Leading wildcard: `WHERE LastName LIKE '%Smith'`\n\n**Fix non-SARGable queries:**\n- \u274c `WHERE YEAR(HireDate) = 2023`\n- \u2705 `WHERE HireDate >= '2023-01-01' AND HireDate < '2024-01-01'`"
+      },
+      {
+        "id": "seek-vs-scan",
+        "title": "Index Seek vs Index Scan",
+        "tags": [
+          "indexing",
+          "execution plan",
+          "performance"
+        ],
+        "notes": "- **Index Seek** \u2014 Efficient and targeted. The engine goes **directly** to the matching rows using the index tree. Like using a book's index to find a specific page.\n\n- **Index Scan** \u2014 A **full read** of the entire index from start to finish. Like reading the whole book to find one sentence.\n\n**Goal:** Always aim for **seeks** over scans. Scans on large tables are expensive. If you see scans in your execution plan, check if your query is SARGable and if proper indexes exist."
+      },
+      {
+        "id": "execution-plan",
+        "title": "Execution Plans",
+        "tags": [
+          "execution plan",
+          "optimization",
+          "SSMS"
+        ],
+        "notes": "An execution plan outlines the **steps the database engine takes** to execute your query \u2014 which indexes it uses, how it joins tables, and where the cost is.\n\n**3 Types:**\n1. **Estimated Execution Plan** \u2014 Shows the planned approach without running the query. Quick to generate.\n2. **Actual Execution Plan** \u2014 Shows what really happened after the query runs. Includes actual row counts.\n3. **Live Query Statistics** \u2014 Real-time visual of the query executing (available in SSMS).\n\n**What to look for:**\n- Table Scans (should be Seeks)\n- Key Lookups (add INCLUDE columns)\n- Thick arrows (high row counts)\n- High-cost operators (Sort, Hash Match on large sets)"
+      },
+      {
+        "id": "query-optimization",
+        "title": "Query Optimization Checklist",
+        "tags": [
+          "optimization",
+          "performance",
+          "best practices"
+        ],
+        "notes": "Step-by-step approach to improving a slow query:\n\n1. **Use Proper Indexing** \u2014 Add indexes on WHERE, JOIN, and ORDER BY columns\n2. **Select Only What You Need** \u2014 Avoid `SELECT *`, retrieve only required columns\n3. **Use WHERE Clauses Efficiently** \u2014 Keep conditions SARGable\n4. **Prefer INNER JOIN** \u2014 It's faster than OUTER/LEFT JOINs (smaller result set)\n5. **Avoid Unnecessary Subqueries** \u2014 Rewrite as JOINs or CTEs where possible\n6. **Use EXISTS Instead of IN** \u2014 `EXISTS` short-circuits, `IN` evaluates all\n7. **Analyze Execution Plans** \u2014 Look for scans, key lookups, and high-cost operators\n8. **Update Statistics** \u2014 Stale statistics lead to bad plans\n9. **Avoid Cursors** \u2014 Use set-based operations instead"
+      },
+      {
+        "id": "cursor",
+        "title": "CURSORs",
+        "tags": [
+          "cursor",
+          "row-by-row",
+          "anti-pattern"
+        ],
+        "notes": "A cursor processes each row of a result set **one at a time**, like a loop.\n\n\u26a0\ufe0f Cursors are powerful but **slow**:\n- \u274c Not efficient for large datasets \u2014 row-by-row processing has massive overhead\n- \u274c Holds locks longer than set-based operations\n- \u2705 Try to use **set-based operations** (`UPDATE`, `JOIN`, `MERGE`) instead\n\n**When cursors are acceptable:**\n- Sending emails per row\n- Complex row-dependent logic that can't be expressed in a single query\n- Administrative tasks on small datasets"
+      },
+      {
+        "id": "normalization",
+        "title": "Normalization & Denormalization",
+        "tags": [
+          "normalization",
+          "database design",
+          "schema"
+        ],
+        "notes": "**Normalization** \u2014 Organizing data to **reduce redundancy** and improve integrity.\n- Data is split into multiple related tables linked by foreign keys\n- Eliminates duplicate data\n- Easier to maintain and update\n- More joins needed for queries\n\n**Denormalization** \u2014 Combining tables to **improve read performance**.\n- Tables are merged, data is intentionally duplicated\n- Fewer joins = faster reads\n- Harder to maintain (updates must touch multiple places)\n- Used in reporting databases, data warehouses, and read-heavy systems\n\n**Rule of thumb:** Normalize for writes, denormalize for reads."
+      },
+      {
+        "id": "triggers",
+        "title": "Database Triggers",
+        "tags": [
+          "triggers",
+          "automation",
+          "events"
+        ],
+        "notes": "A trigger is a special **stored procedure** that runs automatically when a specific event happens on a table.\n\n**Trigger events:** `INSERT`, `UPDATE`, `DELETE`\n\n**Common use cases:**\n- Audit logging (track who changed what)\n- Enforcing business rules\n- Cascading updates across related tables\n- Maintaining denormalized summary tables\n\n**Caution:** Triggers run silently and can cause unexpected side effects. They can also hurt performance if they contain heavy logic. Use sparingly and document them well."
+      },
+      {
+        "id": "connection-pooling",
+        "title": "Connection Pooling",
+        "tags": [
+          "connection pooling",
+          "performance",
+          "ADO.NET"
+        ],
+        "notes": "Connection pooling **reuses database connections** efficiently instead of opening/closing them repeatedly.\n\n**How it works:**\n1. **Pool Creation** \u2014 First connection request creates a pool for that connection string\n2. **Reuse** \u2014 Subsequent requests with the same connection string get an already-established connection from the pool\n3. **Return to Pool** \u2014 When `Connection.Close()` or `Dispose()` is called, the connection is **not terminated** \u2014 it's returned to the pool for reuse\n\n**Why it matters:** Opening a new database connection is expensive (TCP handshake, authentication, etc.). Pooling eliminates this overhead for repeated operations.\n\n**In .NET:** Connection pooling is enabled by default in ADO.NET and EF Core. Just use the same connection string consistently."
+      },
+      {
+        "id": "views",
+        "title": "Regular Views vs Materialized Views",
+        "tags": [
+          "views",
+          "materialized views",
+          "performance"
+        ],
+        "notes": "**Regular Views** \u2014 Virtual tables. No data is stored. Every time you query the view, the database runs the underlying SQL in **real time**.\n- \u2705 Always up-to-date\n- \u274c Can be slow for complex queries\n\n**Materialized Views** \u2014 Physically store the query results on disk. Returns **precomputed results** without re-running the query.\n- \u2705 Much faster reads\n- \u274c Data can become stale \u2014 needs refresh strategy\n- \u274c Uses additional storage\n\n**When to use materialized views:**\n- Complex aggregations that don't need real-time accuracy\n- Reporting dashboards\n- Read-heavy workloads with infrequent data changes"
+      }
+    ]
+  }
+]

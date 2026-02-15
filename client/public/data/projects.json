@@ -63,7 +63,7 @@
     ],
     "title": "Daikin E-commerce",
     "category": "e-commerce",
-    "url": "#",
+    "url": "https://shop.daikin.com.ph/catalog",
     "description": "Daikin Philippines runs an online store for air purifiers, enabling customers to browse and purchase products seamlessly.\n\nKey Contribution:\n\u2022 Implemented end-to-end payment integration with Paynamics for enabling secure transaction processing and handling card payment flows.\n\u2022 Built webhooks, APIs, and blob storage systems with SQL scripts and social login via Facebook and Google.\n\u2022 Designed and implemented Split Pay functionality with Paynamics, enabling automated payment segregation to multiple stakeholders (merchants, logistics, digital platforms) during a single customer transaction, with convenience fees configured per payment channel \u2014 e.g., Credit/Debit Cards (4% + \u20b120), Online Bank Transfer/E-Wallets (2.5%), Over-the-Counter (\u20b125), and Installments (0.60% for credit cards, 2.50% for non-credit).",
     "techStack": [
       "C#",

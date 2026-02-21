@@ -1,30 +1,45 @@
-name: Deploy to Cloudflare Pages
+# Automatically build and deploy the portfolio site to Cloudflare Workers
+# whenever code is pushed to the main branch.
+#
+# Required GitHub Secrets (Settings → Secrets → Actions):
+#   CLOUDFLARE_API_TOKEN  - API token with Workers edit permission
+#   CLOUDFLARE_ACCOUNT_ID - Found in Cloudflare dashboard URL or sidebar
+
+name: Deploy to Cloudflare
 
 on:
   push:
-    branches: [main]
+    branches: [main] # Only triggers on pushes to the main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Build & Deploy
     steps:
+      # 1. Pull the latest code from the repo
       - uses: actions/checkout@v4
 
+      # 2. Set up Node.js (needed for npm ci and next build)
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 3. Install dependencies and build the Next.js static export
+      #    npm ci = clean install from package-lock.json (faster & deterministic)
+      #    npm run build = runs "next build" which outputs to client/out/
       - name: Install & Build
-        working-directory: client
+        working-directory: client # Run commands inside the client/ folder
         run: |
           npm ci
           npm run build
 
-      - name: Deploy to Cloudflare Pages
+      # 4. Deploy to Cloudflare Workers using wrangler
+      #    Uses wrangler.jsonc config which points to ./out as the assets directory
+      #    --commit-dirty=true silences the "uncommitted changes" warning in CI
+      - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: client
-          command: pages deploy out --project-name=mkcportfolio
+          workingDirectory: client # wrangler.jsonc lives here
+          command: deploy --commit-dirty=true

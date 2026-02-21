@@ -42,4 +42,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: client # wrangler.jsonc lives here
-          command: deploy --commit-dirty=true
+          command: deploy

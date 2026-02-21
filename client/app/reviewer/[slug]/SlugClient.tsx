@@ -1,38 +1,40 @@
 "use client";
 
 import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
 
-const ReviewerLanding = dynamic(() => import("./ReviewerLanding"), {
+const ReviewerCategory = dynamic(() => import("../ReviewerCategory"), {
   ssr: false,
   loading: () => (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#999", fontSize: 14 }}>
-      Loading...
+      Loading notebook...
     </div>
   ),
 });
 
-function ReviewerGuard() {
+function SlugGuard() {
   const searchParams = useSearchParams();
+  const params = useParams();
   const code = searchParams.get("code");
+  const slug = params.slug as string;
 
   if (code !== "mkc") {
     notFound();
   }
 
-  return <ReviewerLanding />;
+  return <ReviewerCategory slug={slug} />;
 }
 
-export default function ReviewerPage() {
+export default function SlugClient() {
   return (
     <Suspense fallback={
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#999", fontSize: 14 }}>
         Loading...
       </div>
     }>
-      <ReviewerGuard />
+      <SlugGuard />
     </Suspense>
   );
 }

@@ -83,7 +83,19 @@ export default function ApplicationsContent() {
   const [deleting, setDeleting] = useState(false);
   const [detailApp, setDetailApp] = useState<JobApplication | null>(null);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  const [quickStatusId, setQuickStatusId] = useState<number | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const quickStatusRef = useRef<HTMLDivElement>(null);
+
+  /* ---- Close quick status dropdown on outside click ---- */
+  useEffect(() => {
+    if (!quickStatusId) return;
+    const handleClick = (e: MouseEvent) => {
+      if (quickStatusRef.current && !quickStatusRef.current.contains(e.target as Node)) setQuickStatusId(null);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [quickStatusId]);
 
   /* ---- DATA ---- */
   const fetchApps = useCallback(async () => {
@@ -140,6 +152,31 @@ export default function ApplicationsContent() {
   const addInterviewDate = () => { if (interviewInput) { setForm((f) => ({ ...f, interview_dates: [...(f.interview_dates || []), interviewInput] })); setInterviewInput(""); } };
   const removeInterviewDate = (idx: number) => { setForm((f) => ({ ...f, interview_dates: (f.interview_dates || []).filter((_, i) => i !== idx) })); };
   const toggleSort = (field: typeof sortBy) => { if (sortBy === field) setSortDir((d) => d === "asc" ? "desc" : "asc"); else { setSortBy(field); setSortDir("desc"); } };
+
+  const exportCSV = () => {
+    if (filtered.length === 0) return;
+    const headers = ["Company", "Position", "Status", "Date Applied", "Location", "Salary Range", "Job URL", "Interview Dates", "Notes"];
+    const escapeCSV = (val: string) => { if (val.includes(",") || val.includes('"') || val.includes("\n")) return `"${val.replace(/"/g, '""')}"`; return val; };
+    const rows = filtered.map((a) => [
+      escapeCSV(a.company), escapeCSV(a.position), a.status, a.date_applied,
+      escapeCSV(a.location || ""), escapeCSV(a.salary_range || ""), escapeCSV(a.job_url || ""),
+      escapeCSV((a.interview_dates || []).join("; ")), escapeCSV(a.notes || ""),
+    ].join(","));
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `job-applications-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click(); URL.revokeObjectURL(url);
+  };
+
+  const handleQuickStatus = async (appId: number, newStatus: ApplicationStatus) => {
+    try {
+      await updateApplication(appId, { status: newStatus });
+      setQuickStatusId(null);
+      await fetchApps();
+    } catch (err: unknown) { setError(err instanceof Error ? err.message : "Failed to update status"); }
+  };
 
   const formatDate = (d: string) => { try { return new Date(d + "T00:00:00").toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" }); } catch { return d; } };
   const daysSince = (d: string) => { const diff = Math.floor((Date.now() - new Date(d + "T00:00:00").getTime()) / 86400000); if (diff === 0) return "Today"; if (diff === 1) return "Yesterday"; return `${diff}d ago`; };
@@ -239,6 +276,12 @@ export default function ApplicationsContent() {
             </div>
             <button onClick={openCreate} style={st.btnGold}>+ New Application</button>
           </div>
+          {/* Export */}
+          {applications.length > 0 && (
+            <button onClick={exportCSV} style={{ ...st.btnGhost, padding: "6px 14px", fontSize: 12, marginTop: 12 }}>
+              📥 Export CSV {statusFilter !== "All" ? `(${filtered.length} filtered)` : `(${applications.length})`}
+            </button>
+          )}
         </div>
 
         {/* STATS */}
@@ -322,7 +365,29 @@ export default function ApplicationsContent() {
                         <div style={{ fontSize: 15, fontWeight: 600, color: T.white2, lineHeight: 1.3, fontFamily: T.font }}>{app.company}</div>
                         <div style={{ fontSize: 13, color: T.gray70, marginTop: 3, fontFamily: T.font }}>{app.position}</div>
                       </div>
-                      <span style={{ ...st.badge, background: sc.bg, color: sc.color }}>{sc.icon} {app.status}</span>
+                      {/* Quick status change */}
+                      <div style={{ position: "relative" as const }} onClick={(e) => e.stopPropagation()}>
+                        <button
+                          onClick={() => setQuickStatusId(quickStatusId === app.id ? null : app.id!)}
+                          style={{ ...st.badge, background: sc.bg, color: sc.color, cursor: "pointer", border: "none", transition: T.transition }}
+                          title="Click to change status"
+                        >{sc.icon} {app.status} ▾</button>
+                        {quickStatusId === app.id && (
+                          <div ref={quickStatusRef} style={st.quickDropdown}>
+                            {ALL_STATUSES.map((s) => {
+                              const ssc = statusConfig[s];
+                              return (
+                                <button
+                                  key={s}
+                                  onClick={() => handleQuickStatus(app.id!, s)}
+                                  className="quickStatusItem"
+                                  style={{ ...st.quickDropdownItem, ...(s === app.status ? { background: ssc.bg, color: ssc.color } : {}) }}
+                                >{ssc.icon} {s}</button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 8, fontSize: 12, color: T.grayDim, marginBottom: 10, fontFamily: T.font }}>
@@ -384,8 +449,26 @@ export default function ApplicationsContent() {
                         <td style={st.td}>
                           <div style={{ color: T.gray70, fontSize: 13 }}>{app.position}</div>
                         </td>
-                        <td style={st.td}>
-                          <span style={{ ...st.badge, background: sc.bg, color: sc.color, fontSize: 10, padding: "2px 9px" }}>{sc.icon} {app.status}</span>
+                        <td style={st.td} onClick={(e) => e.stopPropagation()}>
+                          <div style={{ position: "relative" as const }}>
+                            <button
+                              onClick={() => setQuickStatusId(quickStatusId === app.id ? null : app.id!)}
+                              style={{ ...st.badge, background: sc.bg, color: sc.color, fontSize: 10, padding: "2px 9px", cursor: "pointer", border: "none" }}
+                              title="Click to change status"
+                            >{sc.icon} {app.status} ▾</button>
+                            {quickStatusId === app.id && (
+                              <div ref={quickStatusRef} style={st.quickDropdown}>
+                                {ALL_STATUSES.map((s) => {
+                                  const ssc = statusConfig[s];
+                                  return (
+                                    <button key={s} onClick={() => handleQuickStatus(app.id!, s)} className="quickStatusItem"
+                                      style={{ ...st.quickDropdownItem, ...(s === app.status ? { background: ssc.bg, color: ssc.color } : {}) }}
+                                    >{ssc.icon} {s}</button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
                         </td>
                         <td style={st.td}>
                           <div style={{ color: T.gray70, fontSize: 12 }}>{formatDate(app.date_applied)}</div>
@@ -540,6 +623,8 @@ function CSS() {
       .cardBtn:hover { transform: scale(1.15); }
       .tableRow { transition: background 0.15s ease; }
       .tableRow:hover { background: hsla(0,0%,100%,0.03) !important; }
+      .quickStatusItem { transition: background 0.15s ease; }
+      .quickStatusItem:hover { background: hsla(0,0%,100%,0.08) !important; }
       input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); }
       select option { background: hsl(240,2%,13%); color: hsl(0,0%,98%); }
       @media (max-width: 680px) { .statsGrid { grid-template-columns: repeat(2, 1fr) !important; } }
@@ -620,6 +705,19 @@ const st: Record<string, React.CSSProperties> = {
   },
   viewToggleActive: {
     color: T.gold, borderColor: T.jet, background: "rgba(251,191,36,0.08)",
+  },
+
+  /* Quick status dropdown */
+  quickDropdown: {
+    position: "absolute" as const, top: "calc(100% + 4px)", right: 0, zIndex: 50,
+    background: T.surface, borderWidth: 1, borderStyle: "solid", borderColor: T.jet,
+    borderRadius: 10, padding: 4, minWidth: 160,
+    boxShadow: "0 16px 40px hsla(0,0%,0%,0.4)", animation: "appFadeUp 0.15s ease",
+  },
+  quickDropdownItem: {
+    display: "block", width: "100%", padding: "7px 12px", border: "none",
+    background: "none", color: T.gray70, fontSize: 12, fontFamily: T.font,
+    textAlign: "left" as const, cursor: "pointer", borderRadius: 6, whiteSpace: "nowrap" as const,
   },
 
   /* Table */

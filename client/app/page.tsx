@@ -869,22 +869,26 @@ export default function Home() {
             <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
           </button>
 
-          <div className="powered-by">
-            <p className="powered-by-label">Powered by</p>
-            <div className="powered-by-badges">
-              <a href="https://nextjs.org" target="_blank" rel="noopener noreferrer" className="powered-by-badge">
-                <svg viewBox="0 0 180 180" width="14" height="14" fill="currentColor">
-                  <mask id="nextMask" maskUnits="userSpaceOnUse" x="0" y="0" width="180" height="180">
-                    <circle cx="90" cy="90" r="90" fill="white"/>
-                    <path d="M149.508 157.52L69.142 54H54v71.97h12.114V69.384l73.885 95.461a90.304 90.304 0 009.509-7.325z" fill="black"/>
-                    <rect x="115" y="54" width="12" height="72" fill="black"/>
-                  </mask>
-                  <circle cx="90" cy="90" r="90" mask="url(#nextMask)"/>
-                </svg>
-                <span>Next.js</span>
-              </a>
-            </div>
-          </div>
+<div className="powered-by">
+  <p className="powered-by-label">Powered by</p>
+  <div className="powered-by-badges">
+    <a href="https://nextjs.org" target="_blank" rel="noopener noreferrer" className="powered-by-badge">
+      <svg viewBox="0 0 180 180" width="14" height="14" fill="currentColor">
+        <mask id="nextMask" maskUnits="userSpaceOnUse" x="0" y="0" width="180" height="180">
+          <circle cx="90" cy="90" r="90" fill="white"/>
+          <path d="M149.508 157.52L69.142 54H54v71.97h12.114V69.384l73.885 95.461a90.304 90.304 0 009.509-7.325z" fill="black"/>
+          <rect x="115" y="54" width="12" height="72" fill="black"/>
+        </mask>
+        <circle cx="90" cy="90" r="90" mask="url(#nextMask)"/>
+      </svg>
+      <span>Next.js</span>
+    </a>
+    <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="powered-by-badge">
+      <img src="/supabase-icon.svg" alt="Supabase" width={14} height={14} />
+      <span>Supabase</span>
+    </a>
+  </div>
+</div>
         </div>
       </aside>
 

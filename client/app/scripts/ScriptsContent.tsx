@@ -10,7 +10,6 @@ import {
   updateInterviewPrep,
   deleteInterviewPrep,
   togglePrepFavorite,
-  markAsReviewed,
 } from "../../lib/supabase.service";
 
 /* ============================================================
@@ -68,7 +67,7 @@ const EMPTY_FORM: Omit<InterviewPrep, "id" | "created_at" | "updated_at"> = {
    MAIN COMPONENT
    ============================================================ */
 
-export default function InterviewPrepContent() {
+export default function ScriptsContent() {
   const [items, setItems] = useState<InterviewPrep[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -79,9 +78,6 @@ export default function InterviewPrepContent() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
-  const [studyMode, setStudyMode] = useState(false);
-  const [studyIndex, setStudyIndex] = useState(0);
-  const [showAnswer, setShowAnswer] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<InterviewPrep | null>(null);
@@ -117,7 +113,6 @@ export default function InterviewPrepContent() {
   const stats = {
     total: items.length,
     favorites: items.filter((i) => i.is_favorite).length,
-    reviewed: items.filter((i) => i.last_reviewed).length,
     categories: new Set(items.map((i) => i.category)).size,
   };
 
@@ -148,11 +143,6 @@ export default function InterviewPrepContent() {
     catch (err: unknown) { setError(err instanceof Error ? err.message : "Failed to update"); }
   };
 
-  const handleMarkReviewed = async (id: number) => {
-    try { await markAsReviewed(id); await fetchItems(); }
-    catch (err: unknown) { setError(err instanceof Error ? err.message : "Failed to update"); }
-  };
-
   const toggleExpand = (id: number) => {
     setExpandedIds((prev) => { const next = new Set(prev); if (next.has(id)) next.delete(id); else next.add(id); return next; });
   };
@@ -162,88 +152,6 @@ export default function InterviewPrepContent() {
 
   const addTag = () => { if (tagInput.trim() && !(form.tags || []).includes(tagInput.trim())) { setForm((f) => ({ ...f, tags: [...(f.tags || []), tagInput.trim()] })); setTagInput(""); } };
   const removeTag = (idx: number) => { setForm((f) => ({ ...f, tags: (f.tags || []).filter((_, i) => i !== idx) })); };
-
-  const timeAgo = (d?: string) => { if (!d) return "Never"; const diff = Math.floor((Date.now() - new Date(d).getTime()) / 86400000); if (diff === 0) return "Today"; if (diff === 1) return "Yesterday"; return `${diff}d ago`; };
-
-  /* ---- STUDY MODE ---- */
-  const startStudy = () => { setStudyMode(true); setStudyIndex(0); setShowAnswer(false); };
-  const nextStudy = () => { if (studyIndex < filtered.length - 1) { setStudyIndex((i) => i + 1); setShowAnswer(false); } else { setStudyMode(false); } };
-  const prevStudy = () => { if (studyIndex > 0) { setStudyIndex((i) => i - 1); setShowAnswer(false); } };
-
-  if (studyMode && filtered.length > 0) {
-    const item = filtered[studyIndex];
-    const cc = categoryConfig[item.category];
-    const dc = difficultyConfig[item.difficulty];
-    return (
-      <div style={st.page}>
-        <CSS />
-        <div style={{ maxWidth: 750, margin: "0 auto", padding: "40px 20px 100px" }}>
-          <button onClick={() => setStudyMode(false)} style={st.goldLink}>
-            <span style={{ marginRight: 6, fontSize: 11 }}>◂</span> Exit Study Mode
-          </button>
-
-          {/* Progress */}
-          <div style={{ margin: "20px 0", display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ flex: 1, height: 4, background: T.jet, borderRadius: 2, overflow: "hidden" }}>
-              <div style={{ width: `${((studyIndex + 1) / filtered.length) * 100}%`, height: "100%", background: `linear-gradient(to right, ${T.gold}, ${T.goldDim})`, borderRadius: 2, transition: "width 0.3s ease" }} />
-            </div>
-            <span style={{ fontSize: 13, color: T.grayDim, fontFamily: T.font, whiteSpace: "nowrap" as const }}>{studyIndex + 1} / {filtered.length}</span>
-          </div>
-
-          {/* Card */}
-          <div style={{ ...st.card, padding: 0, overflow: "hidden", animation: "prepFadeUp 0.3s ease both" }}>
-            <div style={{ height: 3, background: cc.color }} />
-            <div style={{ padding: "32px 32px 28px" }}>
-              {/* Category + Difficulty */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap" as const, gap: 8 }}>
-                <span style={{ fontSize: 13, color: cc.color, fontFamily: T.font, fontWeight: 500 }}>{cc.icon} {item.category}</span>
-                <span style={{ ...st.diffBadge, background: dc.bg, color: dc.color }}>{item.difficulty}</span>
-              </div>
-
-              {/* Question */}
-              <h2 style={{ fontSize: 20, fontWeight: 600, color: T.white2, lineHeight: 1.5, margin: "0 0 24px", fontFamily: T.font }}>
-                {item.question}
-              </h2>
-
-              {/* Answer toggle */}
-              {!showAnswer ? (
-                <button onClick={() => { setShowAnswer(true); handleMarkReviewed(item.id!); }} style={{ ...st.btnGold, width: "100%", padding: "14px 24px", fontSize: 15 }}>
-                  Reveal Answer
-                </button>
-              ) : (
-                <div style={{ animation: "prepFadeUp 0.3s ease both" }}>
-                  <div style={{ width: "100%", height: 1, background: T.jet, margin: "0 0 24px" }} />
-                  <div style={{ fontSize: 16, color: T.gray, lineHeight: 1.8, fontFamily: T.font, whiteSpace: "pre-wrap" as const }}>
-                    {item.answer}
-                  </div>
-                </div>
-              )}
-
-              {/* Tags */}
-              {item.tags && item.tags.length > 0 && (
-                <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 6, marginTop: 24 }}>
-                  {item.tags.map((t, i) => (
-                    <span key={i} style={st.tag}>{t}</span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, gap: 12 }}>
-            <button onClick={prevStudy} disabled={studyIndex === 0} style={{ ...st.btnGhost, opacity: studyIndex === 0 ? 0.3 : 1 }}>← Previous</button>
-            <button onClick={() => handleToggleFavorite(item.id!, !!item.is_favorite)} style={{ ...st.iconBtn, fontSize: 22 }}>
-              {item.is_favorite ? "⭐" : "☆"}
-            </button>
-            <button onClick={nextStudy} style={st.btnGold}>
-              {studyIndex === filtered.length - 1 ? "Finish ✓" : "Next →"}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   /* ============================================================
      MAIN VIEW
@@ -261,29 +169,24 @@ export default function InterviewPrepContent() {
           </a>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap" as const, gap: 16 }}>
             <div>
-              <h1 style={{ fontSize: 26, fontWeight: 600, color: T.white2, margin: 0, fontFamily: T.font }}>Interview Prep Bank</h1>
-              <p style={{ fontSize: 14, color: T.grayDim, margin: "6px 0 0", fontFamily: T.font }}>Your personal Q&A bank for interview preparation</p>
+              <h1 style={{ fontSize: 26, fontWeight: 600, color: T.white2, margin: 0, fontFamily: T.font }}>Interview Scripts</h1>
+              <p style={{ fontSize: 14, color: T.grayDim, margin: "6px 0 0", fontFamily: T.font }}>Pre-written scripts & templates for interview scenarios</p>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              {filtered.length > 0 && <button onClick={startStudy} style={st.btnGhost}>📖 Study Mode</button>}
-              <button onClick={openCreate} style={st.btnGold}>+ Add Question</button>
+              <button onClick={openCreate} style={st.btnGold}>+ Add Script</button>
             </div>
           </div>
         </div>
 
         {/* STATS */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 28, animation: "prepFadeUp 0.5s ease 0.06s both" }} className="prepStatsGrid">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 28, animation: "prepFadeUp 0.5s ease 0.06s both" }} className="prepStatsGrid">
           <div style={st.card}>
             <div style={{ fontSize: 28, fontWeight: 600, color: T.gold, fontFamily: T.font, lineHeight: 1 }}>{stats.total}</div>
-            <div style={st.statLabel}>Questions</div>
+            <div style={st.statLabel}>Scripts</div>
           </div>
           <div style={st.card}>
             <div style={{ fontSize: 28, fontWeight: 600, color: "#fbbf24", fontFamily: T.font, lineHeight: 1 }}>{stats.favorites}</div>
             <div style={st.statLabel}>Favorites</div>
-          </div>
-          <div style={st.card}>
-            <div style={{ fontSize: 28, fontWeight: 600, color: "#4ade80", fontFamily: T.font, lineHeight: 1 }}>{stats.reviewed}</div>
-            <div style={st.statLabel}>Reviewed</div>
           </div>
           <div style={st.card}>
             <div style={{ fontSize: 28, fontWeight: 600, color: "#818cf8", fontFamily: T.font, lineHeight: 1 }}>{stats.categories}</div>
@@ -299,145 +202,168 @@ export default function InterviewPrepContent() {
           </div>
         )}
 
-        {/* TOOLBAR */}
-        <div style={{ display: "flex", flexDirection: "column" as const, gap: 12, marginBottom: 28, animation: "prepFadeUp 0.5s ease 0.12s both" }}>
+        {/* FILTERS */}
+        <div style={{ display: "flex", flexDirection: "column" as const, gap: 14, marginBottom: 24, animation: "prepFadeUp 0.5s ease 0.12s both" }}>
           {/* Search */}
           <div style={{ position: "relative" as const }}>
-            <span style={{ position: "absolute" as const, left: 14, top: "50%", transform: "translateY(-50%)", color: T.grayDim, fontSize: 14, pointerEvents: "none" as const }}>⌕</span>
-            <input type="text" placeholder="Search questions, answers, tags..." value={search} onChange={(e) => setSearch(e.target.value)} style={st.searchInput} />
-            {search && <button onClick={() => setSearch("")} style={{ position: "absolute" as const, right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: T.grayDim, cursor: "pointer", fontSize: 14 }}>✕</button>}
+            <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 14, color: T.grayDim, pointerEvents: "none" }}>🔍</span>
+            <input
+              style={st.searchInput}
+              placeholder="Search scripts..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
 
-          {/* Filters */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" as const, gap: 10 }}>
-            <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 6 }}>
-              <button onClick={() => setCategoryFilter("All")} style={{ ...st.pill, ...(categoryFilter === "All" ? st.pillActive : {}) }}>All</button>
-              {ALL_CATEGORIES.map((c) => {
-                const count = items.filter((i) => i.category === c).length;
-                if (count === 0) return null;
-                const cc = categoryConfig[c];
-                return <button key={c} onClick={() => setCategoryFilter(categoryFilter === c ? "All" : c)} style={{ ...st.pill, ...(categoryFilter === c ? { background: `${cc.color}15`, color: cc.color, borderColor: "transparent" } : {}) }}>{cc.icon} {c} ({count})</button>;
-              })}
-            </div>
-            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-              {ALL_DIFFICULTIES.map((d) => {
-                const dc = difficultyConfig[d];
-                return <button key={d} onClick={() => setDifficultyFilter(difficultyFilter === d ? "All" : d)} style={{ ...st.pill, ...(difficultyFilter === d ? { background: dc.bg, color: dc.color, borderColor: "transparent" } : {}) }}>{d}</button>;
-              })}
-              <div style={{ width: 1, height: 16, background: T.jet, margin: "0 4px" }} />
-              <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)} style={{ ...st.pill, ...(showFavoritesOnly ? { background: "rgba(251,191,36,0.12)", color: "#fbbf24", borderColor: "transparent" } : {}) }}>⭐</button>
-              <div style={{ width: 1, height: 16, background: T.jet, margin: "0 4px" }} />
-              <button onClick={expandAll} style={st.sortChip} title="Expand all">▼</button>
-              <button onClick={collapseAll} style={st.sortChip} title="Collapse all">▲</button>
-            </div>
+          {/* Category pills */}
+          <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 6 }}>
+            <button onClick={() => setCategoryFilter("All")} style={{ ...st.pill, ...(categoryFilter === "All" ? st.pillActive : {}) }}>All</button>
+            {ALL_CATEGORIES.map((c) => (
+              <button key={c} onClick={() => setCategoryFilter(c)} style={{ ...st.pill, ...(categoryFilter === c ? st.pillActive : {}) }}>
+                {categoryConfig[c].icon} {c}
+              </button>
+            ))}
+          </div>
+
+          {/* Difficulty + Favorites + Expand/Collapse */}
+          <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 8, alignItems: "center" }}>
+            {ALL_DIFFICULTIES.map((d) => {
+              const dc = difficultyConfig[d];
+              return (
+                <button key={d} onClick={() => setDifficultyFilter(difficultyFilter === d ? "All" : d)}
+                  style={{ ...st.pill, ...(difficultyFilter === d ? { background: dc.bg, color: dc.color, borderColor: "transparent" } : {}) }}>
+                  {d}
+                </button>
+              );
+            })}
+            <button onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+              style={{ ...st.pill, ...(showFavoritesOnly ? st.pillActive : {}) }}>
+              ⭐ Favorites
+            </button>
+            <div style={{ flex: 1 }} />
+            <button onClick={expandAll} style={st.sortChip}>Expand All</button>
+            <button onClick={collapseAll} style={st.sortChip}>Collapse All</button>
           </div>
         </div>
 
-        {/* QUESTIONS LIST */}
-        {loading ? (
-          <div style={{ textAlign: "center" as const, padding: 80, color: T.grayDim, fontFamily: T.font }}>
-            <div style={{ width: 28, height: 28, borderWidth: 2, borderStyle: "solid", borderColor: T.jet, borderTopColor: T.gold, borderRadius: "50%", margin: "0 auto 16px", animation: "prepSpin 0.8s linear infinite" }} />
-            Loading questions...
-          </div>
-        ) : filtered.length === 0 ? (
-          <div style={{ textAlign: "center" as const, padding: 80 }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>📝</div>
-            <div style={{ color: T.grayDim, fontFamily: T.font, fontSize: 15 }}>
-              {items.length === 0 ? "No questions yet" : "No matching questions"}
-            </div>
-            {items.length > 0 && (
-              <button onClick={() => { setSearch(""); setCategoryFilter("All"); setDifficultyFilter("All"); setShowFavoritesOnly(false); }} style={{ ...st.btnGhost, marginTop: 12 }}>Clear filters</button>
-            )}
-          </div>
-        ) : (
-          <div style={{ display: "flex", flexDirection: "column" as const, gap: 12 }}>
-            {filtered.map((item, idx) => {
-              const cc = categoryConfig[item.category];
-              const dc = difficultyConfig[item.difficulty];
-              const isExpanded = expandedIds.has(item.id!);
-              return (
-                <div key={item.id} className="prepCard" style={{ ...st.card, padding: 0, overflow: "hidden", animation: `prepFadeUp 0.3s ease ${0.03 * idx}s both` }}>
-                  <div style={{ height: 2, background: cc.color, opacity: 0.5 }} />
-                  <div style={{ padding: "18px 24px" }}>
-                    {/* Question row */}
-                    <div style={{ display: "flex", gap: 12, alignItems: "flex-start", cursor: "pointer" }} onClick={() => toggleExpand(item.id!)}>
-                      <span style={{ color: T.grayDim, fontSize: 12, marginTop: 3, transition: T.transition, transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}>▶</span>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 6, flexWrap: "wrap" as const }}>
-                          <span style={{ fontSize: 12, color: cc.color, fontFamily: T.font }}>{cc.icon} {item.category}</span>
-                          <span style={{ ...st.diffBadge, background: dc.bg, color: dc.color }}>{item.difficulty}</span>
-                          {item.is_favorite && <span style={{ fontSize: 12 }}>⭐</span>}
-                          {item.last_reviewed && <span style={{ fontSize: 10, color: T.grayDim, fontFamily: T.font }}>Reviewed {timeAgo(item.last_reviewed)}</span>}
-                        </div>
-                        <div style={{ fontSize: 15, fontWeight: 500, color: T.white2, lineHeight: 1.6, fontFamily: T.font }}>
-                          {item.question}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Expanded answer */}
-                    {isExpanded && (
-                      <div style={{ marginTop: 16, marginLeft: 24, animation: "prepFadeUp 0.2s ease both" }}>
-                        <div style={{ width: "100%", height: 1, background: T.jet, marginBottom: 16 }} />
-                        <div style={{ fontSize: 15, color: T.gray, lineHeight: 1.9, fontFamily: T.font, whiteSpace: "pre-wrap" as const }}>
-                          {item.answer}
-                        </div>
-
-                        {/* Tags */}
-                        {item.tags && item.tags.length > 0 && (
-                          <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 6, marginTop: 16 }}>
-                            {item.tags.map((t, i) => <span key={i} style={st.tag}>{t}</span>)}
-                          </div>
-                        )}
-
-                        {/* Actions */}
-                        <div style={{ display: "flex", gap: 8, marginTop: 16, paddingTop: 12, borderTop: `1px solid ${T.jet}` }}>
-                          <button onClick={() => handleToggleFavorite(item.id!, !!item.is_favorite)} className="cardBtn" style={st.iconBtn} title={item.is_favorite ? "Unfavorite" : "Favorite"}>
-                            {item.is_favorite ? "⭐" : "☆"}
-                          </button>
-                          <button onClick={() => handleMarkReviewed(item.id!)} className="cardBtn" style={st.iconBtn} title="Mark reviewed">✓</button>
-                          <button onClick={() => openEdit(item)} className="cardBtn" style={st.iconBtn} title="Edit">✏️</button>
-                          {deleteConfirm === item.id ? (
-                            <>
-                              <span style={{ fontSize: 12, color: "#f87171", alignSelf: "center", fontFamily: T.font }}>Delete?</span>
-                              <button onClick={() => handleDelete(item.id!)} disabled={deleting} className="cardBtn" style={{ ...st.iconBtn, color: "#f87171" }}>✓</button>
-                              <button onClick={() => setDeleteConfirm(null)} className="cardBtn" style={st.iconBtn}>✕</button>
-                            </>
-                          ) : (
-                            <button onClick={() => setDeleteConfirm(item.id!)} className="cardBtn" style={st.iconBtn} title="Delete">🗑️</button>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+        {/* LOADING */}
+        {loading && (
+          <div style={{ textAlign: "center" as const, padding: 60 }}>
+            <div style={{ width: 28, height: 28, border: `2px solid ${T.jet}`, borderTopColor: T.gold, borderRadius: "50%", animation: "prepSpin 0.7s linear infinite", margin: "0 auto 12px" }} />
+            <p style={{ color: T.grayDim, fontSize: 13, fontFamily: T.font }}>Loading scripts...</p>
           </div>
         )}
+
+        {/* EMPTY STATE */}
+        {!loading && filtered.length === 0 && (
+          <div style={{ textAlign: "center" as const, padding: "60px 20px", animation: "prepFadeUp 0.5s ease both" }}>
+            <div style={{ fontSize: 48, marginBottom: 12 }}>📝</div>
+            <p style={{ color: T.grayDim, fontSize: 14, fontFamily: T.font, marginBottom: 16 }}>
+              {items.length === 0 ? "No scripts yet. Add your first interview script!" : "No scripts match your filters."}
+            </p>
+          </div>
+        )}
+
+        {/* SCRIPT CARDS */}
+        <div style={{ display: "flex", flexDirection: "column" as const, gap: 12 }}>
+          {filtered.map((item, idx) => {
+            const cc = categoryConfig[item.category];
+            const dc = difficultyConfig[item.difficulty];
+            const expanded = expandedIds.has(item.id!);
+
+            return (
+              <div key={item.id} className="prepCard"
+                style={{ ...st.card, padding: 0, overflow: "hidden", animation: `prepFadeUp 0.4s ease ${idx * 0.03}s both`, cursor: "pointer" }}
+                onClick={() => toggleExpand(item.id!)}
+              >
+                <div style={{ height: 3, background: cc.color }} />
+                <div style={{ padding: "18px 22px" }}>
+                  {/* Top row */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+                    <div style={{ flex: 1 }}>
+                      {/* Category + Difficulty */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" as const }}>
+                        <span style={{ fontSize: 12, color: cc.color, fontFamily: T.font, fontWeight: 500 }}>{cc.icon} {item.category}</span>
+                        <span style={{ ...st.diffBadge, background: dc.bg, color: dc.color }}>{item.difficulty}</span>
+                        {item.is_favorite && <span style={{ fontSize: 13 }}>⭐</span>}
+                      </div>
+
+                      {/* Scenario title */}
+                      <h3 style={{ fontSize: 15, fontWeight: 600, color: T.white2, margin: 0, lineHeight: 1.5, fontFamily: T.font }}>
+                        {item.question}
+                      </h3>
+                    </div>
+
+                    {/* Actions */}
+                    <div style={{ display: "flex", gap: 4, flexShrink: 0 }} onClick={(e) => e.stopPropagation()}>
+                      <button className="cardBtn" onClick={() => handleToggleFavorite(item.id!, !!item.is_favorite)} style={{ ...st.iconBtn, fontSize: 16 }} title="Toggle favorite">
+                        {item.is_favorite ? "⭐" : "☆"}
+                      </button>
+                      <button className="cardBtn" onClick={() => openEdit(item)} style={st.iconBtn} title="Edit">✏️</button>
+                      {deleteConfirm === item.id ? (
+                        <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                          <button onClick={() => handleDelete(item.id!)} disabled={deleting} style={{ ...st.iconBtn, color: "#f87171", fontSize: 12 }}>
+                            {deleting ? "..." : "Yes"}
+                          </button>
+                          <button onClick={() => setDeleteConfirm(null)} style={{ ...st.iconBtn, fontSize: 12 }}>No</button>
+                        </div>
+                      ) : (
+                        <button className="cardBtn" onClick={() => setDeleteConfirm(item.id!)} style={st.iconBtn} title="Delete">🗑️</button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Tags */}
+                  {item.tags && item.tags.length > 0 && (
+                    <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 5, marginTop: 10 }}>
+                      {item.tags.map((t, i) => (
+                        <span key={i} style={st.tag}>{t}</span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Expanded script content */}
+                  {expanded && (
+                    <div style={{ marginTop: 16, animation: "prepFadeUp 0.25s ease both" }}>
+                      <div style={{ width: "100%", height: 1, background: T.jet, marginBottom: 16 }} />
+                      <div style={{ fontSize: 14, color: T.gray, lineHeight: 1.85, fontFamily: T.font, whiteSpace: "pre-wrap" as const }}>
+                        {item.answer}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Expand indicator */}
+                  <div style={{ textAlign: "center" as const, marginTop: 8, fontSize: 10, color: T.grayDim }}>
+                    {expanded ? "▲ Collapse" : "▼ Tap to view script"}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* ============================================================
-         MODAL
-         ============================================================ */}
+      {/* ==================== MODAL ==================== */}
       {modalOpen && (
-        <div style={st.overlay} onClick={closeModal}>
-          <div ref={modalRef} style={st.modal} onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", borderBottom: `1px solid ${T.jet}` }}>
-              <h2 style={{ fontSize: 17, fontWeight: 600, color: T.white2, margin: 0, fontFamily: T.font }}>{editingItem ? "Edit Question" : "Add Question"}</h2>
-              <button onClick={closeModal} style={{ background: "none", border: "none", fontSize: 18, color: T.grayDim, cursor: "pointer", padding: "4px" }}>✕</button>
+        <div style={st.overlay} onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}>
+          <div ref={modalRef} style={st.modal as React.CSSProperties}>
+            <div style={{ padding: "20px 24px", borderBottom: `1px solid ${T.jet}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h2 style={{ margin: 0, fontSize: 18, fontWeight: 600, color: T.white2, fontFamily: T.font }}>
+                {editingItem ? "Edit Script" : "New Script"}
+              </h2>
+              <button onClick={closeModal} style={{ background: "none", border: "none", color: T.grayDim, cursor: "pointer", fontSize: 18 }}>✕</button>
             </div>
 
-            <div style={{ padding: "20px 24px", overflowY: "auto" as const, flex: 1, display: "flex", flexDirection: "column" as const, gap: 16 }}>
+            <div style={{ padding: "20px 24px", overflow: "auto", flex: 1, display: "flex", flexDirection: "column" as const, gap: 18 }}>
               {/* Category + Difficulty */}
-              <div style={st.formRow}>
-                <div style={st.formGroup}>
+              <div style={st.formRow as React.CSSProperties}>
+                <div style={st.formGroup as React.CSSProperties}>
                   <label style={st.formLabel}>Category</label>
                   <select style={st.formInput} value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value as PrepCategory }))}>
                     {ALL_CATEGORIES.map((c) => <option key={c} value={c}>{categoryConfig[c].icon} {c}</option>)}
                   </select>
                 </div>
-                <div style={st.formGroup}>
+                <div style={st.formGroup as React.CSSProperties}>
                   <label style={st.formLabel}>Difficulty</label>
                   <select style={st.formInput} value={form.difficulty} onChange={(e) => setForm((f) => ({ ...f, difficulty: e.target.value as PrepDifficulty }))}>
                     {ALL_DIFFICULTIES.map((d) => <option key={d} value={d}>{d}</option>)}
@@ -445,23 +371,23 @@ export default function InterviewPrepContent() {
                 </div>
               </div>
 
-              {/* Question */}
-              <div style={st.formGroup}>
-                <label style={st.formLabel}>Question *</label>
-                <textarea style={{ ...st.formInput, minHeight: 70, resize: "vertical" as const, fontFamily: T.font }} value={form.question} onChange={(e) => setForm((f) => ({ ...f, question: e.target.value }))} placeholder="e.g. Tell me about a time you had to debug a complex production issue..." />
+              {/* Scenario */}
+              <div style={st.formGroup as React.CSSProperties}>
+                <label style={st.formLabel}>Scenario / Question *</label>
+                <textarea style={{ ...st.formInput, minHeight: 70, resize: "vertical" as const, fontFamily: T.font }} value={form.question} onChange={(e) => setForm((f) => ({ ...f, question: e.target.value }))} placeholder="e.g. Tell me about yourself..." />
               </div>
 
-              {/* Answer */}
-              <div style={st.formGroup}>
-                <label style={st.formLabel}>Answer *</label>
-                <textarea style={{ ...st.formInput, minHeight: 150, resize: "vertical" as const, fontFamily: T.font, lineHeight: 1.7 }} value={form.answer} onChange={(e) => setForm((f) => ({ ...f, answer: e.target.value }))} placeholder="Write your prepared answer here..." />
+              {/* Script */}
+              <div style={st.formGroup as React.CSSProperties}>
+                <label style={st.formLabel}>Script / Response *</label>
+                <textarea style={{ ...st.formInput, minHeight: 150, resize: "vertical" as const, fontFamily: T.font, lineHeight: 1.7 }} value={form.answer} onChange={(e) => setForm((f) => ({ ...f, answer: e.target.value }))} placeholder="Write your prepared script here..." />
               </div>
 
               {/* Tags */}
-              <div style={st.formGroup}>
+              <div style={st.formGroup as React.CSSProperties}>
                 <label style={st.formLabel}>Tags</label>
                 <div style={{ display: "flex", gap: 8 }}>
-                  <input style={{ ...st.formInput, flex: 1 }} value={tagInput} onChange={(e) => setTagInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }} placeholder="e.g. STAR method, async/await" />
+                  <input style={{ ...st.formInput, flex: 1 }} value={tagInput} onChange={(e) => setTagInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }} placeholder="e.g. STAR method, intro, closing" />
                   <button onClick={addTag} disabled={!tagInput.trim()} style={{ ...st.btnGold, padding: "8px 16px", opacity: tagInput.trim() ? 1 : 0.35 }}>Add</button>
                 </div>
                 {(form.tags || []).length > 0 && (

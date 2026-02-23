@@ -5,16 +5,16 @@ import { useSearchParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
 
-const InterviewPrepContent = dynamic(() => import("./InterviewPrepContent"), {
+const ScriptsContent = dynamic(() => import("./ScriptsContent"), {
   ssr: false,
   loading: () => (
     <div style={{ minHeight: "100vh", background: "hsl(0,0%,7%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#999", fontSize: 14 }}>
-      Loading interview prep...
+      Loading scripts...
     </div>
   ),
 });
 
-function PrepGuard() {
+function ScriptsGuard() {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
 
@@ -22,17 +22,17 @@ function PrepGuard() {
     notFound();
   }
 
-  return <InterviewPrepContent />;
+  return <ScriptsContent />;
 }
 
-export default function InterviewPrepPage() {
+export default function ScriptsPage() {
   return (
     <Suspense fallback={
       <div style={{ minHeight: "100vh", background: "hsl(0,0%,7%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#999", fontSize: 14 }}>
         Loading...
       </div>
     }>
-      <PrepGuard />
+      <ScriptsGuard />
     </Suspense>
   );
 }

@@ -175,3 +175,64 @@ export async function markAsReviewed(id: number): Promise<void> {
 
   if (error) throw error;
 }
+
+// ============ TODO TYPES ============
+
+export type TodoPriority = "Low" | "Medium" | "High" | "Urgent";
+export type TodoStatus = "Pending" | "In Progress" | "Done";
+
+export interface Todo {
+  id?: number;
+  title: string;
+  description?: string;
+  priority: TodoPriority;
+  status: TodoStatus;
+  due_date?: string;
+  tags?: string[];
+  created_at?: string;
+  updated_at?: string;
+}
+
+// ============ TODO CRUD ============
+
+export async function getTodos(): Promise<Todo[]> {
+  const { data, error } = await supabase
+    .from("todos")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data || [];
+}
+
+export async function createTodo(todo: Omit<Todo, "id" | "created_at" | "updated_at">): Promise<Todo> {
+  const { data, error } = await supabase
+    .from("todos")
+    .insert([{ ...todo, updated_at: new Date().toISOString() }])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function updateTodo(id: number, todo: Partial<Todo>): Promise<Todo> {
+  const { data, error } = await supabase
+    .from("todos")
+    .update({ ...todo, updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteTodo(id: number): Promise<void> {
+  const { error } = await supabase
+    .from("todos")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+}

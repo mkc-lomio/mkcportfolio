@@ -75,6 +75,18 @@ const EMPTY_EXPENSE: Omit<DailyExpense, "id" | "created_at" | "updated_at"> = {
   description: "", amount: 0, currency: "PHP", category: "Food", expense_date: new Date().toISOString().slice(0, 10), notes: "",
 };
 
+/** Format number with commas and 2 decimals: 141518 → "141,518.00" */
+function fmt(n: number, decimals = 2): string {
+  return n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+/** Format for chart axis: compact display */
+function fmtCompact(n: number): string {
+  if (n >= 1000000) return `₱${(n / 1000000).toFixed(1)}M`;
+  if (n >= 1000) return `₱${(n / 1000).toFixed(1)}k`;
+  return `₱${fmt(n, 0)}`;
+}
+
 /* ============================================================
    MAIN COMPONENT
    ============================================================ */
@@ -123,6 +135,8 @@ export default function CreditContent() {
   const [expSaving, setExpSaving] = useState(false);
   const [deleteExpConfirm, setDeleteExpConfirm] = useState<number | null>(null);
   const [expDateFilter, setExpDateFilter] = useState<string>(new Date().toISOString().slice(0, 7)); // YYYY-MM
+  const [expPage, setExpPage] = useState(1);
+  const EXP_PER_PAGE = 10;
   const expFormRef = useRef<HTMLDivElement>(null);
 
   /* ---- auth ---- */
@@ -567,7 +581,7 @@ export default function CreditContent() {
               {[
                 { label: "Total", value: subStats.total, color: T.gray },
                 { label: "Active", value: subStats.active, color: "#4ade80" },
-                { label: "Monthly Cost", value: `₱${subStats.monthlyTotal.toFixed(2)}`, color: T.gold },
+                { label: "Monthly Cost", value: `₱${fmt(subStats.monthlyTotal)}`, color: T.gold },
               ].map(s => (
                 <div key={s.label} style={{ background: T.surface, borderRadius: T.radius, padding: "14px 16px", border: `1px solid ${T.jet}` }}>
                   <div style={{ fontSize: 22, fontWeight: 600, color: s.color }}>{s.value}</div>
@@ -641,7 +655,7 @@ export default function CreditContent() {
                           </span>
                           {!s.is_active && <span style={{ ...badgeStyle("rgba(148,163,184,0.12)", "#94a3b8") }}>Inactive</span>}
                         </div>
-                        <div style={{ fontSize: 22, fontWeight: 600, color: T.gold }}>₱{s.amount.toFixed(2)} <span style={{ fontSize: 12, color: T.grayDim, fontWeight: 400 }}>{s.currency}</span></div>
+                        <div style={{ fontSize: 22, fontWeight: 600, color: T.gold }}>₱{fmt(s.amount)} <span style={{ fontSize: 12, color: T.grayDim, fontWeight: 400 }}>{s.currency}</span></div>
                         {s.next_due && <div style={{ fontSize: 12, color: T.grayDim, marginTop: 4 }}>Next due: {s.next_due}</div>}
                         {s.notes && <div style={{ fontSize: 12, color: T.gray70, marginTop: 4 }}>{s.notes}</div>}
                       </div>
@@ -674,8 +688,8 @@ export default function CreditContent() {
               {[
                 { label: "Total Loans", value: loanStats.total, color: T.gray },
                 { label: "Active", value: loanStats.active, color: "#60a5fa" },
-                { label: "Total Remaining", value: `₱${loanStats.totalRemaining.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, color: "#f87171" },
-                { label: "Monthly Payments", value: `₱${loanStats.monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, color: T.gold },
+                { label: "Total Remaining", value: `₱${fmt(loanStats.totalRemaining)}`, color: "#f87171" },
+                { label: "Monthly Payments", value: `₱${fmt(loanStats.monthlyPayments)}`, color: T.gold },
               ].map(s => (
                 <div key={s.label} style={{ background: T.surface, borderRadius: T.radius, padding: "14px 16px", border: `1px solid ${T.jet}` }}>
                   <div style={{ fontSize: 20, fontWeight: 600, color: s.color }}>{s.value}</div>
@@ -765,11 +779,11 @@ export default function CreditContent() {
                           <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginBottom: 8 }}>
                             <div>
                               <div style={{ fontSize: 11, color: T.grayDim }}>Remaining</div>
-                              <div style={{ fontSize: 18, fontWeight: 600, color: "#f87171" }}>₱{l.remaining_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} <span style={{ fontSize: 11, color: T.grayDim, fontWeight: 400 }}>{l.currency}</span></div>
+                              <div style={{ fontSize: 18, fontWeight: 600, color: "#f87171" }}>₱{fmt(l.remaining_amount)} <span style={{ fontSize: 11, color: T.grayDim, fontWeight: 400 }}>{l.currency}</span></div>
                             </div>
                             <div>
                               <div style={{ fontSize: 11, color: T.grayDim }}>Monthly</div>
-                              <div style={{ fontSize: 18, fontWeight: 600, color: T.gold }}>₱{l.monthly_payment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                              <div style={{ fontSize: 18, fontWeight: 600, color: T.gold }}>₱{fmt(l.monthly_payment)}</div>
                             </div>
                             {l.interest_rate > 0 && (
                               <div>
@@ -782,8 +796,8 @@ export default function CreditContent() {
                           {l.total_amount > 0 && (
                             <div style={{ marginBottom: 6 }}>
                               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: T.grayDim, marginBottom: 4 }}>
-                                <span>Paid: ₱{(l.total_amount - l.remaining_amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                                <span>of ₱{l.total_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                <span>Paid: ₱{fmt(l.total_amount - l.remaining_amount)}</span>
+                                <span>of ₱{fmt(l.total_amount)}</span>
                               </div>
                               <div style={{ height: 6, borderRadius: 3, background: T.surface2, overflow: "hidden" }}>
                                 <div style={{ height: "100%", borderRadius: 3, background: `linear-gradient(to right, ${T.gold}, ${T.goldDim})`, width: `${Math.min(progress, 100)}%`, transition: "width 0.5s ease" }} />
@@ -823,12 +837,12 @@ export default function CreditContent() {
             {/* Month picker & Stats */}
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
               <label style={{ fontSize: 13, color: T.grayDim }}>Month:</label>
-              <input type="month" value={expDateFilter} onChange={e => setExpDateFilter(e.target.value)} style={{ ...inputStyle(), padding: "8px 12px" }} />
+              <input type="month" value={expDateFilter} onChange={e => { setExpDateFilter(e.target.value); setExpPage(1); }} style={{ ...inputStyle(), padding: "8px 12px" }} />
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10, marginBottom: 20 }}>
               {[
-                { label: "Month Total", value: `₱${expStats.monthTotal.toFixed(2)}`, color: T.gold },
+                { label: "Month Total", value: `₱${fmt(expStats.monthTotal)}`, color: T.gold },
                 { label: "Transactions", value: expStats.count, color: T.gray },
               ].map(s => (
                 <div key={s.label} style={{ background: T.surface, borderRadius: T.radius, padding: "14px 16px", border: `1px solid ${T.jet}` }}>
@@ -853,7 +867,7 @@ export default function CreditContent() {
                         <div style={{ flex: 1, height: 8, borderRadius: 4, background: T.surface2, overflow: "hidden" }}>
                           <div style={{ height: "100%", borderRadius: 4, background: cfg.color, width: `${pct}%`, transition: "width 0.3s ease" }} />
                         </div>
-                        <span style={{ fontSize: 12, fontWeight: 600, color: cfg.color, minWidth: 70, textAlign: "right" }}>₱{cat.total.toFixed(2)}</span>
+                        <span style={{ fontSize: 12, fontWeight: 600, color: cfg.color, minWidth: 70, textAlign: "right" }}>₱{fmt(cat.total)}</span>
                         <span style={{ fontSize: 11, color: T.grayDim, minWidth: 30, textAlign: "right" }}>({cat.count})</span>
                       </div>
                     );
@@ -863,7 +877,7 @@ export default function CreditContent() {
             )}
 
             {/* ---- Monthly Expenses Chart ---- */}
-            <MonthlyExpensesChart data={monthlyChartData} selectedMonth={expDateFilter} onSelectMonth={setExpDateFilter} />
+            <MonthlyExpensesChart data={monthlyChartData} selectedMonth={expDateFilter} onSelectMonth={(m) => { setExpDateFilter(m); setExpPage(1); }} />
 
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
               <button onClick={openCreateExp} style={btnStyle(T.gold, "transparent", T.gold)}>+ New Expense</button>
@@ -913,42 +927,115 @@ export default function CreditContent() {
             )}
 
             {/* List */}
-            {expensesLoading ? <LoadingSpinner /> : filteredExpenses.length === 0 ? <EmptyState text="No expenses for this month" /> : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {filteredExpenses.map(e => {
-                  const cfg = categoryConfig[e.category];
-                  return (
-                    <div key={e.id} style={{ background: T.surface, borderRadius: T.radius, padding: "14px 18px", border: `1px solid ${T.jet}` }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, minWidth: 200 }}>
-                          <span style={{ fontSize: 24, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", background: `${cfg.color}15`, borderRadius: 10 }}>{cfg.icon}</span>
-                          <div>
-                            <div style={{ fontSize: 14, fontWeight: 500, color: T.white1 }}>{e.description}</div>
-                            <div style={{ fontSize: 11, color: T.grayDim, display: "flex", gap: 8, marginTop: 2 }}>
-                              <span>{e.expense_date}</span>
-                              <span style={{ ...badgeStyle(`${cfg.color}18`, cfg.color), padding: "1px 8px", fontSize: 10 }}>{e.category}</span>
+            {expensesLoading ? <LoadingSpinner /> : filteredExpenses.length === 0 ? <EmptyState text="No expenses for this month" /> : (() => {
+              const totalPages = Math.ceil(filteredExpenses.length / EXP_PER_PAGE);
+              const paginated = filteredExpenses.slice((expPage - 1) * EXP_PER_PAGE, expPage * EXP_PER_PAGE);
+              return (
+                <>
+                  {/* Page info */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <span style={{ fontSize: 12, color: T.grayDim }}>
+                      Showing {(expPage - 1) * EXP_PER_PAGE + 1}–{Math.min(expPage * EXP_PER_PAGE, filteredExpenses.length)} of {filteredExpenses.length}
+                    </span>
+                    {totalPages > 1 && (
+                      <span style={{ fontSize: 12, color: T.grayDim }}>
+                        Page {expPage} of {totalPages}
+                      </span>
+                    )}
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {paginated.map(e => {
+                      const cfg = categoryConfig[e.category];
+                      return (
+                        <div key={e.id} style={{ background: T.surface, borderRadius: T.radius, padding: "14px 18px", border: `1px solid ${T.jet}` }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, minWidth: 200 }}>
+                              <span style={{ fontSize: 24, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", background: `${cfg.color}15`, borderRadius: 10 }}>{cfg.icon}</span>
+                              <div>
+                                <div style={{ fontSize: 14, fontWeight: 500, color: T.white1 }}>{e.description}</div>
+                                <div style={{ fontSize: 11, color: T.grayDim, display: "flex", gap: 8, marginTop: 2 }}>
+                                  <span>{e.expense_date}</span>
+                                  <span style={{ ...badgeStyle(`${cfg.color}18`, cfg.color), padding: "1px 8px", fontSize: 10 }}>{e.category}</span>
+                                </div>
+                                {e.notes && <div style={{ fontSize: 11, color: T.gray70, marginTop: 2 }}>{e.notes}</div>}
+                              </div>
                             </div>
-                            {e.notes && <div style={{ fontSize: 11, color: T.gray70, marginTop: 2 }}>{e.notes}</div>}
+                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                              <span style={{ fontSize: 16, fontWeight: 600, color: cfg.color }}>₱{fmt(e.amount)} <span style={{ fontSize: 10, color: T.grayDim, fontWeight: 400 }}>{e.currency}</span></span>
+                              <button onClick={() => openEditExp(e)} style={iconBtnStyle(T.gold)} title="Edit">✏️</button>
+                              {deleteExpConfirm === e.id ? (
+                                <>
+                                  <button onClick={() => handleDeleteExp(e.id!)} style={iconBtnStyle("#f87171")} title="Confirm">✓</button>
+                                  <button onClick={() => setDeleteExpConfirm(null)} style={iconBtnStyle(T.grayDim)} title="Cancel">✕</button>
+                                </>
+                              ) : (
+                                <button onClick={() => setDeleteExpConfirm(e.id!)} style={iconBtnStyle("#f87171")} title="Delete">🗑️</button>
+                              )}
+                            </div>
                           </div>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <span style={{ fontSize: 16, fontWeight: 600, color: cfg.color }}>₱{e.amount.toFixed(2)} <span style={{ fontSize: 10, color: T.grayDim, fontWeight: 400 }}>{e.currency}</span></span>
-                          <button onClick={() => openEditExp(e)} style={iconBtnStyle(T.gold)} title="Edit">✏️</button>
-                          {deleteExpConfirm === e.id ? (
-                            <>
-                              <button onClick={() => handleDeleteExp(e.id!)} style={iconBtnStyle("#f87171")} title="Confirm">✓</button>
-                              <button onClick={() => setDeleteExpConfirm(null)} style={iconBtnStyle(T.grayDim)} title="Cancel">✕</button>
-                            </>
+                      );
+                    })}
+                  </div>
+
+                  {/* Pagination controls */}
+                  {totalPages > 1 && (
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, marginTop: 16 }}>
+                      <button
+                        onClick={() => setExpPage(1)}
+                        disabled={expPage === 1}
+                        style={{ ...pageBtnStyle(expPage !== 1), fontSize: 11 }}
+                      >«</button>
+                      <button
+                        onClick={() => setExpPage(p => Math.max(1, p - 1))}
+                        disabled={expPage === 1}
+                        style={pageBtnStyle(expPage !== 1)}
+                      >‹</button>
+
+                      {(() => {
+                        const pages: (number | string)[] = [];
+                        if (totalPages <= 7) {
+                          for (let i = 1; i <= totalPages; i++) pages.push(i);
+                        } else {
+                          pages.push(1);
+                          if (expPage > 3) pages.push("...");
+                          for (let i = Math.max(2, expPage - 1); i <= Math.min(totalPages - 1, expPage + 1); i++) pages.push(i);
+                          if (expPage < totalPages - 2) pages.push("...");
+                          pages.push(totalPages);
+                        }
+                        return pages.map((p, i) =>
+                          typeof p === "string" ? (
+                            <span key={`ellipsis-${i}`} style={{ color: T.grayDim, fontSize: 12, padding: "0 2px" }}>…</span>
                           ) : (
-                            <button onClick={() => setDeleteExpConfirm(e.id!)} style={iconBtnStyle("#f87171")} title="Delete">🗑️</button>
-                          )}
-                        </div>
-                      </div>
+                            <button key={p} onClick={() => setExpPage(p)}
+                              style={{
+                                ...pageBtnStyle(true),
+                                background: p === expPage ? T.gold : "transparent",
+                                color: p === expPage ? T.surface : T.gray,
+                                fontWeight: p === expPage ? 600 : 400,
+                                borderColor: p === expPage ? T.gold : T.jet,
+                              }}
+                            >{p}</button>
+                          )
+                        );
+                      })()}
+
+                      <button
+                        onClick={() => setExpPage(p => Math.min(totalPages, p + 1))}
+                        disabled={expPage === totalPages}
+                        style={pageBtnStyle(expPage !== totalPages)}
+                      >›</button>
+                      <button
+                        onClick={() => setExpPage(totalPages)}
+                        disabled={expPage === totalPages}
+                        style={{ ...pageBtnStyle(expPage !== totalPages), fontSize: 11 }}
+                      >»</button>
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  )}
+                </>
+              );
+            })()}
           </>
         )}
 
@@ -991,7 +1078,7 @@ function MonthlyExpensesChart({ data, selectedMonth, onSelectMonth }: {
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: chartH, paddingTop: topPad, paddingBottom: 0, marginRight: 6, flexShrink: 0 }}>
           {[maxVal, maxVal * 0.5, 0].map((v, i) => (
             <span key={i} style={{ fontSize: 9, color: T.grayDim, textAlign: "right", minWidth: 36, lineHeight: "1" }}>
-              {v >= 1000 ? `₱${(v / 1000).toFixed(1)}k` : `₱${v.toFixed(0)}`}
+              {fmtCompact(v)}
             </span>
           ))}
         </div>
@@ -1048,7 +1135,7 @@ function MonthlyExpensesChart({ data, selectedMonth, onSelectMonth }: {
                         fill={T.card} stroke={T.jet} strokeWidth="1" />
                       <text x={x + (barW - 8) / 2 + 4} y={y - 12} textAnchor="middle"
                         fill={T.gold} fontSize="9" fontFamily={T.font} fontWeight="600">
-                        ₱{d.total.toFixed(0)}
+                        ₱{fmt(d.total, 0)}
                       </text>
                     </g>
                   )}
@@ -1086,7 +1173,7 @@ function MonthlyExpensesChart({ data, selectedMonth, onSelectMonth }: {
         return (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 8, paddingTop: 8, borderTop: `1px solid ${T.jet}` }}>
             <div style={{ width: 20, height: 1, background: T.goldDim, opacity: 0.6 }} />
-            <span style={{ fontSize: 11, color: T.grayDim }}>Avg: <span style={{ color: T.goldDim, fontWeight: 600 }}>₱{avg.toFixed(2)}</span>/month</span>
+            <span style={{ fontSize: 11, color: T.grayDim }}>Avg: <span style={{ color: T.goldDim, fontWeight: 600 }}>₱{fmt(avg)}</span>/month</span>
           </div>
         );
       })()}
@@ -1176,3 +1263,13 @@ const formContainerStyle: React.CSSProperties = {
 const formTitleStyle: React.CSSProperties = {
   fontSize: 16, fontWeight: 600, color: T.white1, margin: "0 0 16px 0",
 };
+
+function pageBtnStyle(enabled: boolean): React.CSSProperties {
+  return {
+    width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+    background: "transparent", border: `1px solid ${T.jet}`, borderRadius: 8,
+    color: enabled ? T.gray : T.jet, cursor: enabled ? "pointer" : "not-allowed",
+    fontSize: 13, fontFamily: T.font, transition: T.transition, padding: 0,
+    opacity: enabled ? 1 : 0.4,
+  };
+}

@@ -236,3 +236,206 @@ export async function deleteTodo(id: number): Promise<void> {
 
   if (error) throw error;
 }
+
+// ============ SUBSCRIPTION TYPES ============
+
+export type SubscriptionFrequency = "Monthly" | "Quarterly" | "Yearly";
+
+export interface Subscription {
+  id?: number;
+  name: string;
+  amount: number;
+  currency: string;
+  frequency: SubscriptionFrequency;
+  next_due?: string;
+  notes?: string;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// ============ SUBSCRIPTION CRUD ============
+
+export async function getSubscriptions(): Promise<Subscription[]> {
+  const { data, error } = await supabase
+    .from("subscriptions")
+    .select("*")
+    .order("is_active", { ascending: false })
+    .order("name", { ascending: true });
+
+  if (error) throw error;
+  return data || [];
+}
+
+export async function createSubscription(sub: Omit<Subscription, "id" | "created_at" | "updated_at">): Promise<Subscription> {
+  const { data, error } = await supabase
+    .from("subscriptions")
+    .insert([{ ...sub, updated_at: new Date().toISOString() }])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function updateSubscription(id: number, sub: Partial<Subscription>): Promise<Subscription> {
+  const { data, error } = await supabase
+    .from("subscriptions")
+    .update({ ...sub, updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteSubscription(id: number): Promise<void> {
+  const { error } = await supabase
+    .from("subscriptions")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+}
+
+// ============ CREDIT/LOAN TYPES ============
+
+export type CreditLoanStatus = "Active" | "Paid Off" | "Overdue" | "Deferred";
+
+export interface CreditLoan {
+  id?: number;
+  name: string;
+  total_amount: number;
+  remaining_amount: number;
+  monthly_payment: number;
+  currency: string;
+  interest_rate: number;
+  status: CreditLoanStatus;
+  due_date?: string;
+  lender?: string;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// ============ CREDIT/LOAN CRUD ============
+
+export async function getCreditsLoans(): Promise<CreditLoan[]> {
+  const { data, error } = await supabase
+    .from("credits_loans")
+    .select("*")
+    .order("status", { ascending: true })
+    .order("remaining_amount", { ascending: false });
+
+  if (error) throw error;
+  return data || [];
+}
+
+export async function createCreditLoan(loan: Omit<CreditLoan, "id" | "created_at" | "updated_at">): Promise<CreditLoan> {
+  const { data, error } = await supabase
+    .from("credits_loans")
+    .insert([{ ...loan, updated_at: new Date().toISOString() }])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function updateCreditLoan(id: number, loan: Partial<CreditLoan>): Promise<CreditLoan> {
+  const { data, error } = await supabase
+    .from("credits_loans")
+    .update({ ...loan, updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteCreditLoan(id: number): Promise<void> {
+  const { error } = await supabase
+    .from("credits_loans")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+}
+
+// ============ DAILY EXPENSE TYPES ============
+
+export type ExpenseCategory =
+  | "Food"
+  | "Transport"
+  | "Shopping"
+  | "Entertainment"
+  | "Bills"
+  | "Health"
+  | "Education"
+  | "Groceries"
+  | "Personal"
+  | "Other";
+
+export const ALL_EXPENSE_CATEGORIES: ExpenseCategory[] = [
+  "Food", "Transport", "Shopping", "Entertainment", "Bills",
+  "Health", "Education", "Groceries", "Personal", "Other",
+];
+
+export interface DailyExpense {
+  id?: number;
+  description: string;
+  amount: number;
+  currency: string;
+  category: ExpenseCategory;
+  expense_date: string;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// ============ DAILY EXPENSE CRUD ============
+
+export async function getDailyExpenses(): Promise<DailyExpense[]> {
+  const { data, error } = await supabase
+    .from("daily_expenses")
+    .select("*")
+    .order("expense_date", { ascending: false })
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data || [];
+}
+
+export async function createDailyExpense(exp: Omit<DailyExpense, "id" | "created_at" | "updated_at">): Promise<DailyExpense> {
+  const { data, error } = await supabase
+    .from("daily_expenses")
+    .insert([{ ...exp, updated_at: new Date().toISOString() }])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function updateDailyExpense(id: number, exp: Partial<DailyExpense>): Promise<DailyExpense> {
+  const { data, error } = await supabase
+    .from("daily_expenses")
+    .update({ ...exp, updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteDailyExpense(id: number): Promise<void> {
+  const { error } = await supabase
+    .from("daily_expenses")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+}

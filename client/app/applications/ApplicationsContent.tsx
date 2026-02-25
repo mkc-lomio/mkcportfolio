@@ -502,11 +502,82 @@ export default function ApplicationsContent() {
           </div>
           )
         )}
-      </div>
 
-      {/* ============================================================
-         MODAL
-         ============================================================ */}
+        {/* ============================================================
+           JOB SITES — Remote-Friendly for Filipino Developers
+           ============================================================ */}
+        <div style={{ marginTop: 48, animation: "appFadeUp 0.5s ease 0.2s both" }}>
+          <h2 style={{ fontSize: 18, fontWeight: 600, color: T.white2, margin: "0 0 6px", fontFamily: T.font }}>🌐 Remote Job Sites</h2>
+          <p style={{ fontSize: 13, color: T.grayDim, margin: "0 0 18px", fontFamily: T.font }}>Curated list of platforms that hire Filipino developers remotely.</p>
+
+          <div style={{ fontSize: 13, color: T.grayDim, fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.06em", marginBottom: 10, fontFamily: T.font }}>Developer-Focused</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10, marginBottom: 24 }}>
+            {([
+              { name: "Arc.dev", url: "https://arc.dev", desc: "Built for developers. Connects you with US/EU startups & tech companies. High-paying remote roles." },
+              { name: "Toptal", url: "https://toptal.com", desc: "Exclusive network for top-tier developers. Rigorous screening but pays well ($40-80+/hr)." },
+              { name: "Turing", url: "https://turing.com", desc: "AI-matched remote dev jobs with US companies. Good for .NET/Angular profiles." },
+              { name: "We Work Remotely", url: "https://weworkremotely.com", desc: "One of the largest remote job boards, strong in software engineering." },
+              { name: "RemoteOK", url: "https://remoteok.com", desc: "Huge listing of remote dev roles, filterable by stack. Updated daily." },
+              { name: "Wellfound", url: "https://wellfound.com", desc: "Formerly AngelList. Startups hire directly here — founders post roles, many don't care about location." },
+              { name: "Stack Overflow Jobs", url: "https://stackoverflow.co/company/work-here", desc: "Connects devs with employers. Reputation scores and technical expertise on display." },
+            ] as const).map((site) => (
+              <a key={site.name} href={site.url} target="_blank" rel="noopener noreferrer" className="appCard"
+                style={{ ...st.card, padding: "14px 18px", textDecoration: "none", display: "block" }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: T.gold, fontFamily: T.font, marginBottom: 4 }}>{site.name}</div>
+                <div style={{ fontSize: 12, color: T.gray70, lineHeight: 1.5, fontFamily: T.font }}>{site.desc}</div>
+              </a>
+            ))}
+          </div>
+
+          <div style={{ fontSize: 13, color: T.grayDim, fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.06em", marginBottom: 10, fontFamily: T.font }}>General Remote</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10, marginBottom: 24 }}>
+            {([
+              { name: "LinkedIn", url: "https://linkedin.com/jobs", desc: "Filter by \"Remote\" + Philippines. Many companies actively recruit Filipino devs." },
+              { name: "FlexJobs", url: "https://flexjobs.com", desc: "Paid subscription but all listings are verified and scam-free." },
+              { name: "Dynamite Jobs", url: "https://dynamitejobs.com", desc: "Curated remote roles, average $2.3k-$6.5k/month for PH-based workers." },
+              { name: "Built In", url: "https://builtin.com/jobs/remote/as/philippines", desc: "Tech-focused, lists remote roles open to PH." },
+              { name: "JustRemote", url: "https://justremote.co", desc: "Remote-first companies, easy to browse by category." },
+              { name: "Glassdoor", url: "https://glassdoor.com", desc: "Job listings with salary insights, company reviews, and interview experiences." },
+              { name: "Remote.co", url: "https://remote.co", desc: "Fully remote positions only. US/EU companies hiring worldwide — no location restriction." },
+              { name: "Remote In Tech", url: "https://remoteintech.company", desc: "Directory of 850+ remote-friendly tech companies. Browse by region (380 worldwide) or tech stack." },
+              { name: "Remotive", url: "https://remotive.com", desc: "Strictly remote jobs. No hybrid bait. Many companies hire outside US/EU without drama." },
+              { name: "NoDesk", url: "https://nodesk.co", desc: "750+ remote companies. Hand-picked listings not found on larger boards. Quality over quantity." },
+              { name: "Jobspresso", url: "https://jobspresso.co", desc: "Curated high-quality remote roles. Full-time focus from startups and SaaS companies." },
+              { name: "DailyRemote", url: "https://dailyremote.com", desc: "Aggregates remote jobs from 2,000+ companies. Updated daily with email alerts." },
+              { name: "Working Nomads", url: "https://workingnomads.com", desc: "Remote job aggregator for digital nomads. Organized by skill — dev, design, marketing, and more." },
+              { name: "Remote100K", url: "https://remote100k.com", desc: "Premium board for remote jobs paying $100K+/year. Manually vetted listings." },
+            ] as const).map((site) => (
+              <a key={site.name} href={site.url} target="_blank" rel="noopener noreferrer" className="appCard"
+                style={{ ...st.card, padding: "14px 18px", textDecoration: "none", display: "block" }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: T.gold, fontFamily: T.font, marginBottom: 4 }}>{site.name}</div>
+                <div style={{ fontSize: 12, color: T.gray70, lineHeight: 1.5, fontFamily: T.font }}>{site.desc}</div>
+              </a>
+            ))}
+          </div>
+
+          <div style={{ fontSize: 13, color: T.grayDim, fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.06em", marginBottom: 10, fontFamily: T.font }}>PH-Specific</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10 }}>
+            {([
+              { name: "OnlineJobs.ph", url: "https://onlinejobs.ph", desc: "Largest PH remote marketplace. Lots of foreign employers (US/AU/UK). Good for long-term contracts." },
+              { name: "JobStreet PH", url: "https://jobstreet.com.ph", desc: "Most widely used PH job board. Filter for remote/work-from-home across all industries." },
+              { name: "Kalibrr", url: "https://kalibrr.com", desc: "Strong in tech, digital, and startup roles. Growing remote listings." },
+              { name: "Indeed PH", url: "https://ph.indeed.com", desc: "Aggregates jobs from multiple PH boards. Widest search coverage, filter by remote." },
+              { name: "Bossjob", url: "https://bossjob.ph", desc: "AI-powered matching. Strong in IT & engineering. Direct chat with recruiters." },
+              { name: "BruntWork", url: "https://bruntwork.co", desc: "Remote & offshore staffing. Connects Filipino pros with US/AU/NZ clients. Competitive pay." },
+              { name: "Remote Staff", url: "https://remotestaff.ph", desc: "18+ years in remote work. 100% WFH roles with international clients. HMO from Day 1." },
+              { name: "RemoteWork.ph", url: "https://remotework.ph", desc: "Direct hiring — no agency fees or markups. Hire and pay talent directly." },
+              { name: "Jora PH", url: "https://ph.jora.com", desc: "Part of SEEK group. Aggregates 150K+ job ads from multiple PH boards." },
+              { name: "Foundit", url: "https://www.foundit.com.ph", desc: "Formerly Monster. Global job platform with PH listings across IT, BPO, and engineering." },
+            ] as const).map((site) => (
+              <a key={site.name} href={site.url} target="_blank" rel="noopener noreferrer" className="appCard"
+                style={{ ...st.card, padding: "14px 18px", textDecoration: "none", display: "block" }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: T.gold, fontFamily: T.font, marginBottom: 4 }}>{site.name}</div>
+                <div style={{ fontSize: 12, color: T.gray70, lineHeight: 1.5, fontFamily: T.font }}>{site.desc}</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
       {modalOpen && (
         <div style={st.overlay} onClick={closeModal}>
           <div ref={modalRef} style={st.modal} onClick={(e) => e.stopPropagation()}>

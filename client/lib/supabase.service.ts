@@ -439,3 +439,87 @@ export async function deleteDailyExpense(id: number): Promise<void> {
 
   if (error) throw error;
 }
+
+// ============ KNOWLEDGE BASE TYPES ============
+
+export type KnowledgeCategory =
+  | "English"
+  | "Vocabulary"
+  | "Grammar"
+  | "History"
+  | "Science"
+  | "Health"
+  | "Finance"
+  | "Philosophy"
+  | "Psychology"
+  | "Books"
+  | "Life Lessons"
+  | "Fun Facts"
+  | "General";
+
+export interface KnowledgeEntry {
+  id?: number;
+  title: string;
+  content: string;
+  category: KnowledgeCategory;
+  source?: string;
+  source_url?: string;
+  tags?: string[];
+  is_favorite?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// ============ KNOWLEDGE BASE CRUD ============
+
+export async function getKnowledgeEntries(): Promise<KnowledgeEntry[]> {
+  const { data, error } = await supabase
+    .from("knowledge_base")
+    .select("*")
+    .order("category", { ascending: true })
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data || [];
+}
+
+export async function createKnowledgeEntry(entry: Omit<KnowledgeEntry, "id" | "created_at" | "updated_at">): Promise<KnowledgeEntry> {
+  const { data, error } = await supabase
+    .from("knowledge_base")
+    .insert([{ ...entry, updated_at: new Date().toISOString() }])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function updateKnowledgeEntry(id: number, entry: Partial<KnowledgeEntry>): Promise<KnowledgeEntry> {
+  const { data, error } = await supabase
+    .from("knowledge_base")
+    .update({ ...entry, updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteKnowledgeEntry(id: number): Promise<void> {
+  const { error } = await supabase
+    .from("knowledge_base")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+}
+
+export async function toggleKnowledgeFavorite(id: number, is_favorite: boolean): Promise<void> {
+  const { error } = await supabase
+    .from("knowledge_base")
+    .update({ is_favorite, updated_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (error) throw error;
+}

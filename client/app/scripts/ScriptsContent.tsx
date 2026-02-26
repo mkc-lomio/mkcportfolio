@@ -153,6 +153,62 @@ export default function ScriptsContent() {
   const addTag = () => { if (tagInput.trim() && !(form.tags || []).includes(tagInput.trim())) { setForm((f) => ({ ...f, tags: [...(f.tags || []), tagInput.trim()] })); setTagInput(""); } };
   const removeTag = (idx: number) => { setForm((f) => ({ ...f, tags: (f.tags || []).filter((_, i) => i !== idx) })); };
 
+  /* ---- format content with code blocks, inline code, bold ---- */
+  const formatContent = (text: string) => {
+    // Split by code blocks first: ```lang\ncode\n```
+    const parts = text.split(/(```[\s\S]*?```)/g);
+
+    return parts.map((part, i) => {
+      // Code block
+      const codeBlockMatch = part.match(/^```(\w*)\n?([\s\S]*?)```$/);
+      if (codeBlockMatch) {
+        const lang = codeBlockMatch[1];
+        const code = codeBlockMatch[2].replace(/\n$/, "");
+        return (
+          <div key={i} style={{ margin: "12px 0", borderRadius: 10, overflow: "hidden", border: `1px solid ${T.jet}` }}>
+            {lang && (
+              <div style={{ padding: "6px 14px", background: "hsla(0,0%,0%,0.3)", fontSize: 11, color: T.grayDim, fontFamily: "monospace", borderBottom: `1px solid ${T.jet}` }}>
+                {lang}
+              </div>
+            )}
+            <pre style={{ margin: 0, padding: "14px 16px", background: "hsla(0,0%,0%,0.25)", overflowX: "auto", fontSize: 13, lineHeight: 1.6, fontFamily: "'Fira Code', 'Cascadia Code', 'Consolas', monospace", color: "#e2e8f0", whiteSpace: "pre" as const, tabSize: 2 }}>
+              <code>{code}</code>
+            </pre>
+          </div>
+        );
+      }
+
+      // For non-code-block parts, handle inline formatting line by line
+      const lines = part.split("\n");
+      return lines.map((line, li) => {
+        // Process inline code and bold
+        const tokens = line.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+        const formatted = tokens.map((token, ti) => {
+          // Inline code
+          if (token.startsWith("`") && token.endsWith("`")) {
+            return (
+              <code key={ti} style={{ padding: "2px 7px", borderRadius: 5, background: "hsla(0,0%,0%,0.3)", border: `1px solid ${T.jet}`, fontSize: 12.5, fontFamily: "'Fira Code', 'Consolas', monospace", color: T.gold }}>
+                {token.slice(1, -1)}
+              </code>
+            );
+          }
+          // Bold
+          if (token.startsWith("**") && token.endsWith("**")) {
+            return <strong key={ti} style={{ color: T.white2, fontWeight: 600 }}>{token.slice(2, -2)}</strong>;
+          }
+          return <span key={ti}>{token}</span>;
+        });
+
+        return (
+          <span key={`${i}-${li}`}>
+            {li > 0 && <br />}
+            {formatted}
+          </span>
+        );
+      });
+    });
+  };
+
   /* ============================================================
      MAIN VIEW
      ============================================================ */
@@ -326,8 +382,8 @@ export default function ScriptsContent() {
                   {expanded && (
                     <div style={{ marginTop: 16, animation: "prepFadeUp 0.25s ease both" }}>
                       <div style={{ width: "100%", height: 1, background: T.jet, marginBottom: 16 }} />
-                      <div style={{ fontSize: 14, color: T.gray, lineHeight: 1.85, fontFamily: T.font, whiteSpace: "pre-wrap" as const }}>
-                        {item.answer}
+                      <div style={{ fontSize: 14, color: T.gray, lineHeight: 1.85, fontFamily: T.font }}>
+                        {formatContent(item.answer)}
                       </div>
                     </div>
                   )}

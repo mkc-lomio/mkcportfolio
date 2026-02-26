@@ -165,7 +165,7 @@ export default function ScriptsContent() {
         const lang = codeBlockMatch[1];
         const code = codeBlockMatch[2].replace(/\n$/, "");
         return (
-          <div key={i} style={{ margin: "12px 0", borderRadius: 10, overflow: "hidden", border: `1px solid ${T.jet}` }}>
+          <div key={i} style={{ margin: "16px 0", borderRadius: 10, overflow: "hidden", border: `1px solid ${T.jet}` }}>
             {lang && (
               <div style={{ padding: "6px 14px", background: "hsla(0,0%,0%,0.3)", fontSize: 11, color: T.grayDim, fontFamily: "monospace", borderBottom: `1px solid ${T.jet}` }}>
                 {lang}
@@ -178,32 +178,41 @@ export default function ScriptsContent() {
         );
       }
 
-      // For non-code-block parts, handle inline formatting line by line
-      const lines = part.split("\n");
-      return lines.map((line, li) => {
-        // Process inline code and bold
-        const tokens = line.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
-        const formatted = tokens.map((token, ti) => {
-          // Inline code
-          if (token.startsWith("`") && token.endsWith("`")) {
-            return (
-              <code key={ti} style={{ padding: "2px 7px", borderRadius: 5, background: "hsla(0,0%,0%,0.3)", border: `1px solid ${T.jet}`, fontSize: 12.5, fontFamily: "'Fira Code', 'Consolas', monospace", color: T.gold }}>
-                {token.slice(1, -1)}
-              </code>
-            );
-          }
-          // Bold
-          if (token.startsWith("**") && token.endsWith("**")) {
-            return <strong key={ti} style={{ color: T.white2, fontWeight: 600 }}>{token.slice(2, -2)}</strong>;
-          }
-          return <span key={ti}>{token}</span>;
+      // For non-code-block text, split into paragraphs by blank lines
+      const paragraphs = part.split(/\n\s*\n/);
+      return paragraphs.map((para, pi) => {
+        const lines = para.split("\n");
+        const formattedLines = lines.map((line, li) => {
+          // Process inline code and bold
+          const tokens = line.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+          const formatted = tokens.map((token, ti) => {
+            // Inline code
+            if (token.startsWith("`") && token.endsWith("`")) {
+              return (
+                <code key={ti} style={{ padding: "2px 7px", borderRadius: 5, background: "hsla(0,0%,0%,0.3)", border: `1px solid ${T.jet}`, fontSize: 12.5, fontFamily: "'Fira Code', 'Consolas', monospace", color: T.gold }}>
+                  {token.slice(1, -1)}
+                </code>
+              );
+            }
+            // Bold
+            if (token.startsWith("**") && token.endsWith("**")) {
+              return <strong key={ti} style={{ color: T.white2, fontWeight: 600 }}>{token.slice(2, -2)}</strong>;
+            }
+            return <span key={ti}>{token}</span>;
+          });
+
+          return (
+            <span key={`${i}-${pi}-${li}`}>
+              {li > 0 && <br />}
+              {formatted}
+            </span>
+          );
         });
 
         return (
-          <span key={`${i}-${li}`}>
-            {li > 0 && <br />}
-            {formatted}
-          </span>
+          <div key={`${i}-${pi}`} style={{ marginBottom: pi < paragraphs.length - 1 ? 16 : 0 }}>
+            {formattedLines}
+          </div>
         );
       });
     });
